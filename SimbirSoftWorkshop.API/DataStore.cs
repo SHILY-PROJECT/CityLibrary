@@ -27,10 +27,24 @@ namespace SimbirSoftWorkshop.API
             },
             new()
             {
+                Name = "Eliezer",
+                Surname = "Yudkowsky",
+                Patronymic = "Shlomo",
+                Birthday = new(1979, 09, 11)
+            },
+            new()
+            {
                 Name = "Yana",
                 Surname = "Sharkelova",
                 Patronymic = "Egorovna",
                 Birthday = new(1992, 05, 06)
+            },
+            new()
+            {
+                Name = "Igor",
+                Surname = "Premin",
+                Patronymic = "Olegovych",
+                Birthday = new(1978, 11, 27)
             }
         };
 
