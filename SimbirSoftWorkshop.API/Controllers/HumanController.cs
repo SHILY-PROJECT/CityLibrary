@@ -2,6 +2,7 @@
 using System.Linq;
 using System;
 using SimbirSoftWorkshop.API.Models;
+using System.Collections.Generic;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -25,8 +26,8 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <returns></returns>
         [HttpGet("ListHumansIsAuthors")]
         public IActionResult GetHumansIsAuthors()
-            => Ok(DataStore.Humans.Where(human
-                => DataStore.Books.Any(book => book.Author.Contains(human.Name, StringComparison.OrdinalIgnoreCase)
+            => Ok(DataStore.Humans.Where(human => DataStore.Books.Any(book
+                => book.Author.Contains(human.Name, StringComparison.OrdinalIgnoreCase)
                 && book.Author.Contains(human.Surname, StringComparison.OrdinalIgnoreCase))).ToList());
 
         /// <summary>
@@ -66,29 +67,40 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <summary>
         /// 1.3.3 - Удаление человека
         /// </summary>
+        /// <param name="name">Имя</param>
+        /// <param name="surname">Фамилия</param>
+        /// <param name="patronymic">Отчество (если свойство нужно игнорировать, то установите: ignore)</param>
+        /// <param name="birthday">Дата рождения (формат: yyyy-MM-dd) (если свойство нужно игнорировать, то установите: ignore)</param>
+        /// <returns></returns>
         [HttpDelete("DeleteHuman")]
-        public IActionResult DeleteHuman(HumanDto human, bool onlyFirstMatch = true, bool checkPatronymic = false, bool checkBirthday = false)
+        public IActionResult DeleteHuman(string name, string surname, string patronymic = "ignore", string birthday = "ignore")
         {
-            var atOneDeletionOrMany = false;
+            var variables = new List<(string nameVar, string valueVar)>
+            {
+                (nameof(name), name), (nameof(surname), surname), (nameof(patronymic), patronymic), (nameof(birthday), birthday),
+            }
+            .Where(x => string.IsNullOrWhiteSpace(x.valueVar)).ToList();
+
+            if (variables.Count != 0)
+                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{x.nameVar}' - не может быть нулевым или пустым.]")));
 
             for (int i = 0; i < DataStore.Humans.Count;)
             {
                 var item = DataStore.Humans[i];
 
-                if (item.Name.Contains(human.Name, StringComparison.OrdinalIgnoreCase) && item.Surname.Contains(human.Surname, StringComparison.OrdinalIgnoreCase))
+                if (item.Name.Contains(name, StringComparison.OrdinalIgnoreCase) && item.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (checkPatronymic && !(item.Patronymic.Contains(human.Patronymic, StringComparison.OrdinalIgnoreCase))) { i++; continue; }
-                    if (checkBirthday && !($"{item.Birthday:yyyy-MM-dd}".Contains($"{human.Birthday:yyyy-MM-dd}"))) { i++; continue; }
+                    if (patronymic != "ignore" && !(item.Patronymic.Contains(patronymic, StringComparison.OrdinalIgnoreCase))) { i++; continue; }
+                    if (birthday != "ignore" && !($"{item.Birthday:yyyy-MM-dd}".Contains(birthday))) { i++; continue; }
 
                     DataStore.Humans.RemoveAt(i);
-                    atOneDeletionOrMany = true;
 
-                    if (onlyFirstMatch) break;
+                    return Ok("Человек успешно удален");
                 }
                 else i++;
             }
 
-            return atOneDeletionOrMany ? Ok("Человек успешно удален") : BadRequest("Не удалось удалить человека");
+            return BadRequest("Не удалось удалить человека");
         }
 
     }
