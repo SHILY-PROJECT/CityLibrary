@@ -37,7 +37,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         public IActionResult GetHumansByLineQuery(string searchQuery)
         {
             if (string.IsNullOrWhiteSpace(searchQuery))
-                return ValidationProblem("Некорректная фраза запроса");
+                return ValidationProblem($"['{nameof(searchQuery)}' - не может быть нулевым или пустым.]");
 
             var queries = searchQuery.Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
@@ -55,6 +55,16 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpPost("addNewHumanToList")]
         public IActionResult PostAddHuman(HumanDto human)
         {
+            var variables = new List<(string nameVar, string valueVar)>
+            {
+                (nameof(human.Name), human.Name), (nameof(human.Surname), human.Surname), (nameof(human.Patronymic), human.Patronymic)
+            }
+            .Where(x => string.IsNullOrWhiteSpace(x.valueVar) || x.valueVar == "string").ToList();
+
+            if (variables.Count != 0)
+                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{x.nameVar}' - не может быть нулевым или пустым.]")));
+
+            human.HumanId = (DataStore.Humans.Max(x => x.HumanId) + 1);
             DataStore.Humans.Add(human);
 
             if (!DataStore.Humans.Contains(human))

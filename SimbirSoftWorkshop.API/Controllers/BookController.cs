@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Models;
+using SimbirSoftWorkshop.API.Enums;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -17,8 +18,18 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 1.4.1.1 - Список всех книг
         /// </summary>
         [HttpGet("listAllBooks")]
-        public IActionResult GetBooks()
-            => Ok(DataStore.Books);
+        public IActionResult GetBooks(SortBookOptionsEnum sortOprion)
+            => Ok(sortOprion switch
+            {
+                SortBookOptionsEnum.NoSort => DataStore.Books,
+                SortBookOptionsEnum.Title => DataStore.Books.OrderBy(x => x.Title).ToList(),
+                SortBookOptionsEnum.TitleReversed => DataStore.Books.OrderByDescending(y => y.Title).ToList(),
+                SortBookOptionsEnum.Author => DataStore.Books.OrderBy(x => x.Author).ToList(),
+                SortBookOptionsEnum.AuthorReversed => DataStore.Books.OrderByDescending(y => y.Author).ToList(),
+                SortBookOptionsEnum.Genre => DataStore.Books.OrderBy(x => x.Genre).ToList(),
+                SortBookOptionsEnum.GenreReversed => DataStore.Books.OrderByDescending(y => y.Genre).ToList(),
+                _ => DataStore.Books
+            });       
 
         /// <summary>
         /// 1.4.1.2 - Список всех книг автора
