@@ -57,19 +57,29 @@ namespace SimbirSoftWorkshop.API
             {
                 Title = "Harry Potter and the Methods of Rationality",
                 Author = "Eliezer Yudkowsky",
-                Genre = "Fantasy"
+                Genre = "Fantasy",
+                AuthorId = 1
             },
             new()
             {
                 Title = "The Demon-Haunted World: Science as a Candle in the Dark",
                 Author = "Carl Sagan",
-                Genre = "Scientific literature"
+                Genre = "Scientific literature",
+                AuthorId= 2
             },
             new()
             {
                 Title = "The Brain's Way of Healing: Remarkable Discoveries and Recoveries from the Frontiers of Neuroplasticity",
                 Author = "Norman Doidge",
-                Genre = "Self-development literature "
+                Genre = "Self-development literature",
+                AuthorId = 3
+            },
+            new()
+            {
+                Title = "Contact",
+                Author = "Carl Sagan",
+                Genre = "Science fiction",
+                AuthorId = 2
             }
         };
 

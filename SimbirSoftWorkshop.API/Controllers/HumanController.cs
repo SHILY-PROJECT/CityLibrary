@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
 using System.Linq;
-using System;
-using SimbirSoftWorkshop.API.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using SimbirSoftWorkshop.API.Models;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -16,7 +16,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <summary>
         /// 1.3.1.1 - Список всех людей
         /// </summary>
-        [HttpGet("ListAllHumans")]
+        [HttpGet("listAllHumans")]
         public IActionResult GetAllHumans()
             => Ok(DataStore.Humans);
 
@@ -24,17 +24,16 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 1.3.1.2. - Список людей, которые пишут книги
         /// </summary>
         /// <returns></returns>
-        [HttpGet("ListHumansIsAuthors")]
+        [HttpGet("listHumansIsAuthors")]
         public IActionResult GetHumansIsAuthors()
             => Ok(DataStore.Humans.Where(human => DataStore.Books.Any(book
-                => book.Author.Contains(human.Name, StringComparison.OrdinalIgnoreCase)
-                && book.Author.Contains(human.Surname, StringComparison.OrdinalIgnoreCase))).ToList());
+                => book.Author.Equals($"{human.Name} {human.Surname}", StringComparison.OrdinalIgnoreCase))).ToList());
 
         /// <summary>
         /// 1.3.1.3. - Список людей - результат поиска по фразе
         /// </summary>
         /// <param name="searchQuery">Поисковый запрос (фраза).</param>
-        [HttpGet("ListHumansBySearchQuery")]
+        [HttpGet("listHumansBySearchQuery")]
         public IActionResult GetHumansByLineQuery(string searchQuery)
         {
             if (string.IsNullOrWhiteSpace(searchQuery))
@@ -45,7 +44,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             var result = DataStore.Humans
                 .Where(x => queries
                 .All(query => new[] { x.Name, x.Surname, x.Patronymic }
-                .Any(xProperty => xProperty.Contains(query, StringComparison.OrdinalIgnoreCase)))).ToList();
+                .Any(xProperty => xProperty.Equals(query, StringComparison.OrdinalIgnoreCase)))).ToList();
 
             return Ok(result);
         }
@@ -53,7 +52,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <summary>
         /// 1.3.2 - Добавление нового человека
         /// </summary>
-        [HttpPost("AddNewHuman")]
+        [HttpPost("addNewHumanToList")]
         public IActionResult PostAddHuman(HumanDto human)
         {
             DataStore.Humans.Add(human);
@@ -72,7 +71,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <param name="patronymic">Отчество (если свойство нужно игнорировать, то установите: ignore)</param>
         /// <param name="birthday">Дата рождения (формат: yyyy-MM-dd) (если свойство нужно игнорировать, то установите: ignore)</param>
         /// <returns></returns>
-        [HttpDelete("DeleteHuman")]
+        [HttpDelete("deleteHumanFromList")]
         public IActionResult DeleteHuman(string name, string surname, string patronymic = "ignore", string birthday = "ignore")
         {
             var variables = new List<(string nameVar, string valueVar)>
@@ -88,10 +87,10 @@ namespace SimbirSoftWorkshop.API.Controllers
             {
                 var item = DataStore.Humans[i];
 
-                if (item.Name.Contains(name, StringComparison.OrdinalIgnoreCase) && item.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase))
+                if (item.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && item.Surname.Equals(surname, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (patronymic != "ignore" && !(item.Patronymic.Contains(patronymic, StringComparison.OrdinalIgnoreCase))) { i++; continue; }
-                    if (birthday != "ignore" && !($"{item.Birthday:yyyy-MM-dd}".Contains(birthday))) { i++; continue; }
+                    if (patronymic != "ignore" && !(item.Patronymic.Equals(patronymic, StringComparison.OrdinalIgnoreCase))) { i++; continue; }
+                    if (birthday != "ignore" && !($"{item.Birthday:yyyy-MM-dd}".Equals(birthday))) { i++; continue; }
 
                     DataStore.Humans.RemoveAt(i);
 

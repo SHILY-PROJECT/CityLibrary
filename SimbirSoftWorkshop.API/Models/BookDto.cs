@@ -1,4 +1,6 @@
-﻿namespace SimbirSoftWorkshop.API.Models
+﻿using System;
+
+namespace SimbirSoftWorkshop.API.Models
 {
     /// <summary>
     /// 1.2.2 - Класс книги
@@ -7,6 +9,7 @@
     {
         public string Title { get; set; }
         public string Author { get; set; }
+        public long AuthorId { get; set; }
         public string Genre { get; set; }
     }
 }
