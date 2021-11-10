@@ -5,14 +5,16 @@ namespace SimbirSoftWorkshop.API.Models
     /// <summary>
     /// 2.1.1 - Библиотечкая карточка
     /// </summary>
-    public class LibraryCardDto
+    public class LibraryCard
     {
-        public HumanDto Human { get; set; }
-        public BookDto Book { get; set; }
+        public HumanDto Human { get; private set; }
+        public BookDto Book { get; private set; }
         public DateTimeOffset BookReceiptDate { get; private set; }
 
-        public LibraryCardDto()
+        public LibraryCard(HumanDto human, BookDto book)
         {
+            Human = human;
+            Book = book;
             BookReceiptDate = DateTime.Now;
         }
     }

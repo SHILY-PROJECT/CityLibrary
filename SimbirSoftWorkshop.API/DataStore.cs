@@ -91,6 +91,6 @@ namespace SimbirSoftWorkshop.API
         /// <summary>
         /// 2.1.3 - Список библиотечных карточек
         /// </summary>
-        internal static List<LibraryCardDto> LibraryCards = new();
+        internal static List<LibraryCard> LibraryCards = new();
     }
 }

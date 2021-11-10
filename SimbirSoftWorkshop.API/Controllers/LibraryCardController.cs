@@ -47,11 +47,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (book == null)
                 return ValidationProblem(string.Join(", ", variables.Select(x => $"['{humanId}' - книги по вашему запросу не найдено.")));
 
-            var libraryCard = new LibraryCardDto
-            {
-                Human = human,
-                Book = book
-            };
+            var libraryCard = new LibraryCard(human, book);
 
             DataStore.LibraryCards.Add(libraryCard);
 
