@@ -33,15 +33,15 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// </summary>
         /// <param name="title">Название</param>
         /// <param name="genre">Жанр</param>
-        /// <param name="authorName">Имя автора</param>
-        /// <param name="authorSurname">Фамилия автора</param>
+        /// <param name="nameAuthor">Имя автора</param>
+        /// <param name="surnameAuthor">Фамилия автора</param>
         /// <returns></returns>
         [HttpPost("addNewBookToList")]
-        public IActionResult PostAddBook(string title, string genre, string authorName, string authorSurname)
+        public IActionResult PostAddBook(string title, string genre, string nameAuthor, string surnameAuthor)
         {
             var variables = new List<(string nameVar, string valueVar)>
             {
-                (nameof(title), title), (nameof(genre), genre), (nameof(authorName), authorName), (nameof(authorSurname), authorSurname),
+                (nameof(title), title), (nameof(genre), genre), (nameof(nameAuthor), nameAuthor), (nameof(surnameAuthor), surnameAuthor),
             }
             .Where(x => string.IsNullOrWhiteSpace(x.valueVar)).ToList();
 
@@ -52,12 +52,12 @@ namespace SimbirSoftWorkshop.API.Controllers
             {
                 Title = title,
                 Genre = genre,
-                Author = $"{FormatString(authorName)} {FormatString(authorSurname)}",
+                Author = $"{FormatString(nameAuthor)} {FormatString(surnameAuthor)}",
             };
             var existingAuthor = DataStore.Books.FirstOrDefault(x => x.Author == book.Author);
             book.AuthorId = existingAuthor != null ? existingAuthor.AuthorId : (DataStore.Books.Max(x => x.AuthorId) + 1);
 
-            if (DataStore.Books.FirstOrDefault(x => x.Author == book.Author && x.AuthorId == book.AuthorId && x.Title == book.Title) != null)
+            if (DataStore.Books.FirstOrDefault(x => x.Author == book.Author && x.AuthorId == book.AuthorId && x.Title.Contains(book.Title)) != null)
                 return BadRequest("Книга уже существует");
 
             DataStore.Books.Add(book);
@@ -91,7 +91,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             {
                 var item = DataStore.Books[i];
 
-                if (item.Title.Equals(title, StringComparison.OrdinalIgnoreCase) && item.Author.Equals($"{authorName} {authorSurname}", StringComparison.OrdinalIgnoreCase))
+                if (item.Title.Contains(title, StringComparison.OrdinalIgnoreCase) && item.Author.Equals($"{authorName} {authorSurname}", StringComparison.OrdinalIgnoreCase))
                 {
                     DataStore.Books.RemoveAt(i);
                     return Ok("Книга успешно удалена");

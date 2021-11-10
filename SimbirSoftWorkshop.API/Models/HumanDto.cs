@@ -11,6 +11,7 @@ namespace SimbirSoftWorkshop.API.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Patronymic { get; set; }
+        public long HumanId { get; set; }
         public DateTime Birthday { get; set; }
     }
 }

@@ -16,35 +16,40 @@ namespace SimbirSoftWorkshop.API
                 Name = "Alexander",
                 Surname = "Statskov",
                 Patronymic = "Dmitrievich",
-                Birthday = new(1983, 03, 12)
+                Birthday = new(1983, 03, 12),
+                HumanId = 1
             },
             new()
             {
                 Name = "Igor",
                 Surname = "Izmailov",
                 Patronymic = "Innokentievich",
-                Birthday = new(1978, 11, 27)
+                Birthday = new(1978, 11, 27),
+                HumanId = 2
             },
             new()
             {
                 Name = "Eliezer",
                 Surname = "Yudkowsky",
                 Patronymic = "Shlomo",
-                Birthday = new(1979, 09, 11)
+                Birthday = new(1979, 09, 11),
+                HumanId = 3
             },
             new()
             {
                 Name = "Yana",
                 Surname = "Sharkelova",
                 Patronymic = "Egorovna",
-                Birthday = new(1992, 05, 06)
+                Birthday = new(1992, 05, 06),
+                HumanId = 4
             },
             new()
             {
                 Name = "Igor",
                 Surname = "Premin",
                 Patronymic = "Olegovych",
-                Birthday = new(1978, 11, 27)
+                Birthday = new(1978, 11, 27),
+                HumanId = 5
             }
         };
 
@@ -83,5 +88,9 @@ namespace SimbirSoftWorkshop.API
             }
         };
 
+        /// <summary>
+        /// 2.1.3 - Список библиотечных карточек
+        /// </summary>
+        internal static List<LibraryCardDto> LibraryCards = new();
     }
 }
