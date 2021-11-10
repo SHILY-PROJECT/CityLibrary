@@ -9,6 +9,11 @@ namespace SimbirSoftWorkshop.API.Models
     {
         public HumanDto Human { get; set; }
         public BookDto Book { get; set; }
-        public DateTimeOffset BookReceiptDate { get; set; }
+        public DateTimeOffset BookReceiptDate { get; private set; }
+
+        public LibraryCardDto()
+        {
+            BookReceiptDate = DateTime.Now;
+        }
     }
 }

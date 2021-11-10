@@ -50,8 +50,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             var libraryCard = new LibraryCardDto
             {
                 Human = human,
-                Book = book,
-                BookReceiptDate = DateTime.Now
+                Book = book
             };
 
             DataStore.LibraryCards.Add(libraryCard);
