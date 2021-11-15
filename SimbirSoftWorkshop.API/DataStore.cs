@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SimbirSoftWorkshop.API.Models;
 
 namespace SimbirSoftWorkshop.API
@@ -9,7 +8,7 @@ namespace SimbirSoftWorkshop.API
         /// <summary>
         /// 1.2.3 - Список людей
         /// </summary>
-        internal static List<HumanDto> Humans = new()
+        internal static List<HumanDetailDto> Humans = new()
         {
             new()
             {
@@ -17,7 +16,7 @@ namespace SimbirSoftWorkshop.API
                 Surname = "Statskov",
                 Patronymic = "Dmitrievich",
                 Birthday = new(1983, 03, 12),
-                HumanId = 1
+                Id = 1
             },
             new()
             {
@@ -25,7 +24,7 @@ namespace SimbirSoftWorkshop.API
                 Surname = "Izmailov",
                 Patronymic = "Innokentievich",
                 Birthday = new(1978, 11, 27),
-                HumanId = 2
+                Id = 2
             },
             new()
             {
@@ -33,7 +32,7 @@ namespace SimbirSoftWorkshop.API
                 Surname = "Yudkowsky",
                 Patronymic = "Shlomo",
                 Birthday = new(1979, 09, 11),
-                HumanId = 3
+                Id = 3
             },
             new()
             {
@@ -41,7 +40,7 @@ namespace SimbirSoftWorkshop.API
                 Surname = "Sharkelova",
                 Patronymic = "Egorovna",
                 Birthday = new(1992, 05, 06),
-                HumanId = 4
+                Id = 4
             },
             new()
             {
@@ -49,17 +48,18 @@ namespace SimbirSoftWorkshop.API
                 Surname = "Premin",
                 Patronymic = "Olegovych",
                 Birthday = new(1978, 11, 27),
-                HumanId = 5
+                Id = 5
             }
         };
 
         /// <summary>
         /// 1.2.3 - Список книг
         /// </summary>
-        internal static List<BookDto> Books = new()
+        internal static List<BookDetailDto> Books = new()
         {
             new()
             {
+                Id = 1,
                 Title = "Harry Potter and the Methods of Rationality",
                 Author = "Eliezer Yudkowsky",
                 Genre = "Fantasy",
@@ -67,6 +67,7 @@ namespace SimbirSoftWorkshop.API
             },
             new()
             {
+                Id = 2,
                 Title = "The Demon-Haunted World: Science as a Candle in the Dark",
                 Author = "Carl Sagan",
                 Genre = "Scientific literature",
@@ -74,6 +75,7 @@ namespace SimbirSoftWorkshop.API
             },
             new()
             {
+                Id = 3,
                 Title = "The Brain's Way of Healing: Remarkable Discoveries and Recoveries from the Frontiers of Neuroplasticity",
                 Author = "Norman Doidge",
                 Genre = "Self-development literature",
@@ -81,6 +83,7 @@ namespace SimbirSoftWorkshop.API
             },
             new()
             {
+                Id = 4,
                 Title = "Contact",
                 Author = "Carl Sagan",
                 Genre = "Science fiction",
@@ -91,6 +94,6 @@ namespace SimbirSoftWorkshop.API
         /// <summary>
         /// 2.1.3 - Список библиотечных карточек
         /// </summary>
-        internal static List<LibraryCard> LibraryCards = new();
+        internal static List<LibraryCardDetailDto> LibraryCards = new();
     }
 }

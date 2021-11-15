@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Models;
 using SimbirSoftWorkshop.API.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -18,16 +18,16 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 1.4.1.1 - Список всех книг
         /// </summary>
         [HttpGet("listAllBooks")]
-        public IActionResult GetBooks(SortBookOptionsEnum sortOprion)
-            => Ok(sortOprion switch
+        public IActionResult GetBooks([FromQuery] BookSortingTypeEnum bookSortingType)
+            => Ok(bookSortingType switch
             {
-                SortBookOptionsEnum.NoSort => DataStore.Books,
-                SortBookOptionsEnum.Title => DataStore.Books.OrderBy(x => x.Title).ToList(),
-                SortBookOptionsEnum.TitleReversed => DataStore.Books.OrderByDescending(y => y.Title).ToList(),
-                SortBookOptionsEnum.Author => DataStore.Books.OrderBy(x => x.Author).ToList(),
-                SortBookOptionsEnum.AuthorReversed => DataStore.Books.OrderByDescending(y => y.Author).ToList(),
-                SortBookOptionsEnum.Genre => DataStore.Books.OrderBy(x => x.Genre).ToList(),
-                SortBookOptionsEnum.GenreReversed => DataStore.Books.OrderByDescending(y => y.Genre).ToList(),
+                BookSortingTypeEnum.NoSort => DataStore.Books,
+                BookSortingTypeEnum.Title => DataStore.Books.OrderBy(x => x.Title).ToList(),
+                BookSortingTypeEnum.TitleReversed => DataStore.Books.OrderByDescending(y => y.Title).ToList(),
+                BookSortingTypeEnum.Author => DataStore.Books.OrderBy(x => x.Author).ToList(),
+                BookSortingTypeEnum.AuthorReversed => DataStore.Books.OrderByDescending(y => y.Author).ToList(),
+                BookSortingTypeEnum.Genre => DataStore.Books.OrderBy(x => x.Genre).ToList(),
+                BookSortingTypeEnum.GenreReversed => DataStore.Books.OrderByDescending(y => y.Genre).ToList(),
                 _ => DataStore.Books
             });       
 
@@ -36,7 +36,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("listBooksByAuthorId")]
-        public IActionResult GetBooksByAuthorId(long authorId)
+        public IActionResult GetBooksByAuthorId([Required][FromQuery] long authorId)
             => Ok(DataStore.Books.Where(x => x.AuthorId == authorId).ToList());
         
         /// <summary>
@@ -48,33 +48,17 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <param name="surnameAuthor">Фамилия автора</param>
         /// <returns></returns>
         [HttpPost("addNewBookToList")]
-        public IActionResult PostAddBook(string title, string genre, string nameAuthor, string surnameAuthor)
+        public IActionResult PostAddBook([FromForm] BookDto book)
         {
-            var variables = new List<(string nameVar, string valueVar)>
-            {
-                (nameof(title), title), (nameof(genre), genre), (nameof(nameAuthor), nameAuthor), (nameof(surnameAuthor), surnameAuthor),
-            }
-            .Where(x => string.IsNullOrWhiteSpace(x.valueVar)).ToList();
+            var bookDetail = (BookDetailDto)book;
+            var existingAuthor = DataStore.Books.FirstOrDefault(x => x.Author.Equals(bookDetail.Author, StringComparison.OrdinalIgnoreCase));
+            bookDetail.AuthorId = existingAuthor != null ? existingAuthor.AuthorId : (DataStore.Books.Max(x => x.AuthorId) + 1);
 
-            if (variables.Count != 0)
-                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{x.nameVar}' - не может быть нулевым или пустым.]")));
-
-            var book = new BookDto()
-            {
-                Title = title,
-                Genre = genre,
-                Author = $"{FormatString(nameAuthor)} {FormatString(surnameAuthor)}",
-            };
-            var existingAuthor = DataStore.Books.FirstOrDefault(x => x.Author == book.Author);
-            book.AuthorId = existingAuthor != null ? existingAuthor.AuthorId : (DataStore.Books.Max(x => x.AuthorId) + 1);
-
-            if (DataStore.Books.FirstOrDefault(x => x.Author == book.Author && x.AuthorId == book.AuthorId && x.Title.Contains(book.Title)) != null)
+            if (DataStore.Books.FirstOrDefault(x => x.Author == bookDetail.Author && x.AuthorId == bookDetail.AuthorId && x.Title.Contains(bookDetail.Title)) != null)
                 return BadRequest("Книга уже существует");
 
-            DataStore.Books.Add(book);
-
-            if (!DataStore.Books.Contains(book))
-                return BadRequest("Не удалось добавить книгу");
+            bookDetail.Id = (DataStore.Books.Max(x => x.Id) + 1);
+            DataStore.Books.Add(bookDetail);
 
             return Ok("Книга успешно добавлен");
         }
@@ -86,23 +70,12 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <param name="authorName">Имя автора</param>
         /// <param name="authorSurname">Фамилия автора</param>
         /// <returns></returns>
-        [HttpDelete("deleteBookFromList")]
-        public IActionResult DeleteBook(string title, string authorName, string authorSurname)
+        [HttpDelete("removingBookFromList")]
+        public IActionResult DeleteBook([Required][FromQuery] long bookId)
         {
-            var variables = new List<(string nameVar, string valueVar)>
-            {
-                (nameof(title), title), (nameof(authorName), authorName), (nameof(authorSurname), authorSurname),
-            }
-            .Where(x => string.IsNullOrWhiteSpace(x.valueVar)).ToList();
-
-            if (variables.Count != 0)
-                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{x.nameVar}' - не может быть нулевым или пустым.]")));
-
             for (int i = 0; i < DataStore.Books.Count;)
             {
-                var item = DataStore.Books[i];
-
-                if (item.Title.Contains(title, StringComparison.OrdinalIgnoreCase) && item.Author.Equals($"{authorName} {authorSurname}", StringComparison.OrdinalIgnoreCase))
+                if (DataStore.Books[i].Id == bookId)
                 {
                     DataStore.Books.RemoveAt(i);
                     return Ok("Книга успешно удалена");
@@ -113,7 +86,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             return BadRequest("Не удалось удалить книгу");
         }
 
-        private static string FormatString(string author)
-            => new(author.Select((value, index) => index == 0 ? char.ToUpper(value) : char.ToLower(value)).ToArray());
+
+        
     }
 }

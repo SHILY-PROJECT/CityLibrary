@@ -1,6 +1,6 @@
 ﻿namespace SimbirSoftWorkshop.API.Enums
 {
-    public enum SortBookOptionsEnum
+    public enum BookSortingTypeEnum
     {
         NoSort,
         Author,

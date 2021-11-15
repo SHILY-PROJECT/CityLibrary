@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -25,34 +25,25 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <param name="nameAuthorBook">Имя автора</param>
         /// <param name="surnameAuthorBook">Фамилия автора</param>
         [HttpPost("addHumanReaderToLibraryCard")]
-        public IActionResult PostAddHumanReaderToLibraryCard(long humanId, string titleBook, string nameAuthorBook, string surnameAuthorBook)
+        public IActionResult PostAddHumanReaderToLibraryCard([Required] long humanId, [Required] long bookId)
         {
-            var variables = new List<(string nameVar, string valueVar)>
-            {
-                (nameof(titleBook), titleBook), (nameof(nameAuthorBook), nameAuthorBook), (nameof(surnameAuthorBook), surnameAuthorBook)
-            }
-            .Where(x => string.IsNullOrWhiteSpace(x.valueVar)).ToList();
-
-            if (variables.Count != 0)
-                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{x.nameVar}' - не может быть нулевым или пустым.]")));
-
-            var human = DataStore.Humans.FirstOrDefault(x => x.HumanId == humanId);
+            var human = DataStore.Humans.FirstOrDefault(x => x.Id == humanId);
 
             if (human == null)
-                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{humanId}' - данный пользователь отсутствует в базе.")));
+                return ValidationProblem($"['{nameof(humanId)}: {humanId}' - данный пользователь отсутствует в базе.");
 
-            var book = DataStore.Books.FirstOrDefault(x => x.Title.Contains(titleBook, StringComparison.OrdinalIgnoreCase)
-                && x.Author.Equals($"{nameAuthorBook} {surnameAuthorBook}", StringComparison.OrdinalIgnoreCase));
+            var book = DataStore.Books.FirstOrDefault(x => x.Id == bookId);
 
             if (book == null)
-                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{humanId}' - книги по вашему запросу не найдено.")));
+                return ValidationProblem($"{nameof(bookId)}: {bookId}' - книги по вашему запросу не найдено.");           
 
-            var libraryCard = new LibraryCard(human, book);
-
+            var libraryCard = new LibraryCardDetailDto
+            {
+                Human = human,
+                Book = book,
+                Id = (DataStore.LibraryCards.Max(x => x.Id) + 1)
+            };
             DataStore.LibraryCards.Add(libraryCard);
-
-            if (!DataStore.LibraryCards.Contains(libraryCard))
-                return BadRequest("Не удалось добавить библиотечную карточку");
 
             return Ok(libraryCard);
         }

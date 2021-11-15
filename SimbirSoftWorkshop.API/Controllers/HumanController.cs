@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -34,17 +34,17 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// </summary>
         /// <param name="searchQuery">Поисковый запрос (фраза).</param>
         [HttpGet("listHumansBySearchQuery")]
-        public IActionResult GetHumansByLineQuery(string searchQuery)
+        public IActionResult GetHumansByQuery(
+            [Required][StringLength(1000, MinimumLength = 1)]
+            [RegularExpression(@"[A-Za-zА-Яа-я0-9\s-]+", ErrorMessage = "The string can contain only Cyrillic, Latin and whitespace characters.")]
+            string searchQuery)
         {
-            if (string.IsNullOrWhiteSpace(searchQuery))
-                return ValidationProblem($"['{nameof(searchQuery)}' - не может быть нулевым или пустым.]");
-
             var queries = searchQuery.Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
             var result = DataStore.Humans
                 .Where(x => queries
-                .All(query => new[] { x.Name, x.Surname, x.Patronymic }
-                .Any(xProperty => xProperty.Equals(query, StringComparison.OrdinalIgnoreCase)))).ToList();
+                .All(query => new[] { x.Name, x.Surname, x.Patronymic, x.Birthday.ToString("yyyy-MM-dd") }
+                .Any(xProperty => xProperty.Contains(query, StringComparison.OrdinalIgnoreCase)))).ToList();
 
             return Ok(result);
         }
@@ -53,22 +53,11 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 1.3.2 - Добавление нового человека
         /// </summary>
         [HttpPost("addNewHumanToList")]
-        public IActionResult PostAddHuman(HumanDto human)
+        public IActionResult PostAddHuman([Required][FromQuery] HumanDto human)
         {
-            var variables = new List<(string nameVar, string valueVar)>
-            {
-                (nameof(human.Name), human.Name), (nameof(human.Surname), human.Surname), (nameof(human.Patronymic), human.Patronymic)
-            }
-            .Where(x => string.IsNullOrWhiteSpace(x.valueVar) || x.valueVar == "string").ToList();
-
-            if (variables.Count != 0)
-                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{x.nameVar}' - не может быть нулевым или пустым.]")));
-
-            human.HumanId = (DataStore.Humans.Max(x => x.HumanId) + 1);
-            DataStore.Humans.Add(human);
-
-            if (!DataStore.Humans.Contains(human))
-                return BadRequest("Не удалось добавить человека");
+            var humanDetail = (HumanDetailDto)human;
+            humanDetail.Id = (DataStore.Humans.Max(x => x.Id) + 1);
+            DataStore.Humans.Add(humanDetail);
 
             return Ok("Человек успешно добавлен");
         }
@@ -81,29 +70,14 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// <param name="patronymic">Отчество (если свойство нужно игнорировать, то установите: ignore)</param>
         /// <param name="birthday">Дата рождения (формат: yyyy-MM-dd) (если свойство нужно игнорировать, то установите: ignore)</param>
         /// <returns></returns>
-        [HttpDelete("deleteHumanFromList")]
-        public IActionResult DeleteHuman(string name, string surname, string patronymic = "ignore", string birthday = "ignore")
+        [HttpDelete("removingHumanFromList")]
+        public IActionResult DeleteHuman([Required] long humanId)
         {
-            var variables = new List<(string nameVar, string valueVar)>
-            {
-                (nameof(name), name), (nameof(surname), surname), (nameof(patronymic), patronymic), (nameof(birthday), birthday),
-            }
-            .Where(x => string.IsNullOrWhiteSpace(x.valueVar)).ToList();
-
-            if (variables.Count != 0)
-                return ValidationProblem(string.Join(", ", variables.Select(x => $"['{x.nameVar}' - не может быть нулевым или пустым.]")));
-
             for (int i = 0; i < DataStore.Humans.Count;)
             {
-                var item = DataStore.Humans[i];
-
-                if (item.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && item.Surname.Equals(surname, StringComparison.OrdinalIgnoreCase))
+                if (DataStore.Humans[i].Id == humanId)
                 {
-                    if (patronymic != "ignore" && !(item.Patronymic.Equals(patronymic, StringComparison.OrdinalIgnoreCase))) { i++; continue; }
-                    if (birthday != "ignore" && !($"{item.Birthday:yyyy-MM-dd}".Equals(birthday))) { i++; continue; }
-
                     DataStore.Humans.RemoveAt(i);
-
                     return Ok("Человек успешно удален");
                 }
                 else i++;
@@ -112,5 +86,8 @@ namespace SimbirSoftWorkshop.API.Controllers
             return BadRequest("Не удалось удалить человека");
         }
 
+        private static string NormalizeNamingCase(string nameOrSurnameOrPatronymic)
+            => string.Join(" ", nameOrSurnameOrPatronymic.Split(' ')
+                .Select(x => new string(x.Select((value, index) => index == 0 ? char.ToUpper(value) : char.ToLower(value)).ToArray())));
     }
 }
