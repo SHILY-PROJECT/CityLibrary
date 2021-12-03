@@ -1,7 +1,6 @@
-﻿using SimbirSoftWorkshop.API.Enums;
-using SimbirSoftWorkshop.API.Models.DatabaseModels;
+﻿using System.Collections.Generic;
+using SimbirSoftWorkshop.API.Enums;
 using SimbirSoftWorkshop.API.Models.ViewModel;
-using System.Collections.Generic;
 
 namespace SimbirSoftWorkshop.API.Interfaces
 {

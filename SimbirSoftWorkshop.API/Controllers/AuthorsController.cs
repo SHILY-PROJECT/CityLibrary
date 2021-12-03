@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Interfaces;
-using SimbirSoftWorkshop.API.Models.DatabaseModels;
 using SimbirSoftWorkshop.API.Models.ViewModel;
 
 namespace SimbirSoftWorkshop.API.Controllers

@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SimbirSoftWorkshop.API.Interfaces;
 using SimbirSoftWorkshop.API.Models.DatabaseModels;
 using SimbirSoftWorkshop.API.Models.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimbirSoftWorkshop.API.Repositories
 {

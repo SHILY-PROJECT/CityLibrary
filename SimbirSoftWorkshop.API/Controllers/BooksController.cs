@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Enums;
 using SimbirSoftWorkshop.API.Interfaces;
-using SimbirSoftWorkshop.API.Models.DatabaseModels;
 using SimbirSoftWorkshop.API.Models.ViewModel;
 
 namespace SimbirSoftWorkshop.API.Controllers

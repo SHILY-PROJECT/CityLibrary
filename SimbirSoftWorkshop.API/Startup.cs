@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using SimbirSoftWorkshop.API.Interfaces;
 using SimbirSoftWorkshop.API.Repositories;
-using System.Text.Json.Serialization;
 
 namespace SimbirSoftWorkshop.API
 {

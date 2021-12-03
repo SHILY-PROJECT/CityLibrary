@@ -1,10 +1,7 @@
-﻿using SimbirSoftWorkshop.API.Models.DatabaseModels;
-using SimbirSoftWorkshop.API.Models.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SimbirSoftWorkshop.API.Models.DatabaseModels;
+using SimbirSoftWorkshop.API.Models.ViewModel;
 
 namespace SimbirSoftWorkshop.API.Interfaces
 {

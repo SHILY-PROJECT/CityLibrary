@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SimbirSoftWorkshop.API.Interfaces;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using SimbirSoftWorkshop.API.Interfaces;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
