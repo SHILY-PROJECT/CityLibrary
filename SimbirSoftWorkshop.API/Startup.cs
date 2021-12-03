@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SimbirSoftWorkshop.API.Interfaces;
+using SimbirSoftWorkshop.API.Repositories;
+using System.Text.Json.Serialization;
 
 namespace SimbirSoftWorkshop.API
 {
@@ -23,9 +20,22 @@ namespace SimbirSoftWorkshop.API
 
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// 2.4 - Получение строки подключения из конфигурации
+        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
+            var connectionString = Configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SimbirSoftWorkshop.API", Version = "v1" });
