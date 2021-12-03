@@ -10,7 +10,7 @@ CREATE TABLE author(
 
 CREATE TABLE person(
     id INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
-    birth_date DATETIME,
+    birth_date DATETIME2,
     first_name NVARCHAR(50) NOT NULL,
     last_name NVARCHAR(50) NOT NULL,
     middle_name NVARCHAR(50)
