@@ -2,7 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Interfaces;
-using SimbirSoftWorkshop.API.Models.ViewModel;
+using SimbirSoftWorkshop.API.Models.Dto;
+using SimbirSoftWorkshop.API.Models.Dto.Persons;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -20,53 +21,44 @@ namespace SimbirSoftWorkshop.API.Controllers
             _iPersonRepository = iPersonRepository;
         }
 
-
         /// <summary>
         /// 2.7.1.5 - Получение списока всех взятых пользователем книг 
         /// </summary>
         [HttpGet("ListPersonBooks")]
         public IActionResult GetPersonBooks([FromQuery][Required] int personId)
         {
-            try
-            {
-                return Ok(_iPersonRepository.GetPersonBooks(personId));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iPersonRepository.GetPersonBooks(personId);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
         /// 2.7.1.1 - Добавить пользователя
         /// </summary>
         [HttpPost("AddNewPerson")]
-        public IActionResult AddPerson([FromQuery] FullNameDto fullName, [FromQuery] DateTime birthDate = default)
+        public IActionResult AddPerson([FromQuery] PersonDto person)
         {
-            try
-            {
-                return Ok(_iPersonRepository.Add(fullName, birthDate));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iPersonRepository.Add(person);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
         /// 2.7.1.6 - Получение книги пользователем
         /// </summary>
         [HttpPost("PersonTakeBook")]
-        public IActionResult TakeBook([FromQuery][Required] int bookId, [FromQuery][Required] int personId)
+        public IActionResult TakeBook([FromQuery] PersonBookDto personBook)
         {
-            try
-            {
-                _iPersonRepository.TakeBook(bookId, personId);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iPersonRepository.TakeBook(personBook);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
 
             return Ok("Пользователью успешно выдана книга");
         }
@@ -75,16 +67,12 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 2.7.1.7 - Возврат книги пользователем
         /// </summary>
         [HttpPost("PersonReturnBook")]
-        public IActionResult ReturnBook([FromQuery][Required] int bookId, [FromQuery][Required] int personId)
+        public IActionResult ReturnBook([FromQuery] PersonBookDto personBook)
         {
-            try
-            {
-                _iPersonRepository.ReturnBook(bookId, personId);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iPersonRepository.ReturnBook(personBook);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
 
             return Ok("Пользователь успешно вернул книгу");
         }
@@ -93,16 +81,14 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 2.7.1.2 - Обновление/изменение информации о пользователе
         /// </summary>
         [HttpPut("UpdatePersonInformation")]
-        public IActionResult UpdatePerson([FromQuery] PersonUpdateDto personUpdateDto)
+        public IActionResult UpdatePerson([FromQuery] UpdatePersonDto personUpdateDto)
         {
-            try
-            {
-                return Ok(_iPersonRepository.Update(personUpdateDto));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iPersonRepository.Update(personUpdateDto);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
@@ -111,14 +97,10 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpDelete("RemoveById")]
         public IActionResult DeletePerson([FromQuery][Required] int personId)
         {
-            try
-            {
-                _iPersonRepository.Delete(personId);
-            }
-            catch (Exception ex)
-            {
-                return ValidationProblem(ex.Message);
-            }
+            var result = _iPersonRepository.Delete(personId);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
 
             return Ok("Пользователь успешно удален");
         }
@@ -127,16 +109,12 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 2.7.1.4 - Удаление пользователя по ФИО
         /// </summary>
         [HttpDelete("RemoveByFullName")]
-        public IActionResult DeletePerson([FromQuery] FullNameDto fullName)
+        public IActionResult DeletePerson([FromQuery] PersonDto person)
         {
-            try
-            {
-                _iPersonRepository.Delete(fullName.FirstName, fullName.LastName, fullName.MiddleName);
-            }
-            catch(Exception ex)
-            {
-                return ValidationProblem(ex.Message);
-            }
+            var result = _iPersonRepository.Delete(person);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
 
             return Ok("Пользователь успешно удален");
         }

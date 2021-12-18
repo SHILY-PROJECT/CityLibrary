@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Interfaces;
-using SimbirSoftWorkshop.API.Models.ViewModel;
+using SimbirSoftWorkshop.API.Models.Dto.Authors;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -26,14 +25,12 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpGet("ListAllAuthors")]
         public IActionResult GetListAuthors()
         {
-            try
-            {
-                return Ok(_iAuthorRepository.GetListAuthors());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iAuthorRepository.GetListAuthors();
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
@@ -42,30 +39,26 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpGet("ListBooksByAuthor")]
         public IActionResult GetListBooksByAuthor([FromQuery] int authorId)
         {
-            try
-            {
-                return Ok(_iAuthorRepository.GetListBooksByAuthor(authorId));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iAuthorRepository.GetListBooksByAuthor(authorId);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
         /// 2.7.3.3 - Добавление автора
         /// </summary>
         [HttpPost("AddNewAuthorAndHisBooks")]
-        public IActionResult AddAuthor([FromQuery] FullNameDto fullName, [FromQuery] List<string> books = null)
+        public IActionResult AddAuthor([FromQuery] AuthorDto author, [FromQuery] List<string> books = null)
         {
-            try
-            {
-                return Ok(_iAuthorRepository.Add(fullName, books));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iAuthorRepository.Add(author, books);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
@@ -74,14 +67,10 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpDelete("RemoveAuthor")]
         public IActionResult DeleteAuthor([FromQuery] int authorId)
         {
-            try
-            {
-                _iAuthorRepository.Delete(authorId);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iAuthorRepository.Delete(authorId);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
 
             return Ok("Автор успешно удален");
         }

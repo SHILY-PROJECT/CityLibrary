@@ -26,14 +26,12 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpGet("ListAllGenre")]
         public IActionResult GetListGenres()
         {
-            try
-            {
-                return Ok(_iGenreRepository.GetListGenres());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iGenreRepository.GetListGenres();
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
@@ -42,14 +40,12 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpGet("NumberOfBooksByGenre")]
         public IActionResult GetStatisticsByGenres()
         {
-            try
-            {
-                return Ok(_iGenreRepository.GetStatisticsByGenres());
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iGenreRepository.GetStatisticsByGenres();
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
+
+            return Ok(result.Content);
         }
 
         /// <summary>
@@ -58,14 +54,10 @@ namespace SimbirSoftWorkshop.API.Controllers
         [HttpPost("AddNewGenre")]
         public IActionResult AddGenre([FromQuery][Required][StringLength(200, MinimumLength = 1)] string genreName)
         {
-            try
-            {
-                _iGenreRepository.Add(genreName);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = _iGenreRepository.Add(genreName);
+
+            if (result.IsSuccess is false)
+                return BadRequest(result.Message);
 
             return Ok("Жанр успешно добавлен");
         }
