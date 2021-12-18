@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
-using SimbirSoftWorkshop.API.Models.DatabaseModels;
-using SimbirSoftWorkshop.API.Models.ViewModel;
+using SimbirSoftWorkshop.API.Toolkit;
+using SimbirSoftWorkshop.API.Models.Dto.Genres;
+using SimbirSoftWorkshop.API.Models.Entity;
 
 namespace SimbirSoftWorkshop.API.Interfaces
 {
     public interface IGenreRepository
     {
-        public IEnumerable<Genre> GetListGenres();
-        public void Add(string genreNmae);
-        public IEnumerable<GenreStatisticsDto> GetStatisticsByGenres();
+        public ResultContent<IEnumerable<Genre>> GetListGenres();
+        public ResultContent<Genre> Add(string genreNmae);
+        public ResultContent<IEnumerable<GenreStatisticsDto>> GetStatisticsByGenres();
     }
 }

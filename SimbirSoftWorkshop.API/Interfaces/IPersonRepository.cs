@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using SimbirSoftWorkshop.API.Models.DatabaseModels;
-using SimbirSoftWorkshop.API.Models.ViewModel;
+﻿using System.Collections.Generic;
+using SimbirSoftWorkshop.API.Toolkit;
+using SimbirSoftWorkshop.API.Models.Dto;
+using SimbirSoftWorkshop.API.Models.Dto.Persons;
+using SimbirSoftWorkshop.API.Models.Entity;
 
 namespace SimbirSoftWorkshop.API.Interfaces
 {
     public interface IPersonRepository
     {
-        public Person Add(FullNameDto fullName, DateTime birthDate);
-        public Person Update(PersonUpdateDto personUpdateDto);
-        public void Delete(int personId);
-        public void Delete(string firstName, string lastName, string middleName);
-        public IEnumerable<Book> GetPersonBooks(int personId);
-        public void TakeBook(int bookId, int personId);
-        public void ReturnBook(int bookId, int personId);
+        public ResultContent<Person> Add(PersonDto persone);
+        public ResultContent<Person> Update(UpdatePersonDto updatePerson);
+        public ResultContent<Person> Delete(int personId);
+        public ResultContent<IEnumerable<Person>> Delete(PersonDto persone);
+        public ResultContent<IEnumerable<Book>> GetPersonBooks(int personId);
+        public ResultContent<LibraryCard> TakeBook(PersonBookDto personBook);
+        public ResultContent<LibraryCard> ReturnBook(PersonBookDto personBook);
     }
 }
