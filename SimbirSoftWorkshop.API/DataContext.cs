@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimbirSoftWorkshop.API.Models.DatabaseModels;
+using SimbirSoftWorkshop.API.Models.Entity;
 
 namespace SimbirSoftWorkshop.API
 {

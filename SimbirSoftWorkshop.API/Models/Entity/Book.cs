@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SimbirSoftWorkshop.API.Models.DatabaseModels
+namespace SimbirSoftWorkshop.API.Models.Entity
 {
     /// <summary>
     /// 2.2 - Класс книги (описывающий сущность для БД)

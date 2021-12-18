@@ -1,4 +1,4 @@
-﻿namespace SimbirSoftWorkshop.API.Models.ViewModel
+﻿namespace SimbirSoftWorkshop.API.Models.Dto.Genres
 {
     public class GenreStatisticsDto
     {

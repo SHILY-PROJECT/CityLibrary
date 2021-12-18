@@ -1,4 +1,4 @@
-﻿namespace SimbirSoftWorkshop.API.Models.DatabaseModels
+﻿namespace SimbirSoftWorkshop.API.Models.Entity
 {
     /// <summary>
     /// 2.2 - Класс библиотечной карточки, предназначен для связи двух моделей (описывающий сущность для БД)

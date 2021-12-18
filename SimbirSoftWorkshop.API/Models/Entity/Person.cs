@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimbirSoftWorkshop.API.Models.DatabaseModels
+namespace SimbirSoftWorkshop.API.Models.Entity
 {
     /// <summary>
     /// 2.2 - Класс человека/персоны (описывающий сущность для БД)
