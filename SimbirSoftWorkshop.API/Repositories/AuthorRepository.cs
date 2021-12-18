@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using SimbirSoftWorkshop.API.Interfaces;
-using SimbirSoftWorkshop.API.Models.DatabaseModels;
-using SimbirSoftWorkshop.API.Models.ViewModel;
+using SimbirSoftWorkshop.API.Models.Entity;
+using SimbirSoftWorkshop.API.Models.Dto.Authors;
+using SimbirSoftWorkshop.API.Toolkit;
 
 namespace SimbirSoftWorkshop.API.Repositories
 {
@@ -20,49 +21,112 @@ namespace SimbirSoftWorkshop.API.Repositories
             _context = context;
         }
 
-        public IEnumerable<Author> GetListAuthors()
+        /// <summary>
+        /// Получение списка всех авторов.
+        /// </summary>
+        /// <returns></returns>
+        public ResultContent<IEnumerable<Author>> GetListAuthors()
         {
-            return _context.Authors;
-        }
-
-        public Author GetListBooksByAuthor(int authorId)
-        {
-            return _context.Authors
-                .Where(a => a.Id == authorId)
-                .Include(a => a.Books)
-                .ThenInclude(b => b.BooksGenres)
-                .ThenInclude(bg => bg.Genre)
-                .FirstOrDefault();
-        }
-
-        public Author Add(FullNameDto fullName, List<string> books = null)
-        {
-            var firstName = fullName.FirstName;
-            var lastName = fullName.LastName;
-            var middleName = fullName.MiddleName;
-            var author = new Author
+            try
             {
-                FirstName = firstName,
-                LastName = lastName,
-                MiddleName = middleName,
-                Books = books is not null && !books.Any(x => !string.IsNullOrWhiteSpace(x)) ? books.Where(x => string.IsNullOrWhiteSpace(x)).Select(x => new Book { Name = x }).ToList() : null
-            };
-
-            _context.Authors.Add(author);
-            _context.SaveChanges();
-
-            return author;
+                return new ResultContent<IEnumerable<Author>>().Ok(_context.Authors.ToList());
+            }
+            catch (Exception ex)
+            {
+                return new ResultContent<IEnumerable<Author>>().Error(ex);
+            }
         }
 
-        public void Delete(int authorId)
+        /// <summary>
+        /// Получение списка всех книг автора.
+        /// </summary>
+        /// <param name="authorId"></param>
+        /// <returns></returns>
+        public ResultContent<IEnumerable<AuthorBookDto>> GetListBooksByAuthor(int authorId)
         {
-            var author = _context.Authors.Include(a => a.Books).FirstOrDefault(x => x.Id == authorId);
+            try
+            {
+                var author = _context.Authors
+                    .Where(a => a.Id == authorId)
+                    .Include(a => a.Books)
+                        .ThenInclude(b => b.BooksGenres)
+                            .ThenInclude(bg => bg.Genre)
+                    .FirstOrDefault();
 
-            if (author is null) throw new Exception($"'{nameof(authorId)}:{authorId}' - Автор не найден");
-            else if (author.Books.Any()) throw new Exception($"'{nameof(authorId)}:{authorId}' - Невозможно удалить автора, пока у него есть книги");
+                var books = author.Books.Select(book => new AuthorBookDto
+                {
+                    AuthorId = authorId,
+                    Author = $"{author.FirstName} {author.LastName}",
+                    BookId = book.Id,
+                    BookName = book.Name,
+                    GenreId = book.BooksGenres.FirstOrDefault(x => x.BookId == book.Id).GenreId,
+                    GenreName = book.BooksGenres.FirstOrDefault(x => x.BookId == book.Id).Genre.GenreName
+                })
+                .ToList();
 
-            _context.Authors.Remove(author);
-            _context.SaveChanges();
+                return new ResultContent<IEnumerable<AuthorBookDto>>().Ok(books);
+            }
+            catch (Exception ex)
+            {
+                return new ResultContent<IEnumerable<AuthorBookDto>>().Error(ex);
+            }
+        }
+
+        /// <summary>
+        /// Добавление нового автора (с книгами/без)
+        /// </summary>
+        /// <param name="authorDto"></param>
+        /// <param name="books"></param>
+        /// <returns></returns>
+        public ResultContent<Author> Add(AuthorDto authorDto, List<string> books = null)
+        {
+            try
+            {
+                var author = new Author
+                {
+                    FirstName = authorDto.FirstName,
+                    LastName = authorDto.LastName,
+                    MiddleName = authorDto.MiddleName,
+                    Books = books is not null && !books.Any(x => !string.IsNullOrWhiteSpace(x)) ? books.Where(x => string.IsNullOrWhiteSpace(x)).Select(x => new Book { Name = x }).ToList() : null
+                };
+
+                _context.Authors.Add(author);
+                _context.SaveChanges();
+
+                return new ResultContent<Author>().Ok(author);
+            }
+            catch (Exception ex)
+            {
+                return new ResultContent<Author>().Error(ex);
+            }
+        }
+
+        /// <summary>
+        /// Удаление автора.
+        /// </summary>
+        /// <param name="authorId"></param>
+        /// <returns></returns>
+        public ResultContent<Author> Delete(int authorId)
+        {
+            try
+            {
+                var author = _context.Authors.Include(a => a.Books).FirstOrDefault(x => x.Id == authorId);
+
+                if (author is null)
+                    return new ResultContent<Author>().Error($"'{nameof(authorId)}:{authorId}' - Автор не найден");
+
+                if (author.Books.Any())
+                    return new ResultContent<Author>().Error($"'{nameof(authorId)}:{authorId}' - Невозможно удалить автора, пока у него есть книги");
+
+                _context.Authors.Remove(author);
+                _context.SaveChanges();
+
+                return new ResultContent<Author>().Ok(author);
+            }
+            catch (Exception ex)
+            {
+                return new ResultContent<Author>().Error(ex);
+            }
         }
 
     }
