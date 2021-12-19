@@ -18,7 +18,7 @@ namespace SimbirSoftWorkshop.API.Interfaces
         /// <summary>
         /// Добавление нового жанра.
         /// </summary>
-        public ResultContent<Genre> Add(string genreNmae);
+        public ResultContent<Genre> Add(AddGenre genreNmae);
 
         /// <summary>
         /// Получение статистики по жанрам.

@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using SimbirSoftWorkshop.API.Interfaces;
 using SimbirSoftWorkshop.API.Repositories;
+using FluentValidation.AspNetCore;
 
 namespace SimbirSoftWorkshop.API
 {
@@ -26,7 +27,10 @@ namespace SimbirSoftWorkshop.API
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            services
+                .AddControllers()
+                .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             var connectionString = Configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));

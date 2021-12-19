@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Interfaces;
 using SimbirSoftWorkshop.API.Models.Dto.Authors;
@@ -37,7 +38,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 2.7.3.2 - Получение списока всех книг конкретного автора 
         /// </summary>
         [HttpGet("ListBooksByAuthor")]
-        public IActionResult GetListBooksByAuthor([FromQuery] int authorId)
+        public IActionResult GetListBooksByAuthor([FromQuery] AuthorIdDto authorId)
         {
             var result = _iAuthorRepository.GetListBooksByAuthor(authorId);
 
@@ -62,10 +63,10 @@ namespace SimbirSoftWorkshop.API.Controllers
         }
 
         /// <summary>
-        /// 2.7.3.4.	Удаление автора 
+        /// 2.7.3.4 - Удаление автора 
         /// </summary>
         [HttpDelete("RemoveAuthor")]
-        public IActionResult DeleteAuthor([FromQuery] int authorId)
+        public IActionResult DeleteAuthor([FromQuery] AuthorIdDto authorId)
         {
             var result = _iAuthorRepository.Delete(authorId);
 

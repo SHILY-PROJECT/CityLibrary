@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SimbirSoftWorkshop.API.Interfaces;
+using SimbirSoftWorkshop.API.Models.Dto.Genres;
 
 namespace SimbirSoftWorkshop.API.Controllers
 {
@@ -51,7 +51,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 2.7.4.2 - Добавление нового жанра
         /// </summary>
         [HttpPost("AddNewGenre")]
-        public IActionResult AddGenre([FromQuery][Required][StringLength(200, MinimumLength = 1)] string genreName)
+        public IActionResult AddGenre([FromQuery] AddGenre genreName)
         {
             var result = _iGenreRepository.Add(genreName);
 

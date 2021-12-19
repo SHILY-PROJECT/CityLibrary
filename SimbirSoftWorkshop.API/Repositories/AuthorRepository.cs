@@ -42,8 +42,10 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Получение списка всех книг автора.
         /// </summary>
-        public ResultContent<IEnumerable<AuthorBookDetailsDto>> GetListBooksByAuthor(int authorId)
+        public ResultContent<IEnumerable<AuthorBookDetailsDto>> GetListBooksByAuthor(AuthorIdDto authorShortDto)
         {
+            var authorId = authorShortDto.Id;
+
             try
             {
                 var author = _context.Authors
@@ -103,8 +105,10 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Удаление автора.
         /// </summary>
-        public ResultContent<Author> Delete(int authorId)
+        public ResultContent<Author> Delete(AuthorIdDto authorShortDto)
         {
+            var authorId = authorShortDto.Id;
+
             try
             {
                 var author = _context.Authors.Include(a => a.Books).FirstOrDefault(x => x.Id == authorId);

@@ -18,7 +18,7 @@ namespace SimbirSoftWorkshop.API.Interfaces
         /// <summary>
         /// Получение списка всех книг автора по ID.
         /// </summary>
-        public ResultContent<IEnumerable<AuthorBookDetailsDto>> GetListBooksByAuthor(int authorId);
+        public ResultContent<IEnumerable<AuthorBookDetailsDto>> GetListBooksByAuthor(AuthorIdDto authorId);
 
         /// <summary>
         /// Добавление нового автора (с книгами/без).
@@ -28,6 +28,6 @@ namespace SimbirSoftWorkshop.API.Interfaces
         /// <summary>
         /// Удаление автора по ID.
         /// </summary>
-        public ResultContent<Author> Delete(int authorId);
+        public ResultContent<Author> Delete(AuthorIdDto authorId);
     }
 }

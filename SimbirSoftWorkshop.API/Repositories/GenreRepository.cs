@@ -41,11 +41,11 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Добавление нового жанра.
         /// </summary>
-        public ResultContent<Genre> Add(string genreName)
+        public ResultContent<Genre> Add(AddGenre addGenre)
         {
             try
             {
-                var genre = new Genre { GenreName = genreName };
+                var genre = new Genre { GenreName = addGenre.Name };
 
                 _context.Genres.Add(genre);
                 _context.SaveChanges();
