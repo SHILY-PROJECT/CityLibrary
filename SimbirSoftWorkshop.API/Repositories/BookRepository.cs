@@ -18,6 +18,9 @@ namespace SimbirSoftWorkshop.API.Repositories
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// 3.1.1 - Конструктор для реализации DI.
+        /// </summary>
         public BookRepository(DataContext context)
         {
             _context = context;
@@ -26,8 +29,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Добавление новой книги.
         /// </summary>
-        /// <param name="newBook"></param>
-        /// <returns></returns>
         public ResultContent<Book> Add(NewBookDto newBook)
         {
             try
@@ -63,8 +64,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Удаление книги.
         /// </summary>
-        /// <param name="bookId"></param>
-        /// <exception cref="Exception"></exception>
         public ResultContent<Book> Delete(int bookId)
         {
             try
@@ -91,10 +90,7 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Получение книг автора.
         /// </summary>
-        /// <param name="authorSearch"></param>
-        /// <param name="sortingType"></param>
-        /// <returns></returns>
-        public ResultContent<IEnumerable<BookDto>> GetListBooksByAuthor(AuthorDto authorSearch, BookSortingTypeEnum sortingType)
+        public ResultContent<IEnumerable<BookDetailsDto>> GetListBooksByAuthor(AuthorDto authorSearch, BookSortingTypeEnum sortingType)
         {
             var firstName = authorSearch.FirstName;
             var lastName = authorSearch.LastName;
@@ -111,13 +107,13 @@ namespace SimbirSoftWorkshop.API.Repositories
                     .FirstOrDefault();
 
                 if (author is null)
-                    return new ResultContent<IEnumerable<BookDto>>().Error(
+                    return new ResultContent<IEnumerable<BookDetailsDto>>().Error(
                         $"'{nameof(firstName)}:{firstName} | {nameof(lastName)}:{lastName} | {nameof(middleName)}:{middleName}' - Автор не найден");
 
                 if (author.Books is null || author.Books.Any() is false)
-                    return new ResultContent<IEnumerable<BookDto>>().Error("По данному автору книг не найдено");
+                    return new ResultContent<IEnumerable<BookDetailsDto>>().Error("По данному автору книг не найдено");
 
-                var books = author.Books.Select(x => new BookDto
+                var books = author.Books.Select(x => new BookDetailsDto
                 {
                     Id = x.Id,
                     Title = x.Name,
@@ -128,22 +124,18 @@ namespace SimbirSoftWorkshop.API.Repositories
                 })
                 .ToList();
 
-                return new ResultContent<IEnumerable<BookDto>>().Ok(SortingBooks(books, sortingType));
+                return new ResultContent<IEnumerable<BookDetailsDto>>().Ok(SortingBooks(books, sortingType));
             }
             catch (Exception ex)
             {
-                return new ResultContent<IEnumerable<BookDto>>().Error(ex);
+                return new ResultContent<IEnumerable<BookDetailsDto>>().Error(ex);
             }
         }
 
         /// <summary>
         /// Получение списка книг по жанру.
         /// </summary>
-        /// <param name="genreId"></param>
-        /// <param name="sortingType"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public ResultContent<IEnumerable<BookDto>> GetListBooksByGenre(int genreId, BookSortingTypeEnum sortingType)
+        public ResultContent<IEnumerable<BookDetailsDto>> GetListBooksByGenre(int genreId, BookSortingTypeEnum sortingType)
         {
             try
             {
@@ -155,12 +147,12 @@ namespace SimbirSoftWorkshop.API.Repositories
                     .ToList();
 
                 if (booksGenres is null)
-                    new ResultContent<IEnumerable<BookDto>>().Error($"'{nameof(genreId)}:{genreId}' - Жанр не найден");
+                    new ResultContent<IEnumerable<BookDetailsDto>>().Error($"'{nameof(genreId)}:{genreId}' - Жанр не найден");
 
                 if (booksGenres.Any() is false)
-                    new ResultContent<IEnumerable<BookDto>>().Error($"'{nameof(genreId)}:{genreId}' - По данному жанру ничего не найдено");
+                    new ResultContent<IEnumerable<BookDetailsDto>>().Error($"'{nameof(genreId)}:{genreId}' - По данному жанру ничего не найдено");
 
-                var books = booksGenres.Select(x => new BookDto
+                var books = booksGenres.Select(x => new BookDetailsDto
                 {
                     Id = x.BookId,
                     Title = x.Book.Name,
@@ -171,20 +163,18 @@ namespace SimbirSoftWorkshop.API.Repositories
                 })
                 .ToList();
 
-                return new ResultContent<IEnumerable<BookDto>>().Ok(SortingBooks(books, sortingType));
+                return new ResultContent<IEnumerable<BookDetailsDto>>().Ok(SortingBooks(books, sortingType));
             }
             catch (Exception ex)
             {
-                return new ResultContent<IEnumerable<BookDto>>().Error(ex);
+                return new ResultContent<IEnumerable<BookDetailsDto>>().Error(ex);
             }
         }
 
         /// <summary>
         /// Обновление жанра книги.
         /// </summary>
-        /// <param name="updateGenre"></param>
-        /// <returns></returns>
-        public ResultContent<BookDto> UpdateGenre(UpdateGenreOfBookDto updateGenre)
+        public ResultContent<BookDetailsDto> UpdateGenre(UpdateGenreOfBookDto updateGenre)
         {
             var bookId = updateGenre.BookId;
             var oldGenreId = updateGenre.OldGenreId;
@@ -195,10 +185,10 @@ namespace SimbirSoftWorkshop.API.Repositories
                 var bookGenre = _context.BooksGenres.Find(bookId, oldGenreId);
 
                 if (bookGenre is null)
-                    return new ResultContent<BookDto>().Error($"'{nameof(bookId)}:{bookId} | {nameof(oldGenreId)}:{oldGenreId}' - Книга с жанром не найдена");
+                    return new ResultContent<BookDetailsDto>().Error($"'{nameof(bookId)}:{bookId} | {nameof(oldGenreId)}:{oldGenreId}' - Книга с жанром не найдена");
                 
                 if (newGenreId != 0 && _context.Genres.Find(newGenreId) is null)
-                    return new ResultContent<BookDto>().Error($"'{nameof(newGenreId)}:{newGenreId}' - Жанра не существует");
+                    return new ResultContent<BookDetailsDto>().Error($"'{nameof(newGenreId)}:{newGenreId}' - Жанра не существует");
 
                 if (newGenreId != 0)
                 {
@@ -217,7 +207,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                         .ThenInclude(bg => bg.Genre)
                     .FirstOrDefault();
 
-                var bookDto = new BookDto
+                var bookDto = new BookDetailsDto
                 {
                     Id = book.Id,
                     Title = book.Name,
@@ -227,18 +217,18 @@ namespace SimbirSoftWorkshop.API.Repositories
                     Author = $"{book.Author.FirstName} {book.Author.LastName}"
                 };
 
-                return new ResultContent<BookDto>().Ok(bookDto);
+                return new ResultContent<BookDetailsDto>().Ok(bookDto);
             }
             catch (Exception ex)
             {
-                return new ResultContent<BookDto>().Error(ex);
+                return new ResultContent<BookDetailsDto>().Error(ex);
             }
         }
 
         /// <summary>
         /// Сортировка книг.
         /// </summary>
-        private static IEnumerable<BookDto> SortingBooks(List<BookDto> books, BookSortingTypeEnum sortingType) => sortingType switch
+        private static IEnumerable<BookDetailsDto> SortingBooks(List<BookDetailsDto> books, BookSortingTypeEnum sortingType) => sortingType switch
         {
             BookSortingTypeEnum.BookName =>         books.OrderBy(x => x.Title).ToList(),
             BookSortingTypeEnum.BookNameReversed => books.OrderByDescending(x => x.Title).ToList(),

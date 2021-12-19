@@ -51,7 +51,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 2.7.3.3 - Добавление автора
         /// </summary>
         [HttpPost("AddNewAuthorAndHisBooks")]
-        public IActionResult AddAuthor([FromQuery] AuthorDto author, [FromQuery] List<string> books = null)
+        public IActionResult AddAuthor([FromQuery] AuthorDto author, [FromQuery] IEnumerable<AuthorNewBookDto> books)
         {
             var result = _iAuthorRepository.Add(author, books);
 

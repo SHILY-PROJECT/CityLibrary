@@ -1,6 +1,6 @@
 ﻿namespace SimbirSoftWorkshop.API.Models.Dto.Books
 {
-    public class BookDto
+    public class BookDetailsDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

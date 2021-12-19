@@ -16,6 +16,9 @@ namespace SimbirSoftWorkshop.API.Repositories
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// 3.1.1 - Конструктор для реализации DI.
+        /// </summary>
         public AuthorRepository(DataContext context)
         {
             _context = context;
@@ -24,7 +27,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Получение списка всех авторов.
         /// </summary>
-        /// <returns></returns>
         public ResultContent<IEnumerable<Author>> GetListAuthors()
         {
             try
@@ -40,9 +42,7 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Получение списка всех книг автора.
         /// </summary>
-        /// <param name="authorId"></param>
-        /// <returns></returns>
-        public ResultContent<IEnumerable<AuthorBookDto>> GetListBooksByAuthor(int authorId)
+        public ResultContent<IEnumerable<AuthorBookDetailsDto>> GetListBooksByAuthor(int authorId)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                             .ThenInclude(bg => bg.Genre)
                     .FirstOrDefault();
 
-                var books = author.Books.Select(book => new AuthorBookDto
+                var books = author.Books.Select(book => new AuthorBookDetailsDto
                 {
                     AuthorId = authorId,
                     Author = $"{author.FirstName} {author.LastName}",
@@ -64,21 +64,18 @@ namespace SimbirSoftWorkshop.API.Repositories
                 })
                 .ToList();
 
-                return new ResultContent<IEnumerable<AuthorBookDto>>().Ok(books);
+                return new ResultContent<IEnumerable<AuthorBookDetailsDto>>().Ok(books);
             }
             catch (Exception ex)
             {
-                return new ResultContent<IEnumerable<AuthorBookDto>>().Error(ex);
+                return new ResultContent<IEnumerable<AuthorBookDetailsDto>>().Error(ex);
             }
         }
 
         /// <summary>
         /// Добавление нового автора (с книгами/без)
         /// </summary>
-        /// <param name="authorDto"></param>
-        /// <param name="books"></param>
-        /// <returns></returns>
-        public ResultContent<Author> Add(AuthorDto authorDto, List<string> books = null)
+        public ResultContent<Author> Add(AuthorDto authorDto, IEnumerable<AuthorNewBookDto> books)
         {
             try
             {
@@ -86,9 +83,11 @@ namespace SimbirSoftWorkshop.API.Repositories
                 {
                     FirstName = authorDto.FirstName,
                     LastName = authorDto.LastName,
-                    MiddleName = authorDto.MiddleName,
-                    Books = books is not null && !books.Any(x => !string.IsNullOrWhiteSpace(x)) ? books.Where(x => string.IsNullOrWhiteSpace(x)).Select(x => new Book { Name = x }).ToList() : null
+                    MiddleName = authorDto.MiddleName,                 
                 };
+
+                if (books is not null && books.Any())
+                    author.Books = books.Select(x => new Book { Name = x.BookName }).ToList();
 
                 _context.Authors.Add(author);
                 _context.SaveChanges();
@@ -104,8 +103,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Удаление автора.
         /// </summary>
-        /// <param name="authorId"></param>
-        /// <returns></returns>
         public ResultContent<Author> Delete(int authorId)
         {
             try

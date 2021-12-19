@@ -17,6 +17,9 @@ namespace SimbirSoftWorkshop.API.Repositories
     {
         private readonly DataContext _context;
 
+        /// <summary>
+        /// 3.1.1 - Конструктор для реализации DI.
+        /// </summary>
         public PersonRepository(DataContext context)
         {
             _context = context;
@@ -101,10 +104,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Удаление пользователя.
         /// </summary>
-        /// <param name="firstName"></param>
-        /// <param name="lastName"></param>
-        /// <param name="middleName"></param>
-        /// <exception cref="Exception"></exception>
         public ResultContent<IEnumerable<Person>> Delete(PersonDto person)
         {
             var firstName = person.FirstName;
@@ -161,8 +160,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Получение книги пользователем на руки.
         /// </summary>
-        /// <param name="personBook"></param>
-        /// <returns></returns>
         public ResultContent<LibraryCard> TakeBook(PersonBookDto personBook)
         {
             try

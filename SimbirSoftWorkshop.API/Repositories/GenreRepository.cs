@@ -15,6 +15,9 @@ namespace SimbirSoftWorkshop.API.Repositories
     {
         private readonly DataContext _context;
         
+        /// <summary>
+        /// 3.1.1 - Конструктор для реализации DI.
+        /// </summary>
         public GenreRepository(DataContext context)
         {
             _context = context;
@@ -23,7 +26,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Получение списка жанров.
         /// </summary>
-        /// <returns></returns>
         public ResultContent<IEnumerable<Genre>> GetListGenres()
         {
             try
@@ -39,7 +41,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Добавление нового жанра.
         /// </summary>
-        /// <param name="genreName"></param>
         public ResultContent<Genre> Add(string genreName)
         {
             try
@@ -60,7 +61,6 @@ namespace SimbirSoftWorkshop.API.Repositories
         /// <summary>
         /// Получение статистики по жанрам.
         /// </summary>
-        /// <returns></returns>
         public ResultContent<IEnumerable<GenreStatisticsDto>> GetStatisticsByGenres()
         {
             try

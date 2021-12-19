@@ -21,7 +21,8 @@ namespace SimbirSoftWorkshop.API
         public IConfiguration Configuration { get; }
 
         /// <summary>
-        /// 2.4 - Получение строки подключения из конфигурации
+        /// 2.4 - Получение строки подключения из конфигурации.
+        /// 3.1.1 - Реализация DI.
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
@@ -30,7 +31,7 @@ namespace SimbirSoftWorkshop.API
 
             var connectionString = Configuration.GetSection("ConnectionStrings:DefaultConnection").Value;
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
-
+            
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();

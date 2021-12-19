@@ -1,6 +1,6 @@
 ﻿namespace SimbirSoftWorkshop.API.Models.Dto.Authors
 {
-    public class AuthorBookDto
+    public class AuthorBookDetailsDto
     {
         public int AuthorId { get; set; }
         public string Author { get; set; }
