@@ -122,7 +122,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 _context.Authors.Remove(author);
                 _context.SaveChanges();
 
-                return new ResultContent<Author>().Ok(author);
+                return new ResultContent<Author>().Ok(author, "Автор успешно удален");
             }
             catch (Exception ex)
             {

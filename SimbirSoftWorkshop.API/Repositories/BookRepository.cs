@@ -53,7 +53,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 _context.BooksGenres.Add(new BookGenre() { GenreId = genre.Id, BookId = book.Id });
                 _context.SaveChanges();
 
-                return new ResultContent<Book>().Ok(book);
+                return new ResultContent<Book>().Ok(book, "Книга успешно добавлена");
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 _context.Books.Remove(book);
                 _context.SaveChanges();
 
-                return new ResultContent<Book>().Ok(book);
+                return new ResultContent<Book>().Ok(book, "Книга успешно удалена");
             }
             catch (Exception ex)
             {

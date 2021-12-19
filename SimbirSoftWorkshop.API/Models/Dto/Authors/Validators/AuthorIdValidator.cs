@@ -2,9 +2,9 @@
 
 namespace SimbirSoftWorkshop.API.Models.Dto.Authors.Validators
 {
-    public class AuthorShortIdValidator : AbstractValidator<AuthorIdDto>
+    public class AuthorIdValidator : AbstractValidator<AuthorIdDto>
     {
-        public AuthorShortIdValidator()
+        public AuthorIdValidator()
         {
             RuleFor(author => author.Id).InclusiveBetween(1, int.MaxValue);
         }

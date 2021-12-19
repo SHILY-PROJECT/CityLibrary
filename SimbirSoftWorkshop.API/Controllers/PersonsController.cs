@@ -59,7 +59,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Пользователью успешно выдана книга");
+            return Ok(result.Message);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Пользователь успешно вернул книгу");
+            return Ok(result.Message);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Пользователь успешно удален");
+            return Ok(result.Message);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Пользователь успешно удален");
+            return Ok(result.Message);
         }
 
     }

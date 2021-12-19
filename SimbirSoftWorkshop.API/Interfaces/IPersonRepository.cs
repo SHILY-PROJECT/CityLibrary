@@ -14,7 +14,7 @@ namespace SimbirSoftWorkshop.API.Interfaces
         /// <summary>
         /// Добавление нового пользователя.
         /// </summary>
-        public ResultContent<Person> Add(PersonDto persone);
+        public ResultContent<Person> Add(PersonDto person);
 
         /// <summary>
         /// Обновление информации о пользователе.

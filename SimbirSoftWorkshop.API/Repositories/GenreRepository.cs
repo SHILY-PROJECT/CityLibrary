@@ -50,7 +50,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 _context.Genres.Add(genre);
                 _context.SaveChanges();
 
-                return new ResultContent<Genre>().Ok(genre);
+                return new ResultContent<Genre>().Ok(genre, "Жанр успешно добавлен");
             }
             catch (Exception ex)
             {
