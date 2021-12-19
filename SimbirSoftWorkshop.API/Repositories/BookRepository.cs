@@ -73,7 +73,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 if (book is null)
                     return new ResultContent<Book>().Error($"'{nameof(bookId)}:{bookId}' - книга не найдена");
 
-                if (!book.LibraryCards.Any())
+                if (book.LibraryCards.Any() is false)
                     return new ResultContent<Book>().Error($"'{nameof(bookId)}:{bookId}' - книга находится у пользователя");
 
                 _context.Books.Remove(book);

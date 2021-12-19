@@ -26,7 +26,6 @@ namespace SimbirSoftWorkshop.API
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             var connectionString = Configuration.GetSection("ConnectionStrings:DefaultConnection").Value;

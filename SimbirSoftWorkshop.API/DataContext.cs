@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SimbirSoftWorkshop.API.Models.Entity;
 
 namespace SimbirSoftWorkshop.API
@@ -17,7 +18,7 @@ namespace SimbirSoftWorkshop.API
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            if (Database.CanConnect() is false) Database.EnsureCreated();
         }
 
         /// <summary>
@@ -25,84 +26,109 @@ namespace SimbirSoftWorkshop.API
         /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Author>(x =>
-            {
-                x.Property(p => p.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
-                x.Property(p => p.FirstName).HasColumnName("first_name").HasMaxLength(50).IsRequired(true);
-                x.Property(p => p.LastName).HasColumnName("last_name").HasMaxLength(50).IsRequired(true);
-                x.Property(p => p.MiddleName).HasColumnName("middle_name").HasMaxLength(50).IsRequired(false);
-
-                x.HasKey(k => k.Id);
-                x.ToTable("author");
-            });
-
-            modelBuilder.Entity<Person>(x =>
-            {
-                x.Property(p => p.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
-                x.Property(p => p.BirthDate).HasColumnName("birth_date");
-                x.Property(p => p.FirstName).HasColumnName("first_name").HasMaxLength(50).IsRequired(true);
-                x.Property(p => p.LastName).HasColumnName("last_name").HasMaxLength(50).IsRequired(true);
-                x.Property(p => p.MiddleName).HasColumnName("middle_name").HasMaxLength(50).IsRequired(false);
-
-                x.HasKey(k => k.Id);
-                x.ToTable("person");
-            });
-
-            modelBuilder.Entity<Genre>(x =>
-            {
-                x.Property(p => p.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
-                x.Property(p => p.GenreName).HasColumnName("genre_name").HasMaxLength(200).IsRequired(true);
-
-                x.HasKey(k => k.Id);
-                x.ToTable("genre");
-            });
-
-            modelBuilder.Entity<Book>(x =>
-            {
-                x.Property(p => p.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
-                x.Property(p => p.Name).HasColumnName("name").HasMaxLength(500).IsRequired(true);
-                x.Property(p => p.AuthorId).HasColumnName("author_id").IsRequired(true);
-
-                x.HasKey(k => k.Id);
-                x.HasOne(b => b.Author).WithMany(a => a.Books);
-                x.ToTable("book");
-            });
-
-            modelBuilder.Entity<BookGenre>(x =>
-            {
-                x.Property(p => p.BookId).HasColumnName("book_id").IsRequired(true);
-                x.Property(p => p.GenreId).HasColumnName("genre_id").IsRequired(true);
-
-                x.HasKey(k => new { k.BookId, k.GenreId }).HasName("PK_book_id_genre_id");
-                x.HasOne<Book>(bg => bg.Book)
-                    .WithMany(b => b.BooksGenres)
-                    .HasForeignKey(bg => bg.BookId)
-                    .HasConstraintName("FK_book_genre_book");
-                x.HasOne<Genre>(bg => bg.Genre)
-                    .WithMany(g => g.BookGenre)
-                    .HasForeignKey(bg => bg.GenreId)
-                    .HasConstraintName("FK_book_genre_genre");
-                x.ToTable("book_genre");
-            });
-
-            modelBuilder.Entity<LibraryCard>(x =>
-            {
-                x.Property(p => p.BookId).HasColumnName("book_id").IsRequired(true);
-                x.Property(p => p.PersonId).HasColumnName("person_id").IsRequired(true);
-
-                x.HasKey(k => new { k.BookId, k.PersonId }).HasName("PK_book_id_person_id");
-                x.HasOne<Book>(lb => lb.Book)
-                    .WithMany(b => b.LibraryCards)
-                    .HasForeignKey(lb => lb.BookId)
-                    .HasConstraintName("FK_library_card_book");
-                x.HasOne<Person>(lb => lb.Person)
-                    .WithMany(p => p.LibraryCard)
-                    .HasForeignKey(lb => lb.PersonId)
-                    .HasConstraintName("FK_library_card_person");
-                x.ToTable("library_card");
-            });
+            modelBuilder.Entity<Author>(AuthorConfigure);
+            modelBuilder.Entity<Person>(PersonConfigure);
+            modelBuilder.Entity<Genre>(GenreConfigure);
+            modelBuilder.Entity<Book>(BookConfigure);
+            modelBuilder.Entity<BookGenre>(BookGenreConfigure);
+            modelBuilder.Entity<LibraryCard>(LibraryCardConfigure);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        /// <summary>
+        /// Конфигурирование таблицы авторов.
+        /// </summary>
+        public void AuthorConfigure(EntityTypeBuilder<Author> builder)
+        {
+            builder.ToTable("author").HasKey(x => x.Id);
+
+            builder.Property(x => x.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
+            builder.Property(x => x.FirstName).HasColumnName("first_name").HasMaxLength(50).IsRequired(true);
+            builder.Property(x => x.LastName).HasColumnName("last_name").HasMaxLength(50).IsRequired(true);
+            builder.Property(x => x.MiddleName).HasColumnName("middle_name").HasMaxLength(50).IsRequired(false);
+        }
+
+        /// <summary>
+        /// Конфигурирование таблицы пользователей.
+        /// </summary>
+        public void PersonConfigure(EntityTypeBuilder<Person> builder)
+        {
+            builder.ToTable("person").HasKey(x => x.Id);
+
+            builder.Property(x => x.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
+            builder.Property(x => x.FirstName).HasColumnName("first_name").HasMaxLength(50).IsRequired(true);
+            builder.Property(x => x.LastName).HasColumnName("last_name").HasMaxLength(50).IsRequired(true);
+            builder.Property(x => x.MiddleName).HasColumnName("middle_name").HasMaxLength(50).IsRequired(false);
+            builder.Property(x => x.BirthDate).HasColumnName("birth_date");
+        }
+
+        /// <summary>
+        /// Конфигурирование таблицы жанров.
+        /// </summary>
+        public void GenreConfigure(EntityTypeBuilder<Genre> builder)
+        {
+            builder.ToTable("genre").HasKey(x => x.Id);
+
+            builder.Property(x => x.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
+            builder.Property(x => x.GenreName).HasColumnName("genre_name").HasMaxLength(200).IsRequired(true);
+        }
+
+        /// <summary>
+        /// Конфигурирование таблицы книг.
+        /// </summary>
+        public void BookConfigure(EntityTypeBuilder<Book> builder)
+        {
+            builder.ToTable("book").HasKey(x => x.Id);
+            builder.HasOne(x => x.Author).WithMany(x => x.Books);
+
+            builder.Property(x => x.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
+            builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(500).IsRequired(true);
+            builder.Property(x => x.AuthorId).HasColumnName("author_id").IsRequired(true);
+        }
+
+        /// <summary>
+        /// Конфигурирование таблицы книг-жанров.
+        /// </summary>
+        public void BookGenreConfigure(EntityTypeBuilder<BookGenre> builder)
+        {
+            builder.ToTable("book_genre");
+            builder.HasKey(x => new { x.BookId, x.GenreId }).HasName("PK_book_id_genre_id");
+
+            builder.HasOne<Book>(bg => bg.Book)
+                .WithMany(b => b.BooksGenres)
+                .HasForeignKey(bg => bg.BookId)
+                .HasConstraintName("FK_book_genre_book");
+
+            builder.HasOne<Genre>(bg => bg.Genre)
+                .WithMany(g => g.BookGenre)
+                .HasForeignKey(bg => bg.GenreId)
+                .HasConstraintName("FK_book_genre_genre");
+
+            builder.Property(x => x.BookId).HasColumnName("book_id").IsRequired(true);
+            builder.Property(x => x.GenreId).HasColumnName("genre_id").IsRequired(true);
+        }
+
+        /// <summary>
+        /// Конфигурирование таблицы библиотечных карточек.
+        /// </summary>
+        public void LibraryCardConfigure(EntityTypeBuilder<LibraryCard> builder)
+        {
+            builder.ToTable("library_card");
+            builder.HasKey(x => new { x.BookId, x.PersonId }).HasName("PK_book_id_person_id");
+
+            builder.HasOne<Book>(lb => lb.Book)
+                .WithMany(b => b.LibraryCards)
+                .HasForeignKey(lb => lb.BookId)
+                .HasConstraintName("FK_library_card_book");
+
+            builder.HasOne<Person>(lb => lb.Person)
+                .WithMany(p => p.LibraryCard)
+                .HasForeignKey(lb => lb.PersonId)
+                .HasConstraintName("FK_library_card_person");
+
+            builder.Property(p => p.BookId).HasColumnName("book_id").IsRequired(true);
+            builder.Property(p => p.PersonId).HasColumnName("person_id").IsRequired(true);
         }
 
     }
