@@ -10,24 +10,33 @@ using SimbirSoftWorkshop.API.Models.Dto.Genres;
 
 namespace SimbirSoftWorkshop.API.Tests.Controllers
 {
+    /// <summary>
+    /// 3.1.3 - Покрытие тестами.
+    /// </summary>
     public class GenresService_Tests
     {
+        private readonly Mock<IGenreRepository> _genreRepositoryMock;
+        private readonly GenresController _service;
+
+        public GenresService_Tests()
+        {
+            _genreRepositoryMock = new Mock<IGenreRepository>();
+            _service = new GenresController(_genreRepositoryMock.Object);
+        }
+
         [Fact]
         public void GetListGenres_ReturnStatusCode200()
         {
             // Arrange
-            var resultContent = new ResultContent<IEnumerable<Genre>>().Ok();
-            var authorRepositoryMock = new Mock<IGenreRepository>();
+            var respContent = new ResultContent<IEnumerable<Genre>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.GetListGenres()).Returns(resultContent);
-
-            var service = new GenresController(authorRepositoryMock.Object);
+            _genreRepositoryMock.Setup(x => x.GetListGenres()).Returns(respContent);
 
             // Act
-            var result = service.GetListGenres() as OkObjectResult;
+            var result = _service.GetListGenres() as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.GetListGenres(), Times.Once);
+            _genreRepositoryMock.Verify(x => x.GetListGenres(), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -35,19 +44,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void AddGenre_ReturnStatusCode200()
         {
             // Arrange
-            var addGenre = new AddGenre { Name = "Fantasy"};
-            var resultContent = new ResultContent<Genre>().Ok();
-            var authorRepositoryMock = new Mock<IGenreRepository>();
+            var inputData = new AddGenre { Name = "Fantasy"};
+            var respContent = new ResultContent<Genre>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Add(addGenre)).Returns(resultContent);
-
-            var service = new GenresController(authorRepositoryMock.Object);
+            _genreRepositoryMock.Setup(x => x.Add(inputData)).Returns(respContent);
 
             // Act
-            var result = service.AddGenre(addGenre) as OkObjectResult;
+            var result = _service.AddGenre(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Add(addGenre), Times.Once);
+            _genreRepositoryMock.Verify(x => x.Add(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -55,18 +61,15 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void GetStatisticsByGenres_ReturnStatusCode200()
         {
             // Arrange
-            var resultContent = new ResultContent<IEnumerable<GenreStatisticsDto>>().Ok();
-            var authorRepositoryMock = new Mock<IGenreRepository>();
+            var respContent = new ResultContent<IEnumerable<GenreStatisticsDto>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.GetStatisticsByGenres()).Returns(resultContent);
-
-            var service = new GenresController(authorRepositoryMock.Object);
+            _genreRepositoryMock.Setup(x => x.GetStatisticsByGenres()).Returns(respContent);
 
             // Act
-            var result = service.GetStatisticsByGenres() as OkObjectResult;
+            var result = _service.GetStatisticsByGenres() as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.GetStatisticsByGenres(), Times.Once);
+            _genreRepositoryMock.Verify(x => x.GetStatisticsByGenres(), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
     }

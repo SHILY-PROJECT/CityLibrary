@@ -12,25 +12,34 @@ using SimbirSoftWorkshop.API.Models.Dto.Authors;
 
 namespace SimbirSoftWorkshop.API.Tests.Controllers
 {
+    /// <summary>
+    /// 3.1.3 - Покрытие тестами.
+    /// </summary>
     public class BooksService_Tests
     {
+        private readonly Mock<IBookRepository> _bookRepositoryMock;
+        private readonly BooksController _service;
+
+        public BooksService_Tests()
+        {
+            _bookRepositoryMock = new Mock<IBookRepository>();
+            _service = new BooksController(_bookRepositoryMock.Object);
+        }
+
         [Fact]
         public void AddBook_ReturnStatusCode200()
         {
             // Arrange
-            var book = new NewBookDto { Name = "book", AuthorId = 1, GenreId = 1 };
-            var resultContent = new ResultContent<Book>().Ok();
-            var authorRepositoryMock = new Mock<IBookRepository>();
+            var inputData = new NewBookDto { Name = "book", AuthorId = 1, GenreId = 1 };
+            var respContent = new ResultContent<Book>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Add(book)).Returns(resultContent);
-
-            var service = new BooksController(authorRepositoryMock.Object);
+            _bookRepositoryMock.Setup(x => x.Add(inputData)).Returns(respContent);
 
             // Act
-            var result = service.AddBook(book) as OkObjectResult;
+            var result = _service.AddBook(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Add(book), Times.Once);
+            _bookRepositoryMock.Verify(x => x.Add(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -38,19 +47,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void DeleteBook_ReturnStatusCode200()
         {
             // Arrange
-            var bookId = 1;
-            var resultContent = new ResultContent<Book>().Ok();
-            var authorRepositoryMock = new Mock<IBookRepository>();
+            var inputData = 1;
+            var respContent = new ResultContent<Book>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Delete(bookId)).Returns(resultContent);
-
-            var service = new BooksController(authorRepositoryMock.Object);
+            _bookRepositoryMock.Setup(x => x.Delete(inputData)).Returns(respContent);
 
             // Act
-            var result = service.DeleteBook(bookId) as OkObjectResult;
+            var result = _service.DeleteBook(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Delete(bookId), Times.Once);
+            _bookRepositoryMock.Verify(x => x.Delete(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -58,19 +64,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void UpdateGenreBook_ReturnStatusCode200()
         {
             // Arrange
-            var bookUpdateGenre = new UpdateGenreOfBookDto { BookId = 1, NewGenreId = 2, OldGenreId = 3 };
-            var resultContent = new ResultContent<BookDetailsDto>().Ok();
-            var authorRepositoryMock = new Mock<IBookRepository>();
+            var inputData = new UpdateGenreOfBookDto { BookId = 1, NewGenreId = 2, OldGenreId = 3 };
+            var respContent = new ResultContent<BookDetailsDto>().Ok();
 
-            authorRepositoryMock.Setup(x => x.UpdateGenre(bookUpdateGenre)).Returns(resultContent);
-
-            var service = new BooksController(authorRepositoryMock.Object);
+            _bookRepositoryMock.Setup(x => x.UpdateGenre(inputData)).Returns(respContent);
 
             // Act
-            var result = service.UpdateGenreBook(bookUpdateGenre) as OkObjectResult;
+            var result = _service.UpdateGenreBook(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.UpdateGenre(bookUpdateGenre), Times.Once);
+            _bookRepositoryMock.Verify(x => x.UpdateGenre(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -78,20 +81,17 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void GetListBooksByAuthor_ReturnStatusCode200()
         {
             // Arrange
-            var authorSearch = new AuthorDto { FirstName = "Carl", LastName = "Sagan"};
-            var sortType = BookSortingTypeEnum.NoSort;
-            var resultContent = new ResultContent<IEnumerable<BookDetailsDto>>().Ok();
-            var authorRepositoryMock = new Mock<IBookRepository>();
+            var inputData1 = new AuthorDto { FirstName = "Carl", LastName = "Sagan"};
+            var inputData2 = BookSortingTypeEnum.NoSort;
+            var respContent = new ResultContent<IEnumerable<BookDetailsDto>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.GetListBooksByAuthor(authorSearch, sortType)).Returns(resultContent);
-
-            var service = new BooksController(authorRepositoryMock.Object);
+            _bookRepositoryMock.Setup(x => x.GetListBooksByAuthor(inputData1, inputData2)).Returns(respContent);
 
             // Act
-            var result = service.GetListBooksByAuthor(authorSearch, sortType) as OkObjectResult;
+            var result = _service.GetListBooksByAuthor(inputData1, inputData2) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.GetListBooksByAuthor(authorSearch, sortType), Times.Once);
+            _bookRepositoryMock.Verify(x => x.GetListBooksByAuthor(inputData1, inputData2), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -99,20 +99,17 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void GetListBooksByGenre_ReturnStatusCode200()
         {
             // Arrange
-            var genreId = 1;
-            var sortType = BookSortingTypeEnum.NoSort;
-            var resultContent = new ResultContent<IEnumerable<BookDetailsDto>>().Ok();
-            var authorRepositoryMock = new Mock<IBookRepository>();
+            var inputData1 = 1;
+            var inputData2 = BookSortingTypeEnum.NoSort;
+            var respContent = new ResultContent<IEnumerable<BookDetailsDto>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.GetListBooksByGenre(genreId, sortType)).Returns(resultContent);
-
-            var service = new BooksController(authorRepositoryMock.Object);
+            _bookRepositoryMock.Setup(x => x.GetListBooksByGenre(inputData1, inputData2)).Returns(respContent);
 
             // Act
-            var result = service.GetListBooksByGenre(genreId, sortType) as OkObjectResult;
+            var result = _service.GetListBooksByGenre(inputData1, inputData2) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.GetListBooksByGenre(genreId, sortType), Times.Once);
+            _bookRepositoryMock.Verify(x => x.GetListBooksByGenre(inputData1, inputData2), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
     }

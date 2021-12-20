@@ -10,25 +10,33 @@ using SimbirSoftWorkshop.API.Toolkit;
 
 namespace SimbirSoftWorkshop.API.Tests
 {
+    /// <summary>
+    /// 3.1.3 - Покрытие тестами.
+    /// </summary>
     public class AuthorsService_Tests
     {
+        private readonly Mock<IAuthorRepository> _authorRepositoryMock;
+        private readonly AuthorsController _service;
+
+        public AuthorsService_Tests()
+        {
+            _authorRepositoryMock = new Mock<IAuthorRepository>();
+            _service = new AuthorsController(_authorRepositoryMock.Object);
+        }
+
         [Fact]
         public void GetListAuthors_ReturnStatusCode200()
         {
             // Arrange
-            IEnumerable<Author> content = new List<Author> { new Author{ FirstName = "Fil", LastName = "Clazy"} };
-            var resultContent = new ResultContent<IEnumerable<Author>>().Ok(content);
-            var authorRepositoryMock = new Mock<IAuthorRepository>();
+            var respContent = new ResultContent<IEnumerable<Author>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.GetListAuthors()).Returns(resultContent);
-
-            var service = new AuthorsController(authorRepositoryMock.Object);
+            _authorRepositoryMock.Setup(x => x.GetListAuthors()).Returns(respContent);
 
             // Act
-            var result = service.GetListAuthors() as OkObjectResult;
+            var result = _service.GetListAuthors() as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.GetListAuthors(), Times.Once);
+            _authorRepositoryMock.Verify(x => x.GetListAuthors(), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -36,19 +44,16 @@ namespace SimbirSoftWorkshop.API.Tests
         public void GetListBooksByAuthor_ReturnStatusCode200()
         {
             // Arrange
-            var authorId = new AuthorIdDto { Id = 1 };
-            var resultContent = new ResultContent<IEnumerable<AuthorBookDetailsDto>>().Ok();
-            var authorRepositoryMock = new Mock<IAuthorRepository>();
+            var inputData = new AuthorIdDto { Id = 1 };
+            var respContent = new ResultContent<IEnumerable<AuthorBookDetailsDto>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.GetListBooksByAuthor(authorId)).Returns(resultContent);
-
-            var service = new AuthorsController(authorRepositoryMock.Object);
+            _authorRepositoryMock.Setup(x => x.GetListBooksByAuthor(inputData)).Returns(respContent);
 
             // Act
-            var result = service.GetListBooksByAuthor(authorId) as OkObjectResult;
+            var result = _service.GetListBooksByAuthor(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.GetListBooksByAuthor(authorId), Times.Once);
+            _authorRepositoryMock.Verify(x => x.GetListBooksByAuthor(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -56,19 +61,16 @@ namespace SimbirSoftWorkshop.API.Tests
         public void AddAuthor_ReturnStatusCode200()
         {
             // Arrange
-            var author = new AuthorDto { FirstName = "Kail", LastName = "Next" };
-            var resultContent = new ResultContent<Author>().Ok();
-            var authorRepositoryMock = new Mock<IAuthorRepository>();
+            var inputData = new AuthorDto { FirstName = "Kail", LastName = "Next" };
+            var respContent = new ResultContent<Author>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Add(author, null)).Returns(resultContent);
-
-            var service = new AuthorsController(authorRepositoryMock.Object);
+            _authorRepositoryMock.Setup(x => x.Add(inputData, null)).Returns(respContent);
 
             // Act
-            var result = service.AddAuthor(author) as OkObjectResult;
+            var result = _service.AddAuthor(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Add(author, null), Times.Once);
+            _authorRepositoryMock.Verify(x => x.Add(inputData, null), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -76,19 +78,16 @@ namespace SimbirSoftWorkshop.API.Tests
         public void DeleteAuthor_ReturnStatusCode200()
         {
             // Arrange
-            var author = new AuthorIdDto { Id = 1 };
-            var resultContent = new ResultContent<Author>().Ok();
-            var authorRepositoryMock = new Mock<IAuthorRepository>();
+            var inputData = new AuthorIdDto { Id = 1 };
+            var respContent = new ResultContent<Author>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Delete(author)).Returns(resultContent);
-
-            var service = new AuthorsController(authorRepositoryMock.Object);
+            _authorRepositoryMock.Setup(x => x.Delete(inputData)).Returns(respContent);
 
             // Act
-            var result = service.DeleteAuthor(author) as OkObjectResult;
+            var result = _service.DeleteAuthor(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Delete(author), Times.Once);
+            _authorRepositoryMock.Verify(x => x.Delete(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
     }

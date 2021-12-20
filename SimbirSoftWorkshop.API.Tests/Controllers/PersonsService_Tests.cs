@@ -11,25 +11,34 @@ using SimbirSoftWorkshop.API.Models.Dto;
 
 namespace SimbirSoftWorkshop.API.Tests.Controllers
 {
+    /// <summary>
+    /// 3.1.3 - Покрытие тестами.
+    /// </summary>
     public class PersonsService_Tests
     {
+        private readonly Mock<IPersonRepository> _personRepositoryMock;
+        private readonly PersonsController _service;
+
+        public PersonsService_Tests()
+        {
+            _personRepositoryMock = new Mock<IPersonRepository>();
+            _service = new PersonsController(_personRepositoryMock.Object);
+        }
+
         [Fact]
         public void AddPerson_ReturnStatusCode200()
         {
             // Arrange
             var person = new PersonDto { FirstName = "Katy", LastName = "Peir" };
-            var resultContent = new ResultContent<Person>().Ok();
-            var authorRepositoryMock = new Mock<IPersonRepository>();
+            var respContent = new ResultContent<Person>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Add(person)).Returns(resultContent);
-
-            var service = new PersonsController(authorRepositoryMock.Object);
+            _personRepositoryMock.Setup(x => x.Add(person)).Returns(respContent);
 
             // Act
-            var result = service.AddPerson(person) as OkObjectResult;
+            var result = _service.AddPerson(person) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Add(person), Times.Once);
+            _personRepositoryMock.Verify(x => x.Add(person), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -37,19 +46,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void UpdatePerson_ReturnStatusCode200()
         {
             // Arrange
-            var updatePerson = new UpdatePersonDto {  Id = 1, FirstName = "Boby", LastName = "Kalistor" };
-            var resultContent = new ResultContent<Person>().Ok();
-            var authorRepositoryMock = new Mock<IPersonRepository>();
+            var inputData = new UpdatePersonDto {  Id = 1, FirstName = "Boby", LastName = "Kalistor" };
+            var respContent = new ResultContent<Person>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Update(updatePerson)).Returns(resultContent);
-
-            var service = new PersonsController(authorRepositoryMock.Object);
+            _personRepositoryMock.Setup(x => x.Update(inputData)).Returns(respContent);
 
             // Act
-            var result = service.UpdatePerson(updatePerson) as OkObjectResult;
+            var result = _service.UpdatePerson(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Update(updatePerson), Times.Once);
+            _personRepositoryMock.Verify(x => x.Update(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -57,19 +63,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void DeletePersonById_ReturnStatusCode200()
         {
             // Arrange
-            var personId = 1;
-            var resultContent = new ResultContent<Person>().Ok();
-            var authorRepositoryMock = new Mock<IPersonRepository>();
+            var inputData = 1;
+            var respContent = new ResultContent<Person>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Delete(personId)).Returns(resultContent);
-
-            var service = new PersonsController(authorRepositoryMock.Object);
+            _personRepositoryMock.Setup(x => x.Delete(inputData)).Returns(respContent);
 
             // Act
-            var result = service.DeletePerson(personId) as OkObjectResult;
+            var result = _service.DeletePerson(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Delete(personId), Times.Once);
+            _personRepositoryMock.Verify(x => x.Delete(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -77,19 +80,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void DeletePersonByFirstLastMiddleName_ReturnStatusCode200()
         {
             // Arrange
-            var person = new PersonDto { FirstName = "Boby", LastName = "Kalistor", MiddleName = "Zairov" };
-            var resultContent = new ResultContent<IEnumerable<Person>>().Ok();
-            var authorRepositoryMock = new Mock<IPersonRepository>();
+            var inputData = new PersonDto { FirstName = "Boby", LastName = "Kalistor", MiddleName = "Zairov" };
+            var respContent = new ResultContent<IEnumerable<Person>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.Delete(person)).Returns(resultContent);
-
-            var service = new PersonsController(authorRepositoryMock.Object);
+            _personRepositoryMock.Setup(x => x.Delete(inputData)).Returns(respContent);
 
             // Act
-            var result = service.DeletePerson(person) as OkObjectResult;
+            var result = _service.DeletePerson(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.Delete(person), Times.Once);
+            _personRepositoryMock.Verify(x => x.Delete(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -97,19 +97,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void GetPersonBooks_ReturnStatusCode200()
         {
             // Arrange
-            var personId = 1;
-            var resultContent = new ResultContent<IEnumerable<Book>>().Ok();
-            var authorRepositoryMock = new Mock<IPersonRepository>();
+            var inputData = 1;
+            var respContent = new ResultContent<IEnumerable<Book>>().Ok();
 
-            authorRepositoryMock.Setup(x => x.GetPersonBooks(personId)).Returns(resultContent);
-
-            var service = new PersonsController(authorRepositoryMock.Object);
+            _personRepositoryMock.Setup(x => x.GetPersonBooks(inputData)).Returns(respContent);
 
             // Act
-            var result = service.GetPersonBooks(personId) as OkObjectResult;
+            var result = _service.GetPersonBooks(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.GetPersonBooks(personId), Times.Once);
+            _personRepositoryMock.Verify(x => x.GetPersonBooks(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -117,19 +114,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void TakeBook_ReturnStatusCode200()
         {
             // Arrange
-            var personBook = new PersonBookDto { BookId = 1, PersoneId = 1 };
-            var resultContent = new ResultContent<LibraryCard>().Ok();
-            var authorRepositoryMock = new Mock<IPersonRepository>();
+            var inputData = new PersonBookDto { BookId = 1, PersoneId = 1 };
+            var respContent = new ResultContent<LibraryCard>().Ok();
 
-            authorRepositoryMock.Setup(x => x.TakeBook(personBook)).Returns(resultContent);
-
-            var service = new PersonsController(authorRepositoryMock.Object);
+            _personRepositoryMock.Setup(x => x.TakeBook(inputData)).Returns(respContent);
 
             // Act
-            var result = service.TakeBook(personBook) as OkObjectResult;
+            var result = _service.TakeBook(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.TakeBook(personBook), Times.Once);
+            _personRepositoryMock.Verify(x => x.TakeBook(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
 
@@ -137,19 +131,16 @@ namespace SimbirSoftWorkshop.API.Tests.Controllers
         public void ReturnBook_ReturnStatusCode200()
         {
             // Arrange
-            var personBook = new PersonBookDto { BookId = 1, PersoneId = 1 };
-            var resultContent = new ResultContent<LibraryCard>().Ok();
-            var authorRepositoryMock = new Mock<IPersonRepository>();
+            var inputData = new PersonBookDto { BookId = 1, PersoneId = 1 };
+            var respContent = new ResultContent<LibraryCard>().Ok();
 
-            authorRepositoryMock.Setup(x => x.ReturnBook(personBook)).Returns(resultContent);
-
-            var service = new PersonsController(authorRepositoryMock.Object);
+            _personRepositoryMock.Setup(x => x.ReturnBook(inputData)).Returns(respContent);
 
             // Act
-            var result = service.ReturnBook(personBook) as OkObjectResult;
+            var result = _service.ReturnBook(inputData) as OkObjectResult;
 
             // Assert
-            authorRepositoryMock.Verify(x => x.ReturnBook(personBook), Times.Once);
+            _personRepositoryMock.Verify(x => x.ReturnBook(inputData), Times.Once);
             Assert.Equal(200, result.StatusCode);
         }
     }
