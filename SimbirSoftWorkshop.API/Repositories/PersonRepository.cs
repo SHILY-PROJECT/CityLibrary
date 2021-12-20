@@ -113,10 +113,8 @@ namespace SimbirSoftWorkshop.API.Repositories
             try
             {
                 var persons = _context.Persons
-                    .Where(x =>
-                        EF.Functions.Like(x.FirstName, firstName) && EF.Functions.Like(x.LastName, lastName) &&
-                        ((string.IsNullOrWhiteSpace(middleName) && string.IsNullOrWhiteSpace(x.MiddleName)) ||
-                        (!string.IsNullOrWhiteSpace(middleName) && !string.IsNullOrWhiteSpace(x.MiddleName) && EF.Functions.Like(x.MiddleName, middleName))))
+                    .Where(x => EF.Functions.Like(x.FirstName, firstName) && EF.Functions.Like(x.LastName, lastName) &&
+                        (string.IsNullOrEmpty(middleName) || EF.Functions.Like(x.MiddleName, middleName)))
                     .ToList();
 
                 if (persons.Any() is false)
