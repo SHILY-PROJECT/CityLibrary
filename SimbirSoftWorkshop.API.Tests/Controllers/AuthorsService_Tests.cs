@@ -11,7 +11,7 @@ using SimbirSoftWorkshop.API.Toolkit;
 namespace SimbirSoftWorkshop.API.Tests
 {
     /// <summary>
-    /// 3.1.3 - Покрытие тестами.
+    /// 3.1.3 - РџРѕРєСЂС‹С‚РёРµ С‚РµСЃС‚Р°РјРё.
     /// </summary>
     public class AuthorsService_Tests
     {
