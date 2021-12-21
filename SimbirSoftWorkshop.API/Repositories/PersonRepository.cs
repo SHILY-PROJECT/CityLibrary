@@ -93,7 +93,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 _context.Persons.Remove(person);
                 _context.SaveChanges();
 
-                return new ResultContent<Person>().Ok(person);
+                return new ResultContent<Person>().Ok(person, "Пользователь успешно удален");
             }
             catch (Exception ex)
             {
@@ -113,10 +113,8 @@ namespace SimbirSoftWorkshop.API.Repositories
             try
             {
                 var persons = _context.Persons
-                    .Where(x =>
-                        EF.Functions.Like(x.FirstName, firstName) && EF.Functions.Like(x.LastName, lastName) &&
-                        ((string.IsNullOrWhiteSpace(middleName) && string.IsNullOrWhiteSpace(x.MiddleName)) ||
-                        (!string.IsNullOrWhiteSpace(middleName) && !string.IsNullOrWhiteSpace(x.MiddleName) && EF.Functions.Like(x.MiddleName, middleName))))
+                    .Where(x => EF.Functions.Like(x.FirstName, firstName) && EF.Functions.Like(x.LastName, lastName) &&
+                        (string.IsNullOrEmpty(middleName) || EF.Functions.Like(x.MiddleName, middleName)))
                     .ToList();
 
                 if (persons.Any() is false)
@@ -126,7 +124,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 persons.ForEach(x => _context.Remove(x));
                 _context.SaveChanges();
 
-                return new ResultContent<IEnumerable<Person>>().Ok(persons);
+                return new ResultContent<IEnumerable<Person>>().Ok(persons, "Пользователь успешно удален");
             }
             catch (Exception ex)
             {
@@ -172,7 +170,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 _context.LibraryCards.Add(libraryCard);
                 _context.SaveChanges();
 
-                return new ResultContent<LibraryCard>().Ok(libraryCard);
+                return new ResultContent<LibraryCard>().Ok(libraryCard, "Пользователью успешно выдана книга");
             }
             catch (Exception ex)
             {
@@ -199,7 +197,7 @@ namespace SimbirSoftWorkshop.API.Repositories
                 _context.LibraryCards.Remove(libraryCard);
                 _context.SaveChanges();
 
-                return new ResultContent<LibraryCard>().Ok(libraryCard);
+                return new ResultContent<LibraryCard>().Ok(libraryCard, "Пользователь успешно вернул книгу");
             }
             catch (Exception ex)
             {

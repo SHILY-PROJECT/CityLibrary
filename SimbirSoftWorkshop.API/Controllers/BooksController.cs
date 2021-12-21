@@ -63,7 +63,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Книга успешно добавлена");
+            return Ok(result.Message);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Книга успешно удалена");
+            return Ok(result.Message);
         }
     }
 }

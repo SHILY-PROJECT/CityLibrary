@@ -52,7 +52,7 @@ namespace SimbirSoftWorkshop.API.Controllers
         /// 2.7.3.3 - Добавление автора
         /// </summary>
         [HttpPost("AddNewAuthorAndHisBooks")]
-        public IActionResult AddAuthor([FromQuery] AuthorDto author, [FromQuery] IEnumerable<AuthorNewBookDto> books)
+        public IActionResult AddAuthor([FromQuery] AuthorDto author, [FromQuery] IEnumerable<AuthorNewBookDto> books = null)
         {
             var result = _iAuthorRepository.Add(author, books);
 
@@ -73,7 +73,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Автор успешно удален");
+            return Ok(result.Message);
         }
 
 

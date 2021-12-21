@@ -58,7 +58,7 @@ namespace SimbirSoftWorkshop.API.Controllers
             if (result.IsSuccess is false)
                 return BadRequest(result.Message);
 
-            return Ok("Жанр успешно добавлен");
+            return Ok(result.Message);
         }
 
     }
