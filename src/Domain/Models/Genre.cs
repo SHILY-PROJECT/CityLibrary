@@ -1,15 +1,7 @@
-﻿using System.Collections.Generic;
+﻿namespace Domain.Models;
 
-namespace WebApi.WebApi.Models.Entity
+public class Genre
 {
-    /// <summary>
-    /// 2.2 - Класс жанра книги (описывающий сущность для БД)
-    /// </summary>
-    public class Genre
-    {
-        public int Id { get; set; }
-        public string GenreName { get; set; }
-
-        public IEnumerable<BookGenre> BookGenre { get; set; }
-    }
+    public int Id { get; set; }
+    public string GenreName { get; set; }
 }
