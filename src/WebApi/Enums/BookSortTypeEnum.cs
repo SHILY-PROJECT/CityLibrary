@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Enums
 {
-    public enum BookSortingTypeEnum
+    public enum BookSortTypeEnum
     {
         NoSort,
         Author,

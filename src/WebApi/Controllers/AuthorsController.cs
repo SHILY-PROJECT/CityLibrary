@@ -1,81 +1,64 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.WebApi.Interfaces;
 using WebApi.WebApi.Models.Dto.Authors;
 
-namespace WebApi.WebApi.Controllers
+namespace WebApi.WebApi.Controllers;
+
+[ApiController]
+[Route("Authors")]
+public class AuthorsController : ControllerBase
 {
-    /// <summary>
-    /// 2.7 - Контроллер автора
-    /// </summary>
-    [ApiController]
-    [Route("Authors")]
-    public class AuthorsController : ControllerBase
+    private readonly IAuthorService _service;
+
+    public AuthorsController(IAuthorService authorService)
     {
-        private readonly IAuthorRepository _iAuthorRepository;
+        _service = authorService;
+    }
 
-        public AuthorsController(IAuthorRepository iAuthorRepository)
-        {
-            _iAuthorRepository = iAuthorRepository;
-        }
+    [HttpGet("ListAllAuthors")]
+    public IActionResult GetAuthors()
+    {
+        var result = _service.GetListAuthors();
 
-        /// <summary>
-        /// 2.7.3.1 - Получение списока всех авторов
-        /// </summary>
-        [HttpGet("ListAllAuthors")]
-        public IActionResult GetListAuthors()
-        {
-            var result = _iAuthorRepository.GetListAuthors();
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
 
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
+        return Ok(result.Content);
+    }
 
-            return Ok(result.Content);
-        }
+    [HttpGet]
+    public IActionResult GetBooksByAuthor([FromQuery] Guid authorId)
+    {
+        var result = _service.GetListBooksByAuthor(authorId);
 
-        /// <summary>
-        /// 2.7.3.2 - Получение списока всех книг конкретного автора 
-        /// </summary>
-        [HttpGet("ListBooksByAuthor")]
-        public IActionResult GetListBooksByAuthor([FromQuery] AuthorIdDto authorId)
-        {
-            var result = _iAuthorRepository.GetListBooksByAuthor(authorId);
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
 
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
+        return Ok(result.Content);
+    }
 
-            return Ok(result.Content);
-        }
+    [HttpPost]
+    public IActionResult AddAuthor([FromQuery] AuthorDto author, [FromQuery] IEnumerable<AuthorNewBookDto> books)
+    {
+        var result = _service.Add(author, books);
 
-        /// <summary>
-        /// 2.7.3.3 - Добавление автора
-        /// </summary>
-        [HttpPost("AddNewAuthorAndHisBooks")]
-        public IActionResult AddAuthor([FromQuery] AuthorDto author, [FromQuery] IEnumerable<AuthorNewBookDto> books = null)
-        {
-            var result = _iAuthorRepository.Add(author, books);
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
 
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
+        return Ok(result.Content);
+    }
 
-            return Ok(result.Content);
-        }
+    [HttpDelete]
+    public IActionResult DeleteAuthor([FromQuery] AuthorIdDto authorId)
+    {
+        var result = _service.Delete(authorId);
 
-        /// <summary>
-        /// 2.7.3.4 - Удаление автора 
-        /// </summary>
-        [HttpDelete("RemoveAuthor")]
-        public IActionResult DeleteAuthor([FromQuery] AuthorIdDto authorId)
-        {
-            var result = _iAuthorRepository.Delete(authorId);
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
 
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Message);
-        }
-
-
+        return Ok(result.Message);
     }
 }

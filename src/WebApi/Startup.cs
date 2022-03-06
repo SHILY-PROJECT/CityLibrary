@@ -21,10 +21,6 @@ namespace WebApi
 
         public IConfiguration Configuration { get; }
 
-        /// <summary>
-        /// 2.4 - Получение строки подключения из конфигурации.
-        /// 3.1.1 - Реализация DI.
-        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
             services

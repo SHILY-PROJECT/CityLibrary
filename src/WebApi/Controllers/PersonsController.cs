@@ -1,122 +1,98 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.WebApi.Interfaces;
-using WebApi.WebApi.Models.Dto;
-using WebApi.WebApi.Models.Dto.Persons;
+using WebApi.Interfaces;
+using WebApi.Models.Dto;
+using WebApi.Models.Dto.Persons;
 
-namespace WebApi.WebApi.Controllers
+namespace WebApi.Controllers;
+
+[ApiController]
+[Route("/api/person")]
+public class PersonsController : ControllerBase
 {
-    /// <summary>
-    /// 2.7 - Контроллер пользователя
-    /// </summary>
-    [ApiController]
-    [Route("Persons")]
-    public class PersonsController : ControllerBase
+    private readonly IPersonRepository _iPersonRepository;
+
+    public PersonsController(IPersonRepository iPersonRepository)
     {
-        private readonly IPersonRepository _iPersonRepository;
-
-        public PersonsController(IPersonRepository iPersonRepository)
-        {
-            _iPersonRepository = iPersonRepository;
-        }
-
-        /// <summary>
-        /// 2.7.1.5 - Получение списока всех взятых пользователем книг 
-        /// </summary>
-        [HttpGet("ListPersonBooks")]
-        public IActionResult GetPersonBooks([FromQuery][Required] int personId)
-        {
-            var result = _iPersonRepository.GetPersonBooks(personId);
-
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Content);
-        }
-
-        /// <summary>
-        /// 2.7.1.1 - Добавить пользователя
-        /// </summary>
-        [HttpPost("AddNewPerson")]
-        public IActionResult AddPerson([FromQuery] PersonDto person)
-        {
-            var result = _iPersonRepository.Add(person);
-
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Content);
-        }
-
-        /// <summary>
-        /// 2.7.1.6 - Получение книги пользователем
-        /// </summary>
-        [HttpPost("PersonTakeBook")]
-        public IActionResult TakeBook([FromQuery] PersonBookDto personBook)
-        {
-            var result = _iPersonRepository.TakeBook(personBook);
-
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Message);
-        }
-
-        /// <summary>
-        /// 2.7.1.7 - Возврат книги пользователем
-        /// </summary>
-        [HttpPost("PersonReturnBook")]
-        public IActionResult ReturnBook([FromQuery] PersonBookDto personBook)
-        {
-            var result = _iPersonRepository.ReturnBook(personBook);
-
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Message);
-        }
-
-        /// <summary>
-        /// 2.7.1.2 - Обновление/изменение информации о пользователе
-        /// </summary>
-        [HttpPut("UpdatePersonInformation")]
-        public IActionResult UpdatePerson([FromQuery] UpdatePersonDto personUpdateDto)
-        {
-            var result = _iPersonRepository.Update(personUpdateDto);
-
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Content);
-        }
-
-        /// <summary>
-        /// 2.7.1.3 - Удаление пользователя по идентификатору
-        /// </summary>
-        [HttpDelete("RemoveById")]
-        public IActionResult DeletePerson([FromQuery][Required] int personId)
-        {
-            var result = _iPersonRepository.Delete(personId);
-
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Message);
-        }
-
-        /// <summary>
-        /// 2.7.1.4 - Удаление пользователя по ФИО
-        /// </summary>
-        [HttpDelete("RemoveByFullName")]
-        public IActionResult DeletePerson([FromQuery] PersonDto person)
-        {
-            var result = _iPersonRepository.Delete(person);
-
-            if (result.IsSuccess is false)
-                return BadRequest(result.Message);
-
-            return Ok(result.Message);
-        }
-
+        _iPersonRepository = iPersonRepository;
     }
+
+    [HttpGet]
+    public IActionResult GetPersonBooks([FromQuery][Required] int personId)
+    {
+        var result = _iPersonRepository.GetPersonBooks(personId);
+
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
+
+        return Ok(result.Content);
+    }
+
+    [HttpPost]
+    public IActionResult AddPerson([FromQuery] PersonDto person)
+    {
+        var result = _iPersonRepository.Add(person);
+
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
+
+        return Ok(result.Content);
+    }
+
+    [HttpPost]
+    public IActionResult TakeBook([FromQuery] PersonBookDto personBook)
+    {
+        var result = _iPersonRepository.TakeBook(personBook);
+
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
+
+        return Ok(result.Message);
+    }
+
+    [HttpPost]
+    public IActionResult ReturnBook([FromQuery] PersonBookDto personBook)
+    {
+        var result = _iPersonRepository.ReturnBook(personBook);
+
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
+
+        return Ok(result.Message);
+    }
+
+    [HttpPut]
+    public IActionResult UpdatePerson([FromQuery] UpdatePersonDto personUpdateDto)
+    {
+        var result = _iPersonRepository.Update(personUpdateDto);
+
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
+
+        return Ok(result.Content);
+    }
+
+    [HttpDelete]
+    public IActionResult DeletePerson([FromQuery] Guid personId)
+    {
+        var result = _iPersonRepository.Delete(personId);
+
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
+
+        return Ok(result.Message);
+    }
+
+    [HttpDelete("RemoveByFullName")]
+    public IActionResult DeletePerson([FromQuery] PersonDto person)
+    {
+        var result = _iPersonRepository.Delete(person);
+
+        if (result.IsSuccess is false)
+            return BadRequest(result.Message);
+
+        return Ok(result.Message);
+    }
+
 }
