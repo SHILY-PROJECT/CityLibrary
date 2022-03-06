@@ -1,22 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebApi.WebApi.Models.Entity;
+using DataAccess.Entities;
 
-namespace WebApi.EntityConfigurations
+namespace DataAccess.EntityConfigurations;
+
+public class BookConfiguration : IEntityTypeConfiguration<BookDb>
 {
-    /// <summary>
-    /// Конфигурирование таблицы книг.
-    /// </summary>
-    public class BookConfiguration : IEntityTypeConfiguration<Book>
+    public void Configure(EntityTypeBuilder<BookDb> builder)
     {
-        public void Configure(EntityTypeBuilder<Book> builder)
-        {
-            builder.ToTable("book").HasKey(x => x.Id);
-            builder.HasOne(x => x.Author).WithMany(x => x.Books);
+        builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
-            builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(500).IsRequired(true);
-            builder.Property(x => x.AuthorId).HasColumnName("author_id").IsRequired(true);
-        }
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.Name).HasMaxLength(500).IsRequired();
+        builder.Property(x => x.AuthorId).IsRequired();
+
+        builder.HasOne(x => x.Author).WithMany();
     }
 }

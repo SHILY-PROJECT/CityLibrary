@@ -1,22 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebApi.Models.Entity;
+using DataAccess.Entities;
 
-namespace WebApi.EntityConfigurations
+namespace DataAccess.EntityConfigurations;
+
+public class AuthorConfiguration : IEntityTypeConfiguration<AuthorDb>
 {
-    /// <summary>
-    /// Конфигурирование таблицы авторов.
-    /// </summary>
-    public class AuthorConfiguration : IEntityTypeConfiguration<Author>
+    public void Configure(EntityTypeBuilder<AuthorDb> builder)
     {
-        public void Configure(EntityTypeBuilder<Author> builder)
-        {
-            builder.ToTable("author").HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
-            builder.Property(x => x.FirstName).HasColumnName("first_name").HasMaxLength(50).IsRequired(true);
-            builder.Property(x => x.LastName).HasColumnName("last_name").HasMaxLength(50).IsRequired(true);
-            builder.Property(x => x.MiddleName).HasColumnName("middle_name").HasMaxLength(50).IsRequired(false);
-        }
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.FirstName).HasMaxLength(50).IsRequired();
+        builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
+        builder.Property(x => x.MiddleName).HasMaxLength(50);
     }
 }

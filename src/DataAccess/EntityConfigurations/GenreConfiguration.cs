@@ -1,20 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using WebApi.WebApi.Models.Entity;
+using DataAccess.Entities;
 
-namespace WebApi.EntityConfigurations
+namespace DataAccess.EntityConfigurations;
+
+public class GenreConfiguration : IEntityTypeConfiguration<GenreDb>
 {
-    /// <summary>
-    /// Конфигурирование таблицы жанров.
-    /// </summary>
-    public class GenreConfiguration : IEntityTypeConfiguration<Genre>
+    public void Configure(EntityTypeBuilder<GenreDb> builder)
     {
-        public void Configure(EntityTypeBuilder<Genre> builder)
-        {
-            builder.ToTable("genre").HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).HasColumnName("id").UseIdentityColumn(1, 1).IsRequired(true);
-            builder.Property(x => x.GenreName).HasColumnName("genre_name").HasMaxLength(200).IsRequired(true);
-        }
+        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.Name).HasMaxLength(200).IsRequired();
     }
 }

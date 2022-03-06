@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DataAccess
+namespace DataAccess;
+
+public static class DataAccessRegistrator
 {
-    public class DataAccessRegistrator
+    public static IServiceCollection AddDataAccess(this IServiceCollection services, string connectionString)
     {
 
+        return services;
     }
 }

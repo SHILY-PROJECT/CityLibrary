@@ -1,41 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using DataAccess.EntityConfigurations;
 using DataAccess.Entities;
 
-namespace WebApi.WebApi
+namespace DataAccess;
+
+public class DataContext : DbContext
 {
-    /// <summary>
-    /// 2.1 - Класс для подключения к БД
-    /// </summary>
-    public class DataContext : DbContext
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
-        public DbSet<Author> Authors { get; set; }
-        public DbSet<Book> Books { get; set; }
-        public DbSet<Person> Persons { get; set; }
-        public DbSet<Genre> Genres { get; set; }
-        public DbSet<BookGenre> BooksGenres { get; set; }
-        public DbSet<LibraryCard> LibraryCards { get; set; }
-
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        if (Database.CanConnect() is false)
         {
-            if (Database.CanConnect() is false) Database.EnsureCreated();
+            Database.EnsureCreated();
         }
-
-        /// <summary>
-        /// 2.3 - Конфигурировение/мапинг БД (Fluent API)
-        /// </summary>
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new AuthorConfiguration());
-            modelBuilder.ApplyConfiguration(new PersonConfiguration());
-            modelBuilder.ApplyConfiguration(new GenreConfiguration());
-            modelBuilder.ApplyConfiguration(new BookConfiguration());
-            modelBuilder.ApplyConfiguration(new BookGenreConfiguration());
-            modelBuilder.ApplyConfiguration(new LibraryCardConfiguration());
-
-            base.OnModelCreating(modelBuilder);
-        }
-
     }
+
+    public DbSet<AuthorDb> Authors { get; set; }
+    public DbSet<BookDb> Books { get; set; }
+    public DbSet<PersonDb> Persons { get; set; }
+    public DbSet<GenreDb> Genres { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new AuthorConfiguration());
+        modelBuilder.ApplyConfiguration(new PersonConfiguration());
+        modelBuilder.ApplyConfiguration(new GenreConfiguration());
+        modelBuilder.ApplyConfiguration(new BookConfiguration());
+
+        base.OnModelCreating(modelBuilder);
+    }
+
 }
