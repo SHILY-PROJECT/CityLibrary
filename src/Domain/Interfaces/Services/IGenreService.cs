@@ -2,7 +2,7 @@
 
 namespace Domain.Interfaces.Services;
 
-public interface IGenreService : ICRUDOperations<Genre>
+public interface IGenreService : ICRUDServiceOperations<Genre>
 {
-    
+    IReadOnlyCollection<GenreStats> GetStats();
 }

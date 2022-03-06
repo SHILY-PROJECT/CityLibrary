@@ -4,5 +4,5 @@ namespace Domain.Interfaces.Repositories;
 
 public interface IGenreRepository : IRepository<Genre>
 {
-    IEnumerable<GenreStatistics> GetStatistics();
+    IEnumerable<GenreStats> GetStatistics();
 }
