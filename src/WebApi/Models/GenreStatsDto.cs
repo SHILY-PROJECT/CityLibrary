@@ -2,6 +2,6 @@
 
 public class GenreStatsDto
 {
-    public BookDto Book { get; set; }
+    public GenreDto Genre { get; set; }
     public int Quantity { get; set; }
 }

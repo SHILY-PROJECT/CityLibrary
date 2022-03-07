@@ -2,6 +2,6 @@
 
 public class GenreStats
 {
-    public Book Book { get; set; }
+    public Genre Genre { get; set; }
     public int Quantity { get; set; }
 }
