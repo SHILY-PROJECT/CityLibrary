@@ -25,6 +25,22 @@ public class GenreService : IGenreService
         return _genreRepository.GetAll().ToArray();
     }
 
+    public Genre New(Genre model)
+    {
+        model.Id = Guid.NewGuid();
+        return _genreRepository.New(model);
+    }
+
+    public Genre Update(Guid id, Genre model)
+    {
+        return _genreRepository.Update(id, model);
+    }
+
+    public bool Delete(Guid id)
+    {
+        return _genreRepository.Delete(id);
+    }
+
     public IReadOnlyCollection<GenreStats> GetStats()
     {
         var books = _bookRepository.GetAll();
@@ -37,20 +53,5 @@ public class GenreService : IGenreService
         });
 
         return stats.ToArray();
-    }
-
-    public Genre New(Genre model)
-    {
-        return _genreRepository.New(model);
-    }
-
-    public Genre Update(Guid id, Genre model)
-    {
-        return _genreRepository.Update(id, model);
-    }
-
-    public bool Delete(Guid id)
-    {
-        return _genreRepository.Delete(id);
     }
 }

@@ -25,6 +25,22 @@ public class AuthorService : IAuthorService
         return _authorRepository.GetAll().ToArray();
     }
 
+    public Author New(Author model)
+    {
+        model.Id = Guid.NewGuid();
+        return _authorRepository.New(model);
+    }
+
+    public Author Update(Guid id, Author model)
+    {
+        return _authorRepository.Update(id, model);
+    }
+
+    public bool Delete(Guid id)
+    {
+        return _authorRepository.Delete(id);
+    }
+
     public IReadOnlyCollection<Book> GetBooksByAuthor(Guid authorId)
     {
         return _authorRepository.GetBooksByAuthor(authorId).ToArray();
@@ -43,20 +59,5 @@ public class AuthorService : IAuthorService
         });
 
         return (newAuthor, books.ToArray());
-    }
-
-    public Author New(Author model)
-    {
-        return _authorRepository.New(model);
-    }
-
-    public Author Update(Guid id, Author model)
-    {
-        return _authorRepository.Update(id, model);
-    }
-
-    public bool Delete(Guid id)
-    {
-        return _authorRepository.Delete(id);
     }
 }
