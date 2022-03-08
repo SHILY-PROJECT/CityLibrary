@@ -1,6 +1,8 @@
-﻿namespace DataAccess.Entities;
+﻿using DataAccess.Interfaces;
 
-public class GenreDb
+namespace DataAccess.Entities;
+
+public class GenreDb : IGuidProperty
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

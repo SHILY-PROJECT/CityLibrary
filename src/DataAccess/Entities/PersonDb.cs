@@ -1,6 +1,8 @@
-﻿namespace DataAccess.Entities;
+﻿using DataAccess.Interfaces;
 
-public class PersonDb
+namespace DataAccess.Entities;
+
+public class PersonDb : IGuidProperty
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }

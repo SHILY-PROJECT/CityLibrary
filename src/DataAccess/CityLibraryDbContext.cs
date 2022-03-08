@@ -4,9 +4,9 @@ using DataAccess.Entities;
 
 namespace DataAccess;
 
-public class DataContext : DbContext
+public class CityLibraryDbContext : DbContext
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    public CityLibraryDbContext(DbContextOptions<CityLibraryDbContext> options) : base(options)
     {
         if (Database.CanConnect() is false)
         {
