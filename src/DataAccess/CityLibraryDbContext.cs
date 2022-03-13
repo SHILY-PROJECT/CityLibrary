@@ -18,6 +18,7 @@ public class CityLibraryDbContext : DbContext
     public DbSet<BookDb> Books { get; set; }
     public DbSet<PersonDb> Persons { get; set; }
     public DbSet<GenreDb> Genres { get; set; }
+    public DbSet<LibraryCardDb> LibraryCards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
