@@ -1,11 +1,12 @@
-﻿using Domain.Models;
+﻿using AutoMapper;
+using Domain.Models;
 using Domain.Interfaces.Repositories;
+using DataAccess.Models;
 using DataAccess.Entities;
-using AutoMapper;
 
 namespace DataAccess.Repositories;
 
-public class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepository
+public sealed class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepository
 {
     private readonly CityLibraryDbContext _context;
     private readonly IMapper _mapper;
@@ -14,5 +15,16 @@ public class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepository
     {
         _context = context;
         _mapper = mapper;
+    }
+
+    public IEnumerable<GenreStats> GenreStats()
+    {
+        var statsEntities = _context.Genres.Select(genre => new GenreStatsModel
+        {
+            Genre = genre,
+            Quantity = _context.Books.Count(book => book.Genre.Id == genre.Id)
+        });
+
+        return _mapper.Map<IEnumerable<GenreStats>>(statsEntities);
     }
 }

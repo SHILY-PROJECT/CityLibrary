@@ -7,12 +7,10 @@ namespace Domain.Services;
 public class GenreService : IGenreService
 {
     private readonly IGenreRepository _genreRepository;
-    private readonly IBookRepository _bookRepository;
 
-    public GenreService(IGenreRepository genreRepository, IBookRepository bookRepository)
+    public GenreService(IGenreRepository genreRepository)
     {
         _genreRepository = genreRepository;
-        _bookRepository = bookRepository;
     }
 
     public Genre? Get(Guid id)
@@ -43,15 +41,6 @@ public class GenreService : IGenreService
 
     public IReadOnlyCollection<GenreStats> GetStats()
     {
-        var books = _bookRepository.GetAll();
-        var genres = _genreRepository.GetAll();
-
-        var stats = genres.Select(genre => new GenreStats
-        {
-            Genre = genre,
-            Quantity = books.Count(book => book.Genre.Id == genre.Id)
-        });
-
-        return stats.ToArray();
+        return _genreRepository.GenreStats().ToArray();
     }
 }
