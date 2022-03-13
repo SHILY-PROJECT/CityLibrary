@@ -5,7 +5,7 @@ using Domain.Models;
 
 namespace DataAccess.Repositories;
 
-public class BookRepository : BaseRepository<Book, BookDb>, IBookRepository
+public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookRepository
 {
     private readonly CityLibraryDbContext _context;
     private readonly IMapper _mapper;

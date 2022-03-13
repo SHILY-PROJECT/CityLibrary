@@ -5,7 +5,7 @@ using DataAccess.Entities;
 
 namespace DataAccess.Repositories;
 
-public class AuthorRepository : BaseRepository<Author, AuthorDb>, IAuthorRepository
+public sealed class AuthorRepository : BaseRepository<Author, AuthorDb>, IAuthorRepository
 {
     private readonly CityLibraryDbContext _context;
     private readonly IMapper _mapper;
