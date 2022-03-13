@@ -2,6 +2,7 @@
 using Domain.Models;
 using Domain.Interfaces.Services;
 using Domain.Interfaces.Repositories;
+using Domain.Toolkit.Extensions;
 
 namespace Domain.Services;
 
@@ -43,28 +44,18 @@ public class BookService : IBookService
     public IReadOnlyCollection<Book> GetBooksByAuthor(Guid authorId, BookSortType sortType)
     {
         var books = _bookRepository.GetBooksByAuthor(authorId);
-        return SortBooks(books, sortType).ToArray();
+        return books.SortBooks(sortType).ToArray();
     }
 
     public IReadOnlyCollection<Book> GetBooksByAuthor(Author author, BookSortType sortType)
     {
         var books = _bookRepository.GetBooksByAuthor(author);
-        return SortBooks(books, sortType).ToArray();
+        return books.SortBooks(sortType).ToArray();
     }
 
     public IReadOnlyCollection<Book> GetBooksByGenre(Guid genreId, BookSortType sortType)
     {
         var books = _bookRepository.GetBooksByGenre(genreId);
-        return SortBooks(books, sortType).ToArray();
+        return books.SortBooks(sortType).ToArray();
     }
-
-    private static IEnumerable<Book> SortBooks(IEnumerable<Book> books, BookSortType sortType) => sortType switch
-    {
-        BookSortType.BookName           => books.OrderBy(x => x.Name),
-        BookSortType.BookNameReversed   => books.OrderByDescending(x => x.Name),
-        BookSortType.Author             => books.OrderBy(x => x.Author),
-        BookSortType.AuthorReversed     => books.OrderByDescending(x => x.Author),
-        BookSortType.NoSort             => books,
-        _                               => books
-    };
 }
