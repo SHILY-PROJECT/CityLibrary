@@ -2,9 +2,9 @@
 
 public interface ICRUDServiceOperations<TModel>
 {
-    TModel New(TModel model);
-    TModel? Get(Guid id);
-    IReadOnlyCollection<TModel> GetAll();
-    TModel Update(Guid id, TModel model);
-    bool Delete(Guid id);
+    Task<TModel> NewAsync(TModel model);
+    Task<TModel?> GetAsync(Guid id);
+    Task<IReadOnlyCollection<TModel>> GetAllAsync();
+    Task<TModel> UpdateAsync(Guid id, TModel model);
+    Task<bool> DeleteAsync(Guid id);
 }
