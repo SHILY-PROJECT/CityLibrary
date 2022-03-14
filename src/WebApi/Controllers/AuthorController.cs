@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Domain.Models;
@@ -22,41 +23,42 @@ public class AuthorController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IReadOnlyCollection<AuthorDto>> GetAuthors()
+    public async Task<ActionResult<IReadOnlyCollection<AuthorDto>>> GetAuthors()
     {
-        var authors = _service.GetAll();
-        var authorsDto = _mapper.Map<IReadOnlyCollection<AuthorDto>>(authors);
-        return Ok(authorsDto);
+        var authors = await _service.GetAllAsync();
+        var authorsResult = _mapper.Map<IReadOnlyCollection<AuthorDto>>(authors);
+        return Ok(authorsResult);
     }
 
     [HttpGet("{authorId}/books")]
-    public ActionResult<IReadOnlyCollection<AuthorDto>> GetBooksByAuthor([FromRoute] Guid authorId)
+    public async Task<ActionResult<IReadOnlyCollection<AuthorDto>>> GetBooksByAuthor([FromRoute] Guid authorId)
     {
-        var books = _service.GetBooksByAuthor(authorId);
-        var booksDto = _mapper.Map<IReadOnlyCollection<AuthorDto>>(books);
-        return Ok(booksDto);
+        var books = await _service.GetBooksByAuthorAsync(authorId);
+        var booksResult = _mapper.Map<IReadOnlyCollection<AuthorDto>>(books);
+        return Ok(booksResult);
     }
 
     [HttpPost]
-    public ActionResult<AuthorDto> AddAuthor([FromBody] AuthorDto authorDto)
+    public async Task<ActionResult<AuthorDto>> AddAuthor([FromBody] AuthorDto authorDto)
     {
         var author = _mapper.Map<Author>(authorDto);
-        var res = _service.New(author);
-        return _mapper.Map<AuthorDto>(res);
+        var authorResult = await _service.NewAsync(author);
+        return _mapper.Map<AuthorDto>(authorResult);
     }
 
     [HttpPost]
-    public ActionResult AddAuthor([FromBody] (AuthorDto authorDto, IEnumerable<BookDto> booksDto) authorWithBooks)
+    public async Task<ActionResult> AddAuthor([FromBody] (AuthorDto authorDto, IEnumerable<BookDto> booksDto) authorWithBooksDto)
     {
-        var author = _mapper.Map<Author>(authorWithBooks.authorDto);
-        var books = _mapper.Map<IEnumerable<Book>>(authorWithBooks.booksDto);
-        var res = _service.New(author, books);
-        return Ok(_mapper.Map<(AuthorDto authorDto, IEnumerable<BookDto> booksDto)>(res));
+        var author = _mapper.Map<Author>(authorWithBooksDto.authorDto);
+        var books = _mapper.Map<IEnumerable<Book>>(authorWithBooksDto.booksDto);
+        var authorWithBooks = await _service.NewAsync(author, books);
+        var authorWithBooksResult = _mapper.Map<(AuthorDto authorDto, IEnumerable<BookDto> booksDto)>(authorWithBooks);
+        return Ok(authorWithBooksResult);
     }
 
     [HttpDelete]
-    public ActionResult<bool> DeleteAuthor([FromQuery] Guid authorId)
+    public async Task<ActionResult<bool>> DeleteAuthor([FromQuery] Guid authorId)
     {
-        return _service.Delete(authorId);
+        return await _service.DeleteAsync(authorId);
     }
 }
