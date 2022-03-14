@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using DataAccess.Entities;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
@@ -16,19 +17,19 @@ public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookReposito
         _mapper = mapper;
     }
 
-    public IEnumerable<Book> GetBooksByGenre(Guid genreId)
+    public async Task<IEnumerable<Book>> GetBooksByGenreAsync(Guid genreId)
     {
-        var books = _context.Books.Where(book => book.GenreId == genreId);
+        var books = await _context.Books.Where(book => book.GenreId == genreId).ToArrayAsync();
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 
-    public IEnumerable<Book> GetBooksByAuthor(Guid authorId)
+    public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
-        var books = _context.Books.Where(book => book.AuthorId == authorId);
+        var books = await _context.Books.Where(book => book.AuthorId == authorId).ToArrayAsync();
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 
-    public IEnumerable<Book> GetBooksByAuthor(Author author)
+    public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Author author)
     {
         var predicates = new List<Predicate<BookDb>>();
 
@@ -39,7 +40,7 @@ public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookReposito
         if (!string.IsNullOrWhiteSpace(author.MiddleName))
             predicates.Add(new Predicate<BookDb>((BookDb book) => book.Author.MiddleName.Equals(author.MiddleName, StringComparison.OrdinalIgnoreCase)));
 
-        var booksEntities = _context.Books.Where(book => predicates.All(p => p.Invoke(book)));
+        var booksEntities = await _context.Books.Where(book => predicates.All(p => p.Invoke(book))).ToArrayAsync();
 
         return _mapper.Map<IEnumerable<Book>>(booksEntities);
     }

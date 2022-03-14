@@ -4,7 +4,7 @@ namespace Domain.Interfaces.Repositories;
 
 public interface IBookRepository : IRepository<Book>
 {
-    IEnumerable<Book> GetBooksByGenre(Guid genreId);
-    IEnumerable<Book> GetBooksByAuthor(Guid authorId);
-    IEnumerable<Book> GetBooksByAuthor(Author author);
+    Task<IEnumerable<Book>> GetBooksByGenreAsync(Guid genreId);
+    Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId);
+    Task<IEnumerable<Book>> GetBooksByAuthorAsync(Author author);
 }
