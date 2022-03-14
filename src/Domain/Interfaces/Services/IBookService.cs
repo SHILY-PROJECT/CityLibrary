@@ -5,7 +5,7 @@ namespace Domain.Interfaces.Services;
 
 public interface IBookService : ICRUDServiceOperations<Book>
 {
-    IReadOnlyCollection<Book> GetBooksByGenre(Guid genreId, BookSortType sortType);
-    IReadOnlyCollection<Book> GetBooksByAuthor(Guid authorId, BookSortType sortType);
-    IReadOnlyCollection<Book> GetBooksByAuthor(Author author, BookSortType sortType);
+    Task<IReadOnlyCollection<Book>> GetBooksByGenreAsync(Guid genreId, BookSortType sortType);
+    Task<IReadOnlyCollection<Book>> GetBooksByAuthorAsync(Guid authorId, BookSortType sortType);
+    Task<IReadOnlyCollection<Book>> GetBooksByAuthorAsync(Author author, BookSortType sortType);
 }

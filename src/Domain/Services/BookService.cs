@@ -15,47 +15,48 @@ public class BookService : IBookService
         _bookRepository = bookRepository;
     }
 
-    public Book? Get(Guid id)
+    public async Task<Book?> GetAsync(Guid id)
     {
-        return _bookRepository.Get(id);
+        return await _bookRepository.GetAsync(id);
     }
 
-    public IReadOnlyCollection<Book> GetAll()
+    public async Task<IReadOnlyCollection<Book>> GetAllAsync()
     {
-        return _bookRepository.GetAll().ToArray();
+        var books = await _bookRepository.GetAllAsync();
+        return books.ToArray();
     }
 
-    public Book New(Book model)
+    public async Task<Book> NewAsync(Book model)
     {
         model.Id = Guid.NewGuid();
-        return _bookRepository.New(model);
+        return await _bookRepository.NewAsync(model);
     }
 
-    public Book Update(Guid id, Book model)
+    public async Task<Book> UpdateAsync(Guid id, Book model)
     {
-        return _bookRepository.Update(id, model);
+        return await _bookRepository.UpdateAsync(id, model);
     }
 
-    public bool Delete(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        return _bookRepository.Delete(id);
+        return await _bookRepository.DeleteAsync(id);
     }
 
-    public IReadOnlyCollection<Book> GetBooksByAuthor(Guid authorId, BookSortType sortType)
+    public async Task<IReadOnlyCollection<Book>> GetBooksByAuthorAsync(Guid authorId, BookSortType sortType)
     {
-        var books = _bookRepository.GetBooksByAuthor(authorId);
+        var books = await _bookRepository.GetBooksByAuthorAsync(authorId);
         return books.SortBooks(sortType).ToArray();
     }
 
-    public IReadOnlyCollection<Book> GetBooksByAuthor(Author author, BookSortType sortType)
+    public async Task<IReadOnlyCollection<Book>> GetBooksByAuthorAsync(Author author, BookSortType sortType)
     {
-        var books = _bookRepository.GetBooksByAuthor(author);
+        var books = await _bookRepository.GetBooksByAuthorAsync(author);
         return books.SortBooks(sortType).ToArray();
     }
 
-    public IReadOnlyCollection<Book> GetBooksByGenre(Guid genreId, BookSortType sortType)
+    public async Task<IReadOnlyCollection<Book>> GetBooksByGenreAsync(Guid genreId, BookSortType sortType)
     {
-        var books = _bookRepository.GetBooksByGenre(genreId);
+        var books = await _bookRepository.GetBooksByGenreAsync(genreId);
         return books.SortBooks(sortType).ToArray();
     }
 }
