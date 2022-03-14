@@ -13,48 +13,50 @@ public class PersonService : IPersonService
         _personRepository = personRepository;
     }
 
-    public Person? Get(Guid id)
+    public async Task<Person?> GetAsync(Guid id)
     {
-        return _personRepository.Get(id);
+        return await _personRepository.GetAsync(id);
     }
 
-    public IReadOnlyCollection<Person> GetAll()
+    public async Task<IReadOnlyCollection<Person>> GetAllAsync()
     {
-        return _personRepository.GetAll().ToArray();
+        var persons = await _personRepository.GetAllAsync();
+        return persons.ToArray();
     }
 
-    public Person New(Person model)
+    public async Task<Person> NewAsync(Person model)
     {
-        return _personRepository.New(model);
+        return await _personRepository.NewAsync(model);
     }
 
-    public Person Update(Guid id, Person model)
+    public async Task<Person> UpdateAsync(Guid id, Person model)
     {
-        return _personRepository.Update(id, model);
+        return await _personRepository.UpdateAsync(id, model);
     }
 
-    public bool Delete(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        return _personRepository.Delete(id);
+        return await _personRepository.DeleteAsync(id);
     }
 
-    public bool Delete(Person person)
+    public async Task<bool> DeleteAsync(Person person)
     {
-        return _personRepository.Delete(person);
+        return await _personRepository.DeleteAsync(person);
     }
 
-    public IReadOnlyCollection<Book> GetPersonBooks(Guid personId)
+    public async Task<IReadOnlyCollection<Book>> GetPersonBooksAsync(Guid personId)
     {
-        return _personRepository.GetPersonBooks(personId).ToArray();
+        var books = await _personRepository.GetPersonBooksAsync(personId);
+        return books.ToArray();
     }
 
-    public bool TakeBook(Guid personeId, Guid bookId)
+    public async Task<bool> TakeBookAsync(Guid personeId, Guid bookId)
     {
-        return _personRepository.TakeBook(personeId, bookId);
+        return await _personRepository.TakeBookAsync(personeId, bookId);
     }
 
-    public bool ReturnBook(Guid personeId, Guid bookId)
+    public async Task<bool> ReturnBookAsync(Guid personeId, Guid bookId)
     {
-        return _personRepository.ReturnBook(personeId, bookId);
+        return await _personRepository.ReturnBookAsync(personeId, bookId);
     }
 }
