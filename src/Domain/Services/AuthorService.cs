@@ -15,47 +15,49 @@ public class AuthorService : IAuthorService
         _bookRepository = bookRepository;
     }
 
-    public Author? Get(Guid id)
+    public async Task<Author?> GetAsync(Guid id)
     {
-        return _authorRepository.Get(id);
+        return await _authorRepository.GetAsync(id);
     }
 
-    public IReadOnlyCollection<Author> GetAll()
+    public async Task<IReadOnlyCollection<Author>> GetAllAsync()
     {
-        return _authorRepository.GetAll().ToArray();
+        var authors = await _authorRepository.GetAllAsync();
+        return authors.ToArray();
     }
 
-    public Author New(Author model)
+    public async Task<Author> NewAsync(Author model)
     {
         model.Id = Guid.NewGuid();
-        return _authorRepository.New(model);
+        return await _authorRepository.NewAsync(model);
     }
 
-    public Author Update(Guid id, Author model)
+    public async Task<Author> UpdateAsync(Guid id, Author model)
     {
-        return _authorRepository.Update(id, model);
+        return await _authorRepository.UpdateAsync(id, model);
     }
 
-    public bool Delete(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        return _authorRepository.Delete(id);
+        return await _authorRepository.DeleteAsync(id);
     }
 
-    public IReadOnlyCollection<Book> GetBooksByAuthor(Guid authorId)
+    public async Task<IReadOnlyCollection<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
-        return _authorRepository.GetBooksByAuthor(authorId).ToArray();
+        var books = await _authorRepository.GetBooksByAuthorAsync(authorId);
+        return books.ToArray();
     }
 
-    public (Author Author, IReadOnlyCollection<Book> Books) New(Author author, IEnumerable<Book> books)
+    public async Task<(Author Author, IReadOnlyCollection<Book> Books)> NewAsync(Author author, IEnumerable<Book> books)
     {
         author.Id = Guid.NewGuid();
-        var newAuthor = _authorRepository.New(author);
+        var newAuthor = await _authorRepository.NewAsync(author);
 
-        books.ToList().ForEach(book =>
+        books.ToList().ForEach(async book =>
         {
             book.Id = Guid.NewGuid();
             book.Author = newAuthor;
-            book = _bookRepository.New(book);
+            book = await _bookRepository.NewAsync(book);
         });
 
         return (newAuthor, books.ToArray());
