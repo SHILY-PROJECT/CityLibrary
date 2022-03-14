@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using Domain.Interfaces.Repositories;
 using Domain.Models;
 using DataAccess.Entities;
@@ -16,9 +17,9 @@ public sealed class AuthorRepository : BaseRepository<Author, AuthorDb>, IAuthor
         _mapper = mapper;
     }
 
-    public IEnumerable<Book> GetBooksByAuthor(Guid authorId)
+    public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
-        var books = _context.Books.Where(book => book.AuthorId == authorId);
+        var books = await _context.Books.Where(book => book.AuthorId == authorId).ToArrayAsync();
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 }

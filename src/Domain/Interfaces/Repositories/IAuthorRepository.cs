@@ -4,5 +4,5 @@ namespace Domain.Interfaces.Repositories;
 
 public interface IAuthorRepository : IRepository<Author>
 {
-    IEnumerable<Book> GetBooksByAuthor(Guid authorId);
+    Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId);
 }
