@@ -13,34 +13,36 @@ public class GenreService : IGenreService
         _genreRepository = genreRepository;
     }
 
-    public Genre? Get(Guid id)
+    public async Task<Genre?> GetAsync(Guid id)
     {
-        return _genreRepository.Get(id);
+        return await _genreRepository.GetAsync(id);
     }
 
-    public IReadOnlyCollection<Genre> GetAll()
+    public async Task<IReadOnlyCollection<Genre>> GetAllAsync()
     {
-        return _genreRepository.GetAll().ToArray();
+        var genres = await _genreRepository.GetAllAsync();
+        return genres.ToArray();
     }
 
-    public Genre New(Genre model)
+    public async Task<Genre> NewAsync(Genre model)
     {
         model.Id = Guid.NewGuid();
-        return _genreRepository.New(model);
+        return await _genreRepository.NewAsync(model);
     }
 
-    public Genre Update(Guid id, Genre model)
+    public async Task<Genre> UpdateAsync(Guid id, Genre model)
     {
-        return _genreRepository.Update(id, model);
+        return await _genreRepository.UpdateAsync(id, model);
     }
 
-    public bool Delete(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        return _genreRepository.Delete(id);
+        return await _genreRepository.DeleteAsync(id);
     }
 
-    public IReadOnlyCollection<GenreStats> GetStats()
+    public async Task<IReadOnlyCollection<GenreStats>> GetStatsAsync()
     {
-        return _genreRepository.GenreStats().ToArray();
+        var stats = await _genreRepository.GenreStatsAsync();
+        return stats.ToArray();
     }
 }
