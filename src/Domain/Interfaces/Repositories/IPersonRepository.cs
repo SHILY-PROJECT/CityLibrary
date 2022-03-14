@@ -4,8 +4,8 @@ namespace Domain.Interfaces.Repositories;
 
 public interface IPersonRepository : IRepository<Person>
 {
-    bool Delete(Person person);
-    IEnumerable<Book> GetPersonBooks(Guid personId);
-    bool TakeBook(Guid personeId, Guid bookId);
-    bool ReturnBook(Guid personeId, Guid bookId);
+    Task<bool> DeleteAsync(Person person);
+    Task<IEnumerable<Book>> GetPersonBooksAsync(Guid personId);
+    Task<bool> TakeBookAsync(Guid personeId, Guid bookId);
+    Task<bool> ReturnBookAsync(Guid personeId, Guid bookId);
 }

@@ -17,31 +17,32 @@ public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPerson
         _mapper = mapper;
     }
 
-    public IEnumerable<Book> GetPersonBooks(Guid personId)
+    public async Task<IEnumerable<Book>> GetPersonBooksAsync(Guid personId)
     {
-        var books = _context.LibraryCards
+        var books = await _context.LibraryCards
             .Where(card => card.PersonId == personId)
-            .Include(card => card.Book);
+            .Include(card => card.Book)
+            .ToArrayAsync();
 
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 
-    public bool ReturnBook(Guid personeId, Guid bookId)
+    public async Task<bool> ReturnBookAsync(Guid personeId, Guid bookId)
     {
-        var card = _context.LibraryCards.FirstOrDefault(card => card.PersonId == personeId && card.BookId == bookId);
+        var card = await _context.LibraryCards.FirstOrDefaultAsync(card => card.PersonId == personeId && card.BookId == bookId);
 
         if (card is null) return false;
 
         _context.Entry(card).State = EntityState.Deleted;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public bool TakeBook(Guid personeId, Guid bookId)
+    public async Task<bool> TakeBookAsync(Guid personeId, Guid bookId)
     {
-        var personEntity = _context.Persons.FirstOrDefault(person => person.Id == personeId);
-        var bookEntity = _context.Books.FirstOrDefault(book => book.Id == bookId);
+        var personEntity = await _context.Persons.FirstOrDefaultAsync(person => person.Id == personeId);
+        var bookEntity = await _context.Books.FirstOrDefaultAsync(book => book.Id == bookId);
 
         if (personEntity is null || bookEntity is null) return false;
 
@@ -54,12 +55,12 @@ public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPerson
         };
 
         _context.LibraryCards.Add(card);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
 
-    public bool Delete(Person person)
+    public async Task<bool> DeleteAsync(Person person)
     {
         var predicates = new List<Predicate<PersonDb>>();
 
@@ -72,10 +73,10 @@ public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPerson
         if (!string.IsNullOrEmpty(person.MiddleName))
             predicates.Add(new Predicate<PersonDb>((PersonDb personEntity) => personEntity.MiddleName.Equals(person.MiddleName, StringComparison.OrdinalIgnoreCase)));
 
-        var personsEntities = _context.Persons.Where(personEntity => predicates.All(p => p.Invoke(personEntity)));
+        var personsEntities = await _context.Persons.Where(personEntity => predicates.All(p => p.Invoke(personEntity))).ToArrayAsync();
 
         _context.Persons.RemoveRange(personsEntities);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
