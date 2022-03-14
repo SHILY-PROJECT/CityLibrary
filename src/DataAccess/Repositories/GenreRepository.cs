@@ -3,6 +3,7 @@ using Domain.Models;
 using Domain.Interfaces.Repositories;
 using DataAccess.Models;
 using DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories;
 
@@ -17,13 +18,14 @@ public sealed class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepo
         _mapper = mapper;
     }
 
-    public IEnumerable<GenreStats> GenreStats()
+    public async Task<IEnumerable<GenreStats>> GenreStatsAsync()
     {
-        var statsEntities = _context.Genres.Select(genre => new GenreStatsModel
+        var statsEntities = await _context.Genres.Select(genre => new GenreStatsModel
         {
             Genre = genre,
             Quantity = _context.Books.Count(book => book.Genre.Id == genre.Id)
-        });
+        })
+        .ToArrayAsync();
 
         return _mapper.Map<IEnumerable<GenreStats>>(statsEntities);
     }
