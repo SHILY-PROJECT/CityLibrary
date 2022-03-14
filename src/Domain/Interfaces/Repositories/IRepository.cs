@@ -2,9 +2,9 @@
 
 public interface IRepository<TModel>
 {
-    TModel New(TModel model);
-    TModel? Get(Guid id);
-    IEnumerable<TModel> GetAll();
-    TModel Update(Guid id, TModel model);
-    bool Delete(Guid id);
+    Task<TModel> NewAsync(TModel model);
+    Task<TModel?> GetAsync(Guid id);
+    Task<IEnumerable<TModel>> GetAllAsync();
+    Task<TModel> UpdateAsync(Guid id, TModel model);
+    Task<bool> DeleteAsync(Guid id);
 }

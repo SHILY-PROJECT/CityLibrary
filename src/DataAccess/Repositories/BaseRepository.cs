@@ -18,51 +18,52 @@ public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> wher
         _mapper = mapper;
     }
 
-    public TModel? Get(Guid id)
+    public async Task<TModel?> GetAsync(Guid id)
     {
-        var entity = _dbSet.Find(id);
+        var entity = await _dbSet.FindAsync(id);
 
         if (entity is null) return default;
 
         return _mapper.Map<TModel>(entity);
     }
 
-    public IEnumerable<TModel> GetAll()
+    public async Task<IEnumerable<TModel>> GetAllAsync()
     {
-        return _mapper.Map<IReadOnlyCollection<TModel>>(_dbSet);
+        var entities = await _dbSet.ToArrayAsync();
+        return _mapper.Map<IReadOnlyCollection<TModel>>(entities);
     }
 
-    public TModel New(TModel model)
+    public async Task<TModel> NewAsync(TModel model)
     {
         var entity = _mapper.Map<TEntity>(model);
 
-        _dbSet.Add(entity);
-        _context.SaveChanges();
+        await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<TModel>(entity);
     }
 
-    public TModel Update(Guid id, TModel model)
+    public async Task<TModel> UpdateAsync(Guid id, TModel model)
     {
-        var entity = _dbSet.FirstOrDefault(x => x.Id == id);
+        var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
         if (entity is null)
             throw new InvalidOperationException($"'{nameof(id)}' - not found");
 
         _mapper.Map(model, entity);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return _mapper.Map<TModel>(entity);
     }
 
-    public bool Delete(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        var entity = _dbSet.Find(id);
+        var entity = await _dbSet.FindAsync(id);
 
         if (entity is null) return false;
 
         _context.Entry(entity).State = EntityState.Deleted;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return true;
     }
