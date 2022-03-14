@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Domain.Enums;
@@ -23,54 +24,57 @@ public class BookController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IReadOnlyCollection<BookDto>> GetBooks()
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooks()
     {
-        var books = _service.GetAll();
-        var booksDto = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
-        return Ok(booksDto);
+        var books = await _service.GetAllAsync();
+        var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
+        return Ok(booksResult);
     }
 
     [HttpGet]
-    public ActionResult<IReadOnlyCollection<BookDto>> GetBooksByAuthor([FromBody] (AuthorDto authorDto, BookSortType sortType) authorSearch)
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromBody] (AuthorDto authorDto, BookSortType sortType) authorSearch)
     {
         var author = _mapper.Map<Author>(authorSearch.authorDto);
-        var res = _service.GetBooksByAuthor(author, authorSearch.sortType);
-        return Ok(_mapper.Map<IReadOnlyCollection<BookDto>>(res));
+        var books = await _service.GetBooksByAuthorAsync(author, authorSearch.sortType);
+        var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
+        return Ok(booksResult);
     }
 
     [HttpGet("author/{authorId}")]
-    public ActionResult<IReadOnlyCollection<BookDto>> GetBooksByAuthor([FromRoute] Guid authorId, [FromQuery] BookSortType sortType)
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromRoute] Guid authorId, [FromQuery] BookSortType sortType)
     {
-        var res = _service.GetBooksByAuthor(authorId, sortType);
-        return Ok(_mapper.Map<IReadOnlyCollection<BookDto>>(res));
+        var books = await _service.GetBooksByAuthorAsync(authorId, sortType);
+        var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
+        return Ok(booksResult);
     }
 
     [HttpGet("genre/{genreId}")]
-    public ActionResult<IReadOnlyCollection<BookDto>> GetListBooksByGenre([FromRoute] Guid genreId, [FromQuery] BookSortType sortType)
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetListBooksByGenre([FromRoute] Guid genreId, [FromQuery] BookSortType sortType)
     {
-        var res = _service.GetBooksByGenre(genreId, sortType);
-        return Ok(_mapper.Map<IReadOnlyCollection<BookDto>>(res));
+        var books = await _service.GetBooksByGenreAsync(genreId, sortType);
+        var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
+        return Ok(booksResult);
     }
 
     [HttpPost]
-    public ActionResult<BookDto> AddBook([FromQuery] BookDto bookDto)
+    public async Task<ActionResult<BookDto>> AddBook([FromQuery] BookDto bookDto)
     {
         var book = _mapper.Map<Book>(bookDto);
-        var res = _service.New(book);
-        return _mapper.Map<BookDto>(res);
+        var bookResult = await _service.NewAsync(book);
+        return _mapper.Map<BookDto>(bookResult);
     }
 
     [HttpPut]
-    public ActionResult<BookDto> UpdateGenreBook([FromBody] BookDto bookDto)
+    public async Task<ActionResult<BookDto>> UpdateGenreBook([FromBody] BookDto bookDto)
     {
         var book = _mapper.Map<Book>(bookDto);
-        var res = _service.Update(bookDto.Id, book);
-        return _mapper.Map<BookDto>(res);
+        var bookResult = await _service.UpdateAsync(bookDto.Id, book);
+        return _mapper.Map<BookDto>(bookResult);
     }
 
     [HttpDelete]
-    public ActionResult<bool> DeleteBook([FromBody] Guid bookId)
+    public async Task<ActionResult<bool>> DeleteBook([FromBody] Guid bookId)
     {
-        return _service.Delete(bookId);
+        return await _service.DeleteAsync(bookId);
     }
 }
