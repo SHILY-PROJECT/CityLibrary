@@ -21,8 +21,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SimbirSoftWorkshop.API\SimbirSoftWorkshop.API.csproj" />
-  </ItemGroup>
-
 </Project>
