@@ -3,6 +3,7 @@
 public class LibraryCardDb
 {
     public Guid Id { get; set; }
+    public DateTime DataReceived { get; set; }
 
     public Guid PersonId { get; set; }
     public PersonDb Person { get; set; }
