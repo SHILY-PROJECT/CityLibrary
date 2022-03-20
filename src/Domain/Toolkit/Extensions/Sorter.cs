@@ -3,7 +3,7 @@ using Domain.Models;
 
 namespace Domain.Toolkit.Extensions;
 
-public static class Sorter
+internal static class Sorter
 {
     public static IEnumerable<Book> SortBooks(this IEnumerable<Book> books, BookSortType sortType) => sortType switch
     {
