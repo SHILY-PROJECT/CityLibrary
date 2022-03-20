@@ -1,6 +1,11 @@
-﻿namespace DataAccess;
+﻿using AutoMapper;
 
-public class MapperProfile
+namespace DataAccess;
+
+public class MapperProfile : Profile
 {
+    public MapperProfile()
+    {
 
+    }
 }
