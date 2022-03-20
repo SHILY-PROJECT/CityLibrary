@@ -26,8 +26,8 @@ public class CityLibraryDbContext : DbContext
         modelBuilder.ApplyConfiguration(new PersonConfiguration());
         modelBuilder.ApplyConfiguration(new GenreConfiguration());
         modelBuilder.ApplyConfiguration(new BookConfiguration());
+        modelBuilder.ApplyConfiguration(new LibraryCardConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
-
 }
