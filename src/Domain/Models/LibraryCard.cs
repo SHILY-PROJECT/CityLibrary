@@ -1,9 +1,9 @@
 ﻿namespace Domain.Models;
 
-public class LibraryCard
+public record LibraryCard
 {
-    public Guid Id { get; set; }
-    public Person Person { get; set; }
-    public Book Book { get; set; }
-    public DateTime DataReceived { get; set; }
+    public Guid Id { get; init; }
+    public Person Person { get; init; }
+    public Book Book { get; init; }
+    public DateTime DataReceived { get; init; }
 }

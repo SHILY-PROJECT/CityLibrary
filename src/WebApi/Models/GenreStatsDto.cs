@@ -1,7 +1,7 @@
 ﻿namespace WebApi.Models;
 
-public class GenreStatsDto
+public record GenreStatsDto
 {
-    public GenreDto Genre { get; set; }
-    public int Quantity { get; set; }
+    public GenreDto Genre { get; init; }
+    public int Quantity { get; init; }
 }

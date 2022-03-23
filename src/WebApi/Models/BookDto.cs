@@ -2,8 +2,8 @@
 
 namespace WebApi.Models;
 
-public class BookDto
+public record BookDto
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
+    public Guid Id { get; init; }
+    public string Name { get; init; }
 }

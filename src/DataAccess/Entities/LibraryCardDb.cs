@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Entities;
 
-public class LibraryCardDb
+public record LibraryCardDb
 {
     public Guid Id { get; set; }
     public DateTime DataReceived { get; set; }

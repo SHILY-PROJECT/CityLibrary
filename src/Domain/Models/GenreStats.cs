@@ -1,7 +1,7 @@
 ﻿namespace Domain.Models;
 
-public class GenreStats
+public record GenreStats
 {
-    public Genre Genre { get; set; }
-    public int Quantity { get; set; }
+    public Genre Genre { get; init; }
+    public int Quantity { get; init; }
 }

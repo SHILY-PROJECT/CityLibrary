@@ -2,10 +2,10 @@
 
 namespace WebApi.Models;
 
-public class AuthorDto
+public record AuthorDto
 {
-    public Guid Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string MiddleName { get; set; }
+    public Guid Id { get; init; }
+    public string FirstName { get; init; }
+    public string LastName { get; init; }
+    public string MiddleName { get; init; }
 }

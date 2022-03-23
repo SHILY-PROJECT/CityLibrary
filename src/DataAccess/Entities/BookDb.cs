@@ -2,7 +2,7 @@
 
 namespace DataAccess.Entities;
 
-public class BookDb : IGuidProperty
+public record BookDb : IGuidProperty
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

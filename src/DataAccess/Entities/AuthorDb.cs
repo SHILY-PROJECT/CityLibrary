@@ -2,10 +2,10 @@
 
 namespace DataAccess.Entities;
 
-public class AuthorDb : IGuidProperty
+public record AuthorDb : IGuidProperty
 {
-    public Guid Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string MiddleName { get; set; }
+    public Guid Id { get; init; }
+    public string FirstName { get; init; }
+    public string LastName { get; init; }
+    public string MiddleName { get; init; }
 }

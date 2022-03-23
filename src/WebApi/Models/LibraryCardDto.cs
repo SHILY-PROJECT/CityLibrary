@@ -2,10 +2,10 @@
 
 namespace WebApi.Models;
 
-public class LibraryCardDto
+public record LibraryCardDto
 {
-    public Guid Id { get; set; }
-    public PersonDto Person { get; set; }
-    public BookDto Book { get; set; }
-    public DateTime DataReceived { get; set; }
+    public Guid Id { get; init; }
+    public PersonDto Person { get; init; }
+    public BookDto Book { get; init; }
+    public DateTime DataReceived { get; init; }
 }
