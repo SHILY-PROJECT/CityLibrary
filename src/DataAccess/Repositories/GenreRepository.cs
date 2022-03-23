@@ -20,12 +20,9 @@ public sealed class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepo
 
     public async Task<IEnumerable<GenreStats>> GenreStatsAsync()
     {
-        var statsEntities = await _context.Genres.Select(genre => new GenreStatsModel
-        {
-            Genre = genre,
-            Quantity = _context.Books.Count(book => book.Genre.Id == genre.Id)
-        })
-        .ToArrayAsync();
+        var statsEntities = await _context.Genres
+            .Select(genre => new GenreStatsModel(genre, _context.Books.Count(book => book.Genre.Id == genre.Id)))
+            .ToArrayAsync();
 
         return _mapper.Map<IEnumerable<GenreStats>>(statsEntities);
     }
