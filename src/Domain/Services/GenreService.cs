@@ -26,8 +26,7 @@ public class GenreService : IGenreService
 
     public async Task<Genre> NewAsync(Genre model)
     {
-        model.Id = Guid.NewGuid();
-        return await _genreRepository.NewAsync(model);
+        return await _genreRepository.NewAsync(model with { Id = Guid.NewGuid() });
     }
 
     public async Task<Genre> UpdateAsync(Guid id, Genre model)
