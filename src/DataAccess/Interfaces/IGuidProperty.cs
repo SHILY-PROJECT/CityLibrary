@@ -2,5 +2,5 @@
 
 public interface IGuidProperty
 {
-    Guid Id { get; set; }
+    Guid Id { get; }
 }
