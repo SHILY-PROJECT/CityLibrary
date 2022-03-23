@@ -28,8 +28,7 @@ public class AuthorService : IAuthorService
 
     public async Task<Author> NewAsync(Author model)
     {
-        model.Id = Guid.NewGuid();
-        return await _authorRepository.NewAsync(model);
+        return await _authorRepository.NewAsync(model with { Id = Guid.NewGuid() });
     }
 
     public async Task<Author> UpdateAsync(Guid id, Author model)
@@ -50,14 +49,15 @@ public class AuthorService : IAuthorService
 
     public async Task<(Author Author, IReadOnlyCollection<Book> Books)> NewAsync(Author author, IEnumerable<Book> books)
     {
-        author.Id = Guid.NewGuid();
-        var newAuthor = await _authorRepository.NewAsync(author);
+        var newAuthor = await _authorRepository.NewAsync(author with { Id = Guid.NewGuid() });
 
         books.ToList().ForEach(async book =>
         {
-            book.Id = Guid.NewGuid();
-            book.Author = newAuthor;
-            book = await _bookRepository.NewAsync(book);
+            book = await _bookRepository.NewAsync(book with
+            {
+                Id = Guid.NewGuid(),
+                Author = newAuthor
+            });
         });
 
         return (newAuthor, books.ToArray());
