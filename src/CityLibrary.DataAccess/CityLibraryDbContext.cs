@@ -1,13 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CityLibrary.DataAccess.EntityConfigurations;
+using CityLibrary.DataAccess.Models;
 using CityLibrary.DataAccess.Entities;
+using CityLibrary.DataAccess.EntityConfigurations;
 
 namespace CityLibrary.DataAccess;
 
 public class CityLibraryDbContext : DbContext
 {
-    public CityLibraryDbContext(DbContextOptions<CityLibraryDbContext> options) : base(options)
+    private static bool _isDeletedDatabaseAtFirstStartup;
+    private readonly DatabaseCreationSettings _databaseCreationSettings;
+
+    public CityLibraryDbContext(DbContextOptions<CityLibraryDbContext> options, DatabaseCreationSettings databaseCreationSettings) : base(options)
     {
+        _databaseCreationSettings = databaseCreationSettings;
+
+        if (databaseCreationSettings.ReCreateDatabaseAtFirstStartup && !_isDeletedDatabaseAtFirstStartup)
+        {
+            Database.EnsureDeleted();
+            _isDeletedDatabaseAtFirstStartup = true;
+        }
+
         Database.EnsureCreated();
     }
 
@@ -25,6 +37,11 @@ public class CityLibraryDbContext : DbContext
             .ApplyConfiguration(new GenreConfiguration())
             .ApplyConfiguration(new BookConfiguration())
             .ApplyConfiguration(new LibraryCardConfiguration());
+
+        if (_databaseCreationSettings.AddTestDataWhenCreatingDatabase)
+        {
+
+        }
 
         base.OnModelCreating(modelBuilder);
     }
