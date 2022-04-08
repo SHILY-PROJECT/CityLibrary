@@ -4,11 +4,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using CityLibrary.Domain;
+using CityLibrary.DataAccess;
+using CityLibrary.DataAccess.Models;
 
 namespace CityLibrary.WebApi;
 
 public class Startup
 {
+    private const string _apiTitle = "CityLibrary.API";
+    private const string _apiVersion = "v2";
+
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -19,11 +25,15 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CityLibrary.API", Version = "v1" });
-        });
+
+        services
+            .AddDomain()
+            .AddDataAccess(
+                Configuration.GetConnectionString("CityLibraryDb"),
+                Configuration.GetSection("DatabaseCreationSettings").Get<DatabaseCreationSettings>())
+            .AddWebApi();
+
+        services.AddSwaggerGen(c => c.SwaggerDoc(_apiVersion, new OpenApiInfo { Title = _apiTitle, Version = _apiVersion }));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -32,18 +42,12 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CityLibrary.API v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{_apiVersion}/swagger.json", $"{_apiTitle} {_apiVersion}"));
         }
 
         app.UseHttpsRedirection();
-
         app.UseRouting();
-
         app.UseAuthorization();
-
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }
