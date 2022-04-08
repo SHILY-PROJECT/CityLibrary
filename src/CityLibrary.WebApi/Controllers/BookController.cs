@@ -31,17 +31,17 @@ public class BookController : ControllerBase
         return Ok(booksResult);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromBody] (AuthorDto authorDto, BookSortType sortType) authorSearch)
+    [HttpGet("author")]
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromQuery] AuthorDto authorDto, [FromQuery] BookSortType sortType)
     {
-        var author = _mapper.Map<Author>(authorSearch.authorDto);
-        var books = await _service.GetBooksByAuthorAsync(author, authorSearch.sortType);
+        var author = _mapper.Map<Author>(authorDto);
+        var books = await _service.GetBooksByAuthorAsync(author, sortType);
         var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
         return Ok(booksResult);
     }
 
     [HttpGet("author/{authorId}")]
-    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromRoute] Guid authorId, [FromQuery] BookSortType sortType)
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthorId([FromRoute] Guid authorId, [FromQuery] BookSortType sortType)
     {
         var books = await _service.GetBooksByAuthorAsync(authorId, sortType);
         var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);

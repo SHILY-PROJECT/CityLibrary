@@ -53,13 +53,13 @@ public class PersonController : ControllerBase
         return Ok(booksResult);
     }
 
-    [HttpPost]
+    [HttpPost("takeBook")]
     public async Task<ActionResult<bool>> TakeBook([FromQuery] Guid personeId, [FromQuery] Guid bookId)
     {
         return await _service.TakeBookAsync(personeId, bookId);
     }
 
-    [HttpPost]
+    [HttpPost("returnBook")]
     public async Task<ActionResult<bool>> ReturnBook([FromQuery] Guid personeId, [FromQuery] Guid bookId)
     {
         return await _service.ReturnBookAsync(personeId, bookId);
@@ -73,8 +73,8 @@ public class PersonController : ControllerBase
         return _mapper.Map<PersonDto>(updatedPerson);
     }
 
-    [HttpDelete]
-    public async Task<ActionResult<bool>> DeletePerson([FromQuery] Guid personId)
+    [HttpDelete("{personId}")]
+    public async Task<ActionResult<bool>> DeletePerson([FromRoute] Guid personId)
     {
         return await _service.DeleteAsync(personId);
     }
