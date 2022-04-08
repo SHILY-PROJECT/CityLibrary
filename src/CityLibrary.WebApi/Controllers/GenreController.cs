@@ -41,7 +41,7 @@ public class GenreController : ControllerBase
     public async Task<ActionResult<GenreDto>> AddGenre([FromBody] GenreDto genreDto)
     {
         var genre = _mapper.Map<Genre>(genreDto);
-        var genreResult = await _service.NewAsync(genre);
-        return _mapper.Map<GenreDto>(genreResult);
+        var newGenre = await _service.NewAsync(genre);
+        return _mapper.Map<GenreDto>(newGenre);
     }
 }

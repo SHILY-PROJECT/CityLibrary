@@ -41,8 +41,8 @@ public class PersonController : ControllerBase
     public async Task<ActionResult<PersonDto>> AddPerson([FromQuery] PersonDto personDto)
     {
         var person = _mapper.Map<Person>(personDto);
-        var personResult = await _service.NewAsync(person);
-        return _mapper.Map<PersonDto>(personResult);
+        var newPerson = await _service.NewAsync(person);
+        return _mapper.Map<PersonDto>(newPerson);
     }
 
     [HttpGet("{personId}/books")]
@@ -70,8 +70,8 @@ public class PersonController : ControllerBase
     public async Task<ActionResult<PersonDto>> UpdatePerson([FromBody] PersonDto personDto)
     {
         var person = _mapper.Map<Person>(personDto);
-        var personResult = await _service.UpdateAsync(personDto.Id, person);
-        return _mapper.Map<PersonDto>(personResult);
+        var updatedPerson = await _service.UpdateAsync(personDto.Id, person);
+        return _mapper.Map<PersonDto>(updatedPerson);
     }
 
     [HttpDelete]

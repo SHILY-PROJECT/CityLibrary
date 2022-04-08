@@ -19,11 +19,12 @@ public class CityLibraryDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new AuthorConfiguration());
-        modelBuilder.ApplyConfiguration(new PersonConfiguration());
-        modelBuilder.ApplyConfiguration(new GenreConfiguration());
-        modelBuilder.ApplyConfiguration(new BookConfiguration());
-        modelBuilder.ApplyConfiguration(new LibraryCardConfiguration());
+        modelBuilder
+            .ApplyConfiguration(new AuthorConfiguration())
+            .ApplyConfiguration(new PersonConfiguration())
+            .ApplyConfiguration(new GenreConfiguration())
+            .ApplyConfiguration(new BookConfiguration())
+            .ApplyConfiguration(new LibraryCardConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

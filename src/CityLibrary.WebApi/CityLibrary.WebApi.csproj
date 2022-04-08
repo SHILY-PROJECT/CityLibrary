@@ -6,9 +6,13 @@
 
   <ItemGroup>
     <Compile Remove="Scripts\**" />
+    <Compile Remove="Validators\**" />
     <Content Remove="Scripts\**" />
+    <Content Remove="Validators\**" />
     <EmbeddedResource Remove="Scripts\**" />
+    <EmbeddedResource Remove="Validators\**" />
     <None Remove="Scripts\**" />
+    <None Remove="Validators\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,10 +29,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>

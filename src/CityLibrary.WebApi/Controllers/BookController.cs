@@ -60,16 +60,16 @@ public class BookController : ControllerBase
     public async Task<ActionResult<BookDto>> AddBook([FromQuery] BookDto bookDto)
     {
         var book = _mapper.Map<Book>(bookDto);
-        var bookResult = await _service.NewAsync(book);
-        return _mapper.Map<BookDto>(bookResult);
+        var newBook = await _service.NewAsync(book);
+        return _mapper.Map<BookDto>(newBook);
     }
 
     [HttpPut]
     public async Task<ActionResult<BookDto>> UpdateGenreBook([FromBody] BookDto bookDto)
     {
         var book = _mapper.Map<Book>(bookDto);
-        var bookResult = await _service.UpdateAsync(bookDto.Id, book);
-        return _mapper.Map<BookDto>(bookResult);
+        var updatedBook = await _service.UpdateAsync(bookDto.Id, book);
+        return _mapper.Map<BookDto>(updatedBook);
     }
 
     [HttpDelete]
