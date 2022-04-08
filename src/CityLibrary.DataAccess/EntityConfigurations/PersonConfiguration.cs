@@ -4,16 +4,15 @@ using CityLibrary.DataAccess.Entities;
 
 namespace CityLibrary.DataAccess.EntityConfigurations;
 
-public class PersonConfiguration : IEntityTypeConfiguration<PersonDb>
+internal sealed class PersonConfiguration : IEntityTypeConfiguration<PersonDb>
 {
     public void Configure(EntityTypeBuilder<PersonDb> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(p => p.Id);
 
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
-        builder.Property(x => x.FirstName).HasMaxLength(50).IsRequired();
-        builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
-        builder.Property(x => x.MiddleName).HasMaxLength(50);
-        builder.Property(x => x.BirthDate);
+        builder.Property(p => p.Id).ValueGeneratedOnAdd();
+        builder.Property(p => p.FirstName).HasMaxLength(50).IsRequired();
+        builder.Property(p => p.LastName).HasMaxLength(50).IsRequired();
+        builder.Property(p => p.MiddleName).HasMaxLength(50);
     }
 }

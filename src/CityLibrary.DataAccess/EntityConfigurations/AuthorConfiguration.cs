@@ -4,15 +4,15 @@ using CityLibrary.DataAccess.Entities;
 
 namespace CityLibrary.DataAccess.EntityConfigurations;
 
-public class AuthorConfiguration : IEntityTypeConfiguration<AuthorDb>
+internal sealed class AuthorConfiguration : IEntityTypeConfiguration<AuthorDb>
 {
     public void Configure(EntityTypeBuilder<AuthorDb> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(a => a.Id);
 
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
-        builder.Property(x => x.FirstName).HasMaxLength(50).IsRequired();
-        builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
-        builder.Property(x => x.MiddleName).HasMaxLength(50);
+        builder.Property(a => a.Id).ValueGeneratedOnAdd();
+        builder.Property(a => a.FirstName).HasMaxLength(50).IsRequired();
+        builder.Property(a => a.LastName).HasMaxLength(50).IsRequired();
+        builder.Property(a => a.MiddleName).HasMaxLength(50);
     }
 }
