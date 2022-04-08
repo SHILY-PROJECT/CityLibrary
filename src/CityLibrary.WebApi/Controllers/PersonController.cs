@@ -53,7 +53,6 @@ public class PersonController : ControllerBase
         return Ok(booksResult);
     }
 
-
     [HttpPost]
     public async Task<ActionResult<bool>> TakeBook([FromQuery] Guid personeId, [FromQuery] Guid bookId)
     {
