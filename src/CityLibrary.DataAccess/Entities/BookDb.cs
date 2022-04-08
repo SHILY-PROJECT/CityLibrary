@@ -4,12 +4,12 @@ namespace CityLibrary.DataAccess.Entities;
 
 public record BookDb : IGuidProperty
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
+    public Guid Id { get; init; }
+    public string Name { get; init; }
 
-    public Guid GenreId { get; set; }
-    public GenreDb Genre { get; set; }
+    public Guid GenreId { get; init; }
+    public GenreDb Genre { get; init; }
 
-    public Guid AuthorId { get; set; }
-    public AuthorDb Author { get; set; }
+    public Guid AuthorId { get; init; }
+    public AuthorDb Author { get; init; }
 }

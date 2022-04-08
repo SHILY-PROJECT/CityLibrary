@@ -2,12 +2,12 @@
 
 public record LibraryCardDb
 {
-    public Guid Id { get; set; }
-    public DateTime DataReceived { get; set; }
+    public Guid Id { get; init; }
+    public DateTime DateBookReceived { get; init; }
 
-    public Guid PersonId { get; set; }
-    public PersonDb Person { get; set; }
+    public Guid PersonId { get; init; }
+    public PersonDb Person { get; init; }
 
-    public Guid BookId { get; set; }
-    public BookDb Book { get; set; }
+    public Guid BookId { get; init; }
+    public BookDb Book { get; init; }
 }
