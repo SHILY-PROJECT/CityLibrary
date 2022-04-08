@@ -38,7 +38,7 @@ public class AuthorController : ControllerBase
         return Ok(booksResult);
     }
 
-    [HttpPost]
+    [HttpPost("addAuthor")]
     public async Task<ActionResult<AuthorDto>> AddAuthor([FromBody] AuthorDto authorDto)
     {
         var author = _mapper.Map<Author>(authorDto);
@@ -46,16 +46,19 @@ public class AuthorController : ControllerBase
         return _mapper.Map<AuthorDto>(newAuthor);
     }
 
-    [HttpPost]
-    public async Task<ActionResult> AddAuthor([FromBody] (AuthorDto authorDto, IEnumerable<BookDto> booksDto) authorWithBooksDto)
+    [HttpPost("addAuthorWithBooks")]
+    public async Task<ActionResult<AuthorWithBooksDto>> AddAuthorWithBooks([FromBody] AuthorWithBooksDto authorWithBooksDto)
     {
-        var author = _mapper.Map<Author>(authorWithBooksDto.authorDto);
-        var books = _mapper.Map<IEnumerable<Book>>(authorWithBooksDto.booksDto);
+        var author = _mapper.Map<Author>(authorWithBooksDto.Author);
+        var books = _mapper.Map<List<Book>>(authorWithBooksDto.Books);
 
         var newAuthorWithBooks = await _service.NewAsync(author, books);
-        var newAuthorWithBooksResult = _mapper.Map<(AuthorDto authorDto, IEnumerable<BookDto> booksDto)>(newAuthorWithBooks);
 
-        return Ok(newAuthorWithBooksResult);
+        return authorWithBooksDto with
+        {
+            Author = _mapper.Map<AuthorDto>(newAuthorWithBooks.Author),
+            Books = _mapper.Map<List<BookDto>>(newAuthorWithBooks.Books)
+        };
     }
 
     [HttpDelete]
