@@ -14,8 +14,8 @@ internal sealed class LibraryCardConfiguration : IEntityTypeConfiguration<Librar
 
         builder
             .HasOne(lc => lc.Person)
-            .WithOne()
-            .HasForeignKey<LibraryCardDb>(lc => lc.PersonId);
+            .WithMany()
+            .HasForeignKey(lc => lc.PersonId);
 
         builder
             .HasOne(lc => lc.Book)

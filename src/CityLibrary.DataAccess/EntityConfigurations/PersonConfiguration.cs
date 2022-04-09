@@ -13,6 +13,6 @@ internal sealed class PersonConfiguration : IEntityTypeConfiguration<PersonDb>
         builder.Property(p => p.Id).ValueGeneratedOnAdd();
         builder.Property(p => p.FirstName).HasMaxLength(50).IsRequired();
         builder.Property(p => p.LastName).HasMaxLength(50).IsRequired();
-        builder.Property(p => p.MiddleName).HasMaxLength(50);
+        builder.Property(p => p.MiddleName).HasMaxLength(50).IsRequired(false);
     }
 }
