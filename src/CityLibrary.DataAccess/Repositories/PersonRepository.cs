@@ -62,20 +62,29 @@ public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPerson
 
     public async Task<bool> DeleteAsync(Person person)
     {
-        var predicates = new List<Predicate<PersonDb>>();
-
-        if (new[] { person.FirstName, person.LastName, person.MiddleName }.All(p => string.IsNullOrEmpty(p))) return false;
+        var personsEntities = _context.Persons.AsQueryable();
 
         if (!string.IsNullOrEmpty(person.FirstName))
-            predicates.Add(new Predicate<PersonDb>((PersonDb personEntity) => personEntity.FirstName.Equals(person.FirstName, StringComparison.OrdinalIgnoreCase)));
+            personsEntities = personsEntities.Where(personEntity =>
+                EF.Functions.Like(personEntity.FirstName, person.FirstName) && personEntity.FirstName.Length == person.FirstName.Length);
+
         if (!string.IsNullOrEmpty(person.LastName))
-            predicates.Add(new Predicate<PersonDb>((PersonDb personEntity) => personEntity.LastName.Equals(person.LastName, StringComparison.OrdinalIgnoreCase)));
+            personsEntities = personsEntities.Where(personEntity =>
+                EF.Functions.Like(personEntity.LastName, person.LastName) && personEntity.LastName.Length == person.LastName.Length);
+
         if (!string.IsNullOrEmpty(person.MiddleName))
-            predicates.Add(new Predicate<PersonDb>((PersonDb personEntity) => personEntity.MiddleName.Equals(person.MiddleName, StringComparison.OrdinalIgnoreCase)));
+            personsEntities = personsEntities.Where(personEntity =>
+                EF.Functions.Like(personEntity.MiddleName, person.MiddleName) && personEntity.MiddleName.Length == person.MiddleName.Length);
 
-        var personsEntities = await _context.Persons.Where(personEntity => predicates.All(p => p.Invoke(personEntity))).ToArrayAsync();
+        if (!string.IsNullOrEmpty(person.MiddleName))
+            personsEntities = personsEntities.Where(personEntity =>
+                EF.Functions.Like(personEntity.Email, person.Email) && personEntity.Email.Length == person.Email.Length);
 
-        _context.Persons.RemoveRange(personsEntities);
+        var filteredPersons = await personsEntities.ToArrayAsync();
+
+        if (!filteredPersons.Any()) return false;
+
+        _context.Persons.RemoveRange(filteredPersons);
         await _context.SaveChangesAsync();
 
         return true;
