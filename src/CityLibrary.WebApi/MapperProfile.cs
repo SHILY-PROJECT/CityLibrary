@@ -9,6 +9,7 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMap<AuthorDto, Author>().ReverseMap();
+        CreateMap<AuthorForSearchDto, Author>().ReverseMap();
         CreateMap<BookDto, Book>().ReverseMap();
         CreateMap<GenreDto, Genre>().ReverseMap();
         CreateMap<GenreStatsDto, GenreStats>().ReverseMap();

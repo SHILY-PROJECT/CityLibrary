@@ -32,9 +32,9 @@ public class BookController : ControllerBase
     }
 
     [HttpGet("author")]
-    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromQuery] AuthorDto authorDto, [FromQuery] BookSortType sortType)
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromQuery] AuthorForSearchDto authorForSearchDto, [FromQuery] BookSortType sortType)
     {
-        var author = _mapper.Map<Author>(authorDto);
+        var author = _mapper.Map<Author>(authorForSearchDto);
         var books = await _service.GetBooksByAuthorAsync(author, sortType);
         var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
         return Ok(booksResult);
