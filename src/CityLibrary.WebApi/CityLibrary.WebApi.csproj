@@ -6,13 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Scripts\**" />
-    <Compile Remove="Validators\**" />
     <Content Remove="Scripts\**" />
-    <Content Remove="Validators\**" />
     <EmbeddedResource Remove="Scripts\**" />
-    <EmbeddedResource Remove="Validators\**" />
     <None Remove="Scripts\**" />
-    <None Remove="Validators\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +30,10 @@
   <ItemGroup>
     <ProjectReference Include="..\CityLibrary.DataAccess\CityLibrary.DataAccess.csproj" />
     <ProjectReference Include="..\CityLibrary.Domain\CityLibrary.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Validators\" />
   </ItemGroup>
 
 </Project>
