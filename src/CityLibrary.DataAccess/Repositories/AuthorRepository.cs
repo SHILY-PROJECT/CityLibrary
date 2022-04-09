@@ -19,7 +19,12 @@ public sealed class AuthorRepository : BaseRepository<Author, AuthorDb>, IAuthor
 
     public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
-        var books = await _context.Books.Where(book => book.AuthorId == authorId).ToArrayAsync();
+        var books = await _context.Books
+            .Where(book => book.AuthorId == authorId)
+            .Include(book => book.Genre)
+            .Include(book => book.Author)
+            .ToArrayAsync();
+
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 }

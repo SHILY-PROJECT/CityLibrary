@@ -19,13 +19,23 @@ public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookReposito
 
     public async Task<IEnumerable<Book>> GetBooksByGenreAsync(Guid genreId)
     {
-        var books = await _context.Books.Where(book => book.GenreId == genreId).ToArrayAsync();
+        var books = await _context.Books
+            .Where(book => book.GenreId == genreId)
+            .Include(book => book.Genre)
+            .Include(book => book.Author)
+            .ToArrayAsync();
+
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
-        var books = await _context.Books.Where(book => book.AuthorId == authorId).ToArrayAsync();
+        var books = await _context.Books
+            .Where(book => book.AuthorId == authorId)
+            .Include(book => book.Genre)
+            .Include(book => book.Author)
+            .ToArrayAsync();
+
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 
@@ -40,7 +50,11 @@ public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookReposito
         if (!string.IsNullOrWhiteSpace(author.MiddleName))
             predicates.Add(new Predicate<BookDb>((BookDb book) => book.Author.MiddleName.Equals(author.MiddleName, StringComparison.OrdinalIgnoreCase)));
 
-        var booksEntities = await _context.Books.Where(book => predicates.All(p => p.Invoke(book))).ToArrayAsync();
+        var booksEntities = await _context.Books
+            .Where(book => predicates.All(p => p.Invoke(book)))
+            .Include(book => book.Genre)
+            .Include(book => book.Author)
+            .ToArrayAsync();
 
         return _mapper.Map<IEnumerable<Book>>(booksEntities);
     }
