@@ -31,10 +31,10 @@ public class AuthorController : ControllerBase
     }
 
     [HttpGet("{authorId}/books")]
-    public async Task<ActionResult<IReadOnlyCollection<AuthorDto>>> GetBooksByAuthor([FromRoute] Guid authorId)
+    public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromRoute] Guid authorId)
     {
         var books = await _service.GetBooksByAuthorAsync(authorId);
-        var booksResult = _mapper.Map<IReadOnlyCollection<AuthorDto>>(books);
+        var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
         return Ok(booksResult);
     }
 
