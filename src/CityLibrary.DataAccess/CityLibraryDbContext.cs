@@ -40,7 +40,7 @@ public class CityLibraryDbContext : DbContext
 
         if (_databaseCreationSettings.AddTestDataWhenCreatingDatabase)
         {
-
+            modelBuilder.ApplyTestData();
         }
 
         base.OnModelCreating(modelBuilder);
