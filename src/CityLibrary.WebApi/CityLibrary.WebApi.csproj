@@ -32,8 +32,4 @@
     <ProjectReference Include="..\CityLibrary.Domain\CityLibrary.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\" />
-  </ItemGroup>
-
 </Project>
