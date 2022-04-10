@@ -11,6 +11,9 @@ internal sealed class LibraryCardConfiguration : IEntityTypeConfiguration<Librar
         builder.HasKey(lc => new { lc.PersonId, lc.BookId });
 
         builder.Property(lc => lc.Id).ValueGeneratedOnAdd();
+        builder.Property(lc => lc.DateBookReceived).IsRequired();
+        builder.Property(lc => lc.BookId).IsRequired();
+        builder.Property(lc => lc.PersonId).IsRequired();
 
         builder
             .HasOne(lc => lc.Person)

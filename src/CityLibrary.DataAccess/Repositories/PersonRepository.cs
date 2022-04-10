@@ -48,6 +48,7 @@ public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPerson
 
         var card = new LibraryCardDb
         {
+            DateBookReceived = DateTime.Now,
             PersonId = personeId,
             Person = personEntity,
             BookId = bookId,
