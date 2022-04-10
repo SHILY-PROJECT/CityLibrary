@@ -25,16 +25,14 @@ public class GenreController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<GenreDto>>> GetGenres()
     {
         var genres = await _service.GetAllAsync();
-        var genresResult = _mapper.Map<IReadOnlyCollection<GenreDto>>(genres);
-        return Ok(genresResult);
+        return _mapper.Map<GenreDto[]>(genres);
     }
 
     [HttpGet("stats")]
     public async Task<ActionResult<IReadOnlyCollection<GenreStatsDto>>> GetStats()
     {
         var stats = await _service.GetStatsAsync();
-        var statsResult = _mapper.Map<IReadOnlyCollection<GenreStatsDto>>(stats);
-        return Ok(statsResult);
+        return _mapper.Map<GenreStatsDto[]>(stats)
     }
 
     [HttpPost]

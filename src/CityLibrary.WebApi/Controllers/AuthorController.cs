@@ -26,16 +26,14 @@ public class AuthorController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<AuthorDto>>> GetAuthors()
     {
         var authors = await _service.GetAllAsync();
-        var authorsResult = _mapper.Map<IReadOnlyCollection<AuthorDto>>(authors);
-        return Ok(authorsResult);
+        return _mapper.Map<AuthorDto[]>(authors);
     }
 
     [HttpGet("{authorId}/books")]
     public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromRoute] Guid authorId)
     {
         var books = await _service.GetBooksByAuthorAsync(authorId);
-        var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
-        return Ok(booksResult);
+        return _mapper.Map<BookDto[]>(books);
     }
 
     [HttpPost("addAuthor")]

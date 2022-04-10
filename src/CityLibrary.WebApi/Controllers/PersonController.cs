@@ -33,8 +33,7 @@ public class PersonController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<PersonDto>>> GetPersons()
     {
         var persons = await _service.GetAllAsync();
-        var personsResult = _mapper.Map<IReadOnlyCollection<PersonDto>>(persons);
-        return Ok(personsResult);
+        return _mapper.Map<PersonDto[]>(persons);
     }
 
     [HttpPost]
@@ -49,8 +48,7 @@ public class PersonController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetPersonBooks([FromRoute] Guid personId)
     {
         var books = await _service.GetPersonBooksAsync(personId);
-        var booksResult = _mapper.Map<IReadOnlyCollection<BookDto>>(books);
-        return Ok(booksResult);
+        return _mapper.Map<BookDto[]>(books);
     }
 
     [HttpPost("takeBook")]
