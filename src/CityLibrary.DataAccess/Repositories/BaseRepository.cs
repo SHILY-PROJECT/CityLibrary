@@ -18,7 +18,7 @@ public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> wher
         _mapper = mapper;
     }
 
-    public async Task<TModel?> GetAsync(Guid id)
+    public virtual async Task<TModel?> GetAsync(Guid id)
     {
         var entity = await _dbSet.FindAsync(id);
 
@@ -27,13 +27,13 @@ public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> wher
         return _mapper.Map<TModel>(entity);
     }
 
-    public async Task<IEnumerable<TModel>> GetAllAsync()
+    public virtual async Task<IEnumerable<TModel>> GetAllAsync()
     {
         var entities = await _dbSet.ToArrayAsync();
         return _mapper.Map<IReadOnlyCollection<TModel>>(entities);
     }
 
-    public async Task<TModel> NewAsync(TModel model)
+    public virtual async Task<TModel> NewAsync(TModel model)
     {
         var entity = _mapper.Map<TEntity>(model);
 
@@ -43,7 +43,7 @@ public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> wher
         return _mapper.Map<TModel>(entity);
     }
 
-    public async Task<TModel> UpdateAsync(Guid id, TModel model)
+    public virtual async Task<TModel> UpdateAsync(Guid id, TModel model)
     {
         var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -56,7 +56,7 @@ public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> wher
         return _mapper.Map<TModel>(entity);
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public virtual async Task<bool> DeleteAsync(Guid id)
     {
         var entity = await _dbSet.FindAsync(id);
 
