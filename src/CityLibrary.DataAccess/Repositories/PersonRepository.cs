@@ -21,7 +21,9 @@ public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPerson
     {
         var books = await _context.LibraryCards
             .Where(card => card.PersonId == personId)
-            .Include(card => card.Book)
+            .Include(card => card.Book.Genre)
+            .Include(card => card.Book.Author)
+            .Select(card => card.Book)
             .ToArrayAsync();
 
         return _mapper.Map<IEnumerable<Book>>(books);
