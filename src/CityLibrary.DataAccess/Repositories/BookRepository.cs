@@ -17,6 +17,16 @@ public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookReposito
         _mapper = mapper;
     }
 
+    public override async Task<IEnumerable<Book>> GetAllAsync()
+    {
+        var entities = await _context.Books
+            .Include(book => book.Genre)
+            .Include(book => book.Author)
+            .ToArrayAsync();
+
+        return _mapper.Map<IEnumerable<Book>>(entities);
+    }
+
     public async Task<IEnumerable<Book>> GetBooksByGenreAsync(Guid genreId)
     {
         var books = await _context.Books
