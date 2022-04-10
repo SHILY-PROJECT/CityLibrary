@@ -30,7 +30,7 @@ public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> wher
     public virtual async Task<IEnumerable<TModel>> GetAllAsync()
     {
         var entities = await _dbSet.ToArrayAsync();
-        return _mapper.Map<IReadOnlyCollection<TModel>>(entities);
+        return _mapper.Map<IEnumerable<TModel>>(entities);
     }
 
     public virtual async Task<TModel> NewAsync(TModel model)
