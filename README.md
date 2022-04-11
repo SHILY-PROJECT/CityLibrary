@@ -12,7 +12,7 @@
 - FluentValidation
 
 ## Архитектура
-- Onion
+- Hexagonal architecture
 
 ## Превью
 ![Files](preview.png)
