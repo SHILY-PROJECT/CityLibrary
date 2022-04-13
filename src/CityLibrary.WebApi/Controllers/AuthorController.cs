@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
-using CityLibrary.WebApi.Models;
+using CityLibrary.WebApi.Models.Book;
+using CityLibrary.WebApi.Models.Author;
 
 namespace CityLibrary.WebApi.WebApi.Controllers;
 
@@ -59,8 +60,8 @@ public class AuthorController : ControllerBase
         };
     }
 
-    [HttpDelete]
-    public async Task<ActionResult<bool>> DeleteAuthor([FromQuery] Guid authorId)
+    [HttpDelete("{authorId}")]
+    public async Task<ActionResult<bool>> DeleteAuthor([FromRoute] Guid authorId)
     {
         return await _service.DeleteAsync(authorId);
     }

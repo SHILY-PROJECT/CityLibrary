@@ -6,7 +6,8 @@ using AutoMapper;
 using CityLibrary.Domain.Enums;
 using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
-using CityLibrary.WebApi.Models;
+using CityLibrary.WebApi.Models.Book;
+using CityLibrary.WebApi.Models.Author;
 
 namespace CityLibrary.WebApi.WebApi.Controllers;
 
@@ -68,8 +69,8 @@ public class BookController : ControllerBase
         return _mapper.Map<BookDto>(updatedBook);
     }
 
-    [HttpDelete]
-    public async Task<ActionResult<bool>> DeleteBook([FromBody] Guid bookId)
+    [HttpDelete("{bookId}")]
+    public async Task<ActionResult<bool>> DeleteBook([FromRoute] Guid bookId)
     {
         return await _service.DeleteAsync(bookId);
     }

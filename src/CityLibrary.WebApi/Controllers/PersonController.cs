@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
-using CityLibrary.WebApi.Models;
+using CityLibrary.WebApi.Models.Person;
+using CityLibrary.WebApi.Models.Book;
 
 namespace CityLibrary.WebApi.Controllers;
 
@@ -78,9 +79,9 @@ public class PersonController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<ActionResult<bool>> DeletePerson([FromQuery] PersonDto personDto)
+    public async Task<ActionResult<bool>> DeletePerson([FromQuery] PersonForDeleteDto personForDeleteDto)
     {
-        var person = _mapper.Map<Person>(personDto);
+        var person = _mapper.Map<Person>(personForDeleteDto);
         return await _service.DeleteAsync(person);
     }
 }

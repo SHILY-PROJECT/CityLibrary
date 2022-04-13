@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
-using CityLibrary.WebApi.Models;
+using CityLibrary.WebApi.Models.Genre;
 
 namespace CityLibrary.WebApi.Controllers;
 
@@ -32,7 +32,7 @@ public class GenreController : ControllerBase
     public async Task<ActionResult<IReadOnlyCollection<GenreStatsDto>>> GetStats()
     {
         var stats = await _service.GetStatsAsync();
-        return _mapper.Map<GenreStatsDto[]>(stats)
+        return _mapper.Map<GenreStatsDto[]>(stats);
     }
 
     [HttpPost]
