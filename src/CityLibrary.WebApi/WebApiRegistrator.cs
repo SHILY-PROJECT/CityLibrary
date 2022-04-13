@@ -10,9 +10,8 @@ public static class WebApiRegistrator
     {
         services
             .AddAutoMapper(typeof(MapperProfile))
-            .AddValidatorsFromAssemblyContaining<AuthorDtoValidator>(ServiceLifetime.Transient);
+            .AddValidatorsFromAssemblyContaining<Startup>(ServiceLifetime.Transient);
 
         return services;
     }
 }
-

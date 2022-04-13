@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CityLibrary.WebApi.Models;
+namespace CityLibrary.WebApi.Models.Genre;
 
 public record GenreDto
 {
