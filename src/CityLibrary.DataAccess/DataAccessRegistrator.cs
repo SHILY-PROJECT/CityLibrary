@@ -8,7 +8,7 @@ namespace CityLibrary.DataAccess;
 
 public static class DataAccessRegistrator
 {
-    public static IServiceCollection AddDataAccess(this IServiceCollection services, string connectionString, DatabaseCreationSettings databaseCreationSettings)
+    public static IServiceCollection AddDataAccess(this IServiceCollection services, string connectionString, DatabaseCreationSettings? databaseCreationSettings = null)
     {
         services
             .AddScoped<IAuthorRepository, AuthorRepository>()
@@ -16,7 +16,7 @@ public static class DataAccessRegistrator
             .AddScoped<IGenreRepository, GenreRepository>()
             .AddScoped<IPersonRepository, PersonRepository>();
 
-        services.AddScoped(x => databaseCreationSettings);
+        services.AddScoped(x => databaseCreationSettings ?? new DatabaseCreationSettings());
 
         services
             .AddAutoMapper(typeof(DataAccess.MapperProfile))
