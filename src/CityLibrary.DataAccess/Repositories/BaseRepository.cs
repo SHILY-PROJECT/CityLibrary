@@ -5,7 +5,7 @@ using CityLibrary.DataAccess.Interfaces;
 
 namespace CityLibrary.DataAccess.Repositories;
 
-public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> where TEntity : class, IGuidProperty
+internal abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> where TEntity : class, IGuidProperty
 {
     private readonly CityLibraryDbContext _context;
     private readonly DbSet<TEntity> _dbSet;
@@ -48,7 +48,7 @@ public abstract class BaseRepository<TModel, TEntity> : IRepository<TModel> wher
         var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
 
         if (entity is null)
-            throw new InvalidOperationException($"'{nameof(id)}' - not found");
+            throw new InvalidOperationException($"'{nameof(id)}' not found");
 
         _mapper.Map(model, entity);
         await _context.SaveChangesAsync();

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CityLibrary.DataAccess.Repositories;
 
-public sealed class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepository
+internal class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepository
 {
     private readonly CityLibraryDbContext _context;
     private readonly IMapper _mapper;

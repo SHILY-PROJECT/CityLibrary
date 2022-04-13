@@ -6,7 +6,7 @@ using CityLibrary.DataAccess.Entities;
 
 namespace CityLibrary.DataAccess.Repositories;
 
-public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPersonRepository
+internal class PersonRepository : BaseRepository<Person, PersonDb>, IPersonRepository
 {
     private readonly CityLibraryDbContext _context;
     private readonly IMapper _mapper;
@@ -20,9 +20,9 @@ public sealed class PersonRepository : BaseRepository<Person, PersonDb>, IPerson
     public async Task<IEnumerable<Book>> GetPersonBooksAsync(Guid personId)
     {
         var books = await _context.LibraryCards
-            .Where(card => card.PersonId == personId)
             .Include(card => card.Book.Genre)
             .Include(card => card.Book.Author)
+            .Where(card => card.PersonId == personId)
             .Select(card => card.Book)
             .ToArrayAsync();
 

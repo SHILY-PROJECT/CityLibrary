@@ -6,7 +6,7 @@ using CityLibrary.Domain.Models;
 
 namespace CityLibrary.DataAccess.Repositories;
 
-public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookRepository
+internal class BookRepository : BaseRepository<Book, BookDb>, IBookRepository
 {
     private readonly CityLibraryDbContext _context;
     private readonly IMapper _mapper;
@@ -17,41 +17,32 @@ public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookReposito
         _mapper = mapper;
     }
 
+    protected virtual IQueryable<BookDb> BooksAsEagerIQueryable
+    {
+        get => _context.Books.Include(book => book.Genre).Include(book => book.Author);
+    }
+
     public override async Task<IEnumerable<Book>> GetAllAsync()
     {
-        var entities = await _context.Books
-            .Include(book => book.Genre)
-            .Include(book => book.Author)
-            .ToArrayAsync();
-
+        var entities = await BooksAsEagerIQueryable.ToArrayAsync();
         return _mapper.Map<IEnumerable<Book>>(entities);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByGenreAsync(Guid genreId)
     {
-        var books = await _context.Books
-            .Where(book => book.GenreId == genreId)
-            .Include(book => book.Genre)
-            .Include(book => book.Author)
-            .ToArrayAsync();
-
+        var books = await BooksAsEagerIQueryable.Where(book => book.GenreId == genreId).ToArrayAsync();
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
-        var books = await _context.Books
-            .Where(book => book.AuthorId == authorId)
-            .Include(book => book.Genre)
-            .Include(book => book.Author)
-            .ToArrayAsync();
-
+        var books = await BooksAsEagerIQueryable.Where(book => book.AuthorId == authorId).ToArrayAsync();
         return _mapper.Map<IEnumerable<Book>>(books);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Author author)
     {
-        var booksEntities = _context.Books.AsQueryable();
+        var booksEntities = BooksAsEagerIQueryable;
 
         if (!string.IsNullOrWhiteSpace(author.FirstName))
             booksEntities = booksEntities.Where(book => EF.Functions.Like(book.Author.FirstName, author.FirstName));
@@ -60,10 +51,7 @@ public sealed class BookRepository : BaseRepository<Book, BookDb>, IBookReposito
         if (!string.IsNullOrWhiteSpace(author.MiddleName))
             booksEntities = booksEntities.Where(book => EF.Functions.Like(book.Author.MiddleName, author.MiddleName));
 
-        var filteredBooks = await booksEntities
-            .Include(book => book.Genre)
-            .Include(book => book.Author)
-            .ToArrayAsync();
+        var filteredBooks = await booksEntities.ToArrayAsync();
 
         return _mapper.Map<IEnumerable<Book>>(filteredBooks);
     }
