@@ -12,8 +12,8 @@ namespace CityLibrary.WebApi;
 
 public class Startup
 {
-    private const string _apiTitle = "CityLibrary.API";
-    private const string _apiVersion = "v2";
+    private const string Title = "CityLibrary.API";
+    private const string Version = "v2";
 
     public Startup(IConfiguration configuration)
     {
@@ -33,7 +33,7 @@ public class Startup
                 Configuration.GetSection("DatabaseCreationSettings").Get<DatabaseCreationSettings>())
             .AddWebApi();
 
-        services.AddSwaggerGen(c => c.SwaggerDoc(_apiVersion, new OpenApiInfo { Title = _apiTitle, Version = _apiVersion }));
+        services.AddSwaggerGen(c => c.SwaggerDoc(Version, new OpenApiInfo { Title = Title, Version = Version }));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,7 +42,7 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{_apiVersion}/swagger.json", $"{_apiTitle} {_apiVersion}"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{Version}/swagger.json", $"{Title} {Version}"));
         }
 
         app.UseHttpsRedirection();
