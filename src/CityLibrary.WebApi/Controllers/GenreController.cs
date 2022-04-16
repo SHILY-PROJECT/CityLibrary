@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
-using CityLibrary.WebApi.Models.Genre;
+using CityLibrary.WebApi.Models.Genres;
 
 namespace CityLibrary.WebApi.Controllers;
 

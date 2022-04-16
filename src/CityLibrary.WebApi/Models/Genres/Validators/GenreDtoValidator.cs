@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using CityLibrary.WebApi.Models.Genre;
 
-namespace CityLibrary.WebApi.Validators.Genre;
+namespace CityLibrary.WebApi.Models.Genres.Validators;
 
 public class GenreDtoValidator : AbstractValidator<GenreDto>
 {

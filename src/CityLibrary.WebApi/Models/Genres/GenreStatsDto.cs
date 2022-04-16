@@ -1,4 +1,4 @@
-﻿namespace CityLibrary.WebApi.Models.Genre;
+﻿namespace CityLibrary.WebApi.Models.Genres;
 
 public record GenreStatsDto
 {

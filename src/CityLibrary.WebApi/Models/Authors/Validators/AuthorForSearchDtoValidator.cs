@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using CityLibrary.WebApi.Models.Author;
 
-namespace CityLibrary.WebApi.Validators.Author;
+namespace CityLibrary.WebApi.Models.Authors.Validators;
 
 public class AuthorForSearchDtoValidator : AbstractValidator<AuthorForSearchDto>
 {

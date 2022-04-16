@@ -1,7 +1,7 @@
-﻿using CityLibrary.WebApi.Models.Book;
-using System;
+﻿using System;
+using CityLibrary.WebApi.Models.Books;
 
-namespace CityLibrary.WebApi.Models.Person;
+namespace CityLibrary.WebApi.Models.Persons;
 
 public record LibraryCardDto
 {

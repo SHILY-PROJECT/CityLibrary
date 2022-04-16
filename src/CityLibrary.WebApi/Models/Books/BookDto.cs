@@ -1,8 +1,8 @@
-﻿using CityLibrary.WebApi.Models.Author;
-using CityLibrary.WebApi.Models.Genre;
-using System;
+﻿using System;
+using CityLibrary.WebApi.Models.Authors;
+using CityLibrary.WebApi.Models.Genres;
 
-namespace CityLibrary.WebApi.Models.Book;
+namespace CityLibrary.WebApi.Models.Books;
 
 public record BookDto
 {

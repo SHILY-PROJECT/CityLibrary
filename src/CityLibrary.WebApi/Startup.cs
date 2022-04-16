@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using CityLibrary.Domain;
 using CityLibrary.DataAccess;
 using CityLibrary.DataAccess.Models;
+using FluentValidation.AspNetCore;
 
 namespace CityLibrary.WebApi;
 
@@ -24,7 +25,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
+        services
+            .AddControllers()
+            .AddFluentValidation();
 
         services
             .AddDomain()

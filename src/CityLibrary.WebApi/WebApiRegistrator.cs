@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
-using CityLibrary.WebApi.Validators;
+using CityLibrary.WebApi.Models.Persons.Validators;
+using FluentValidation.AspNetCore;
 
 namespace CityLibrary.WebApi;
 

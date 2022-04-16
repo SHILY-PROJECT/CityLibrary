@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using CityLibrary.WebApi.Models.Book;
 
-namespace CityLibrary.WebApi.Validators.Book;
+namespace CityLibrary.WebApi.Models.Books.Validators;
 
 public class BookDtoValidator : AbstractValidator<BookDto>
 {

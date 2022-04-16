@@ -6,8 +6,8 @@ using AutoMapper;
 using CityLibrary.Domain.Enums;
 using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
-using CityLibrary.WebApi.Models.Book;
-using CityLibrary.WebApi.Models.Author;
+using CityLibrary.WebApi.Models.Books;
+using CityLibrary.WebApi.Models.Authors;
 
 namespace CityLibrary.WebApi.WebApi.Controllers;
 

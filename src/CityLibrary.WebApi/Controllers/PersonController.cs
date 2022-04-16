@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
-using CityLibrary.WebApi.Models.Person;
-using CityLibrary.WebApi.Models.Book;
+using CityLibrary.WebApi.Models.Persons;
+using CityLibrary.WebApi.Models.Books;
 
 namespace CityLibrary.WebApi.Controllers;
 

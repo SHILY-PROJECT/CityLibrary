@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using CityLibrary.Domain.Models;
-using CityLibrary.WebApi.Models.Author;
-using CityLibrary.WebApi.Models.Book;
-using CityLibrary.WebApi.Models.Genre;
-using CityLibrary.WebApi.Models.Person;
+using CityLibrary.WebApi.Models.Authors;
+using CityLibrary.WebApi.Models.Books;
+using CityLibrary.WebApi.Models.Genres;
+using CityLibrary.WebApi.Models.Persons;
 
 namespace CityLibrary.WebApi;
 
@@ -18,6 +18,6 @@ public class MapperProfile : Profile
         CreateMap<GenreStatsDto, GenreStats>().ReverseMap();
         CreateMap<LibraryCardDto, LibraryCard>().ReverseMap();
         CreateMap<PersonDto, Person>().ReverseMap();
-        CreateMap<PersonForDeleteDto, Author>().ReverseMap();
+        CreateMap<PersonForDeleteDto, Person>().ReverseMap();
     }
 }
