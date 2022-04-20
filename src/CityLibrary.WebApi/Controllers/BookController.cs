@@ -12,7 +12,7 @@ using CityLibrary.WebApi.Models.Authors;
 namespace CityLibrary.WebApi.WebApi.Controllers;
 
 [ApiController]
-[Route("/api/book")]
+[Route("/api/books")]
 public class BookController : ControllerBase
 {
     private readonly IBookService _service;

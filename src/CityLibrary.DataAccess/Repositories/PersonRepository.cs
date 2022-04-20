@@ -26,7 +26,7 @@ internal class PersonRepository : BaseRepository<Person, PersonDb>, IPersonRepos
             .Select(card => card.Book)
             .ToArrayAsync();
 
-        return _mapper.Map<IEnumerable<Book>>(books);
+        return _mapper.Map<Book[]>(books);
     }
 
     public async Task<bool> ReturnBookAsync(Guid personeId, Guid bookId)

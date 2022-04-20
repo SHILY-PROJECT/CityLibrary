@@ -6,8 +6,8 @@ public class PersonDtoValidator : AbstractValidator<PersonDto>
 {
     public PersonDtoValidator()
     {
-        RuleFor(p => p.FirstName).Length(2, 50);
-        RuleFor(p => p.LastName).Length(2, 50);
-        RuleFor(p => p.Email).EmailAddress();
+        RuleFor(p => p.FirstName).NotNull().NotEmpty().MaximumLength(50);
+        RuleFor(p => p.LastName).NotNull().NotEmpty().MaximumLength(50);
+        RuleFor(p => p.Email).NotNull().NotEmpty().EmailAddress();
     }
 }

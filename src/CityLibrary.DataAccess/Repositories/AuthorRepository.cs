@@ -25,6 +25,6 @@ internal class AuthorRepository : BaseRepository<Author, AuthorDb>, IAuthorRepos
             .Where(book => book.AuthorId == authorId)
             .ToArrayAsync();
 
-        return _mapper.Map<IEnumerable<Book>>(books);
+        return _mapper.Map<Book[]>(books);
     }
 }

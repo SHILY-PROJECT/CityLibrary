@@ -9,7 +9,7 @@ using CityLibrary.WebApi.Models.Genres;
 namespace CityLibrary.WebApi.Controllers;
 
 [ApiController]
-[Route("/api/genre")]
+[Route("/api/genres")]
 public class GenreController : ControllerBase
 {
     private readonly IGenreService _service;

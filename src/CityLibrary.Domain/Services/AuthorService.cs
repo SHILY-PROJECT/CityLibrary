@@ -22,8 +22,7 @@ public class AuthorService : IAuthorService
 
     public async Task<IReadOnlyCollection<Author>> GetAllAsync()
     {
-        var authors = await _authorRepository.GetAllAsync();
-        return authors.ToArray();
+        return (await _authorRepository.GetAllAsync()).ToArray();
     }
 
     public async Task<Author> NewAsync(Author model)
@@ -43,23 +42,14 @@ public class AuthorService : IAuthorService
 
     public async Task<IReadOnlyCollection<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
-        var books = await _authorRepository.GetBooksByAuthorAsync(authorId);
-        return books.ToArray();
+        return (await _authorRepository.GetBooksByAuthorAsync(authorId)).ToArray();
     }
 
     public async Task<(Author Author, IReadOnlyCollection<Book> Books)> NewAsync(Author author, IEnumerable<Book> books)
     {
         var newAuthor = await _authorRepository.NewAsync(author with { Id = Guid.NewGuid() });
-
-        books.ToList().ForEach(async book =>
-        {
-            book = await _bookRepository.NewAsync(book with
-            {
-                Id = Guid.NewGuid(),
-                Author = newAuthor
-            });
-        });
-
+        books = books.Select(book => book with { Id = Guid.NewGuid(), Author = newAuthor });
+        books = await _bookRepository.NewAsync(books);
         return (newAuthor, books.ToArray());
     }
 }

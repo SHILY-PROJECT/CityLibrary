@@ -22,22 +22,32 @@ internal class BookRepository : BaseRepository<Book, BookDb>, IBookRepository
         get => _context.Books.Include(book => book.Genre).Include(book => book.Author);
     }
 
+    public async Task<IEnumerable<Book>> NewAsync(IEnumerable<Book> books)
+    {
+        var entities = _mapper.Map<BookDb[]>(books);
+
+        await _context.Books.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
+
+        return _mapper.Map<Book[]>(entities);
+    }
+
     public override async Task<IEnumerable<Book>> GetAllAsync()
     {
         var entities = await BooksAsEagerIQueryable.ToArrayAsync();
-        return _mapper.Map<IEnumerable<Book>>(entities);
+        return _mapper.Map<Book[]>(entities);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByGenreAsync(Guid genreId)
     {
         var books = await BooksAsEagerIQueryable.Where(book => book.GenreId == genreId).ToArrayAsync();
-        return _mapper.Map<IEnumerable<Book>>(books);
+        return _mapper.Map<Book[]>(books);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Guid authorId)
     {
         var books = await BooksAsEagerIQueryable.Where(book => book.AuthorId == authorId).ToArrayAsync();
-        return _mapper.Map<IEnumerable<Book>>(books);
+        return _mapper.Map<Book[]>(books);
     }
 
     public async Task<IEnumerable<Book>> GetBooksByAuthorAsync(Author author)
@@ -53,6 +63,6 @@ internal class BookRepository : BaseRepository<Book, BookDb>, IBookRepository
 
         var filteredBooks = await booksEntities.ToArrayAsync();
 
-        return _mapper.Map<IEnumerable<Book>>(filteredBooks);
+        return _mapper.Map<Book[]>(filteredBooks);
     }
 }

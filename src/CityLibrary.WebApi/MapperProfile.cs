@@ -13,11 +13,16 @@ public class MapperProfile : Profile
     {
         CreateMap<AuthorDto, Author>().ReverseMap();
         CreateMap<AuthorForSearchDto, Author>().ReverseMap();
+
         CreateMap<BookDto, Book>().ReverseMap();
+        CreateMap<NewBookWithAuthorDto, Book>().ReverseMap();
+        CreateMap<NewBookWithoutAuthorDto, Book>().ReverseMap();
+
         CreateMap<GenreDto, Genre>().ReverseMap();
         CreateMap<GenreStatsDto, GenreStats>().ReverseMap();
-        CreateMap<LibraryCardDto, LibraryCard>().ReverseMap();
+
         CreateMap<PersonDto, Person>().ReverseMap();
         CreateMap<PersonForDeleteDto, Person>().ReverseMap();
+        CreateMap<LibraryCardDto, LibraryCard>().ReverseMap();
     }
 }

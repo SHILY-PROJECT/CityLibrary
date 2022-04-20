@@ -20,8 +20,7 @@ public class PersonService : IPersonService
 
     public async Task<IReadOnlyCollection<Person>> GetAllAsync()
     {
-        var persons = await _personRepository.GetAllAsync();
-        return persons.ToArray();
+        return (await _personRepository.GetAllAsync()).ToArray();
     }
 
     public async Task<Person> NewAsync(Person model)
@@ -46,8 +45,7 @@ public class PersonService : IPersonService
 
     public async Task<IReadOnlyCollection<Book>> GetPersonBooksAsync(Guid personId)
     {
-        var books = await _personRepository.GetPersonBooksAsync(personId);
-        return books.ToArray();
+        return (await _personRepository.GetPersonBooksAsync(personId)).ToArray();
     }
 
     public async Task<bool> TakeBookAsync(Guid personeId, Guid bookId)

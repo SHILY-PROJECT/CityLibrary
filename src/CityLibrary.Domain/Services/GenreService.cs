@@ -20,8 +20,7 @@ public class GenreService : IGenreService
 
     public async Task<IReadOnlyCollection<Genre>> GetAllAsync()
     {
-        var genres = await _genreRepository.GetAllAsync();
-        return genres.ToArray();
+        return (await _genreRepository.GetAllAsync()).ToArray();
     }
 
     public async Task<Genre> NewAsync(Genre model)
@@ -41,7 +40,6 @@ public class GenreService : IGenreService
 
     public async Task<IReadOnlyCollection<GenreStats>> GetStatsAsync()
     {
-        var stats = await _genreRepository.GenreStatsAsync();
-        return stats.ToArray();
+        return (await _genreRepository.GenreStatsAsync()).ToArray();
     }
 }

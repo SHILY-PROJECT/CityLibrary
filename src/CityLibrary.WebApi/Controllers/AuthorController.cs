@@ -7,62 +7,62 @@ using CityLibrary.Domain.Models;
 using CityLibrary.Domain.Interfaces.Services;
 using CityLibrary.WebApi.Models.Books;
 using CityLibrary.WebApi.Models.Authors;
+using System.Linq;
 
 namespace CityLibrary.WebApi.WebApi.Controllers;
 
 [ApiController]
-[Route("/api/author")]
+[Route("/api/authors")]
 public class AuthorController : ControllerBase
 {
-    private readonly IAuthorService _service;
+    private readonly IAuthorService _authorService;
+    private readonly IBookService _bookService;
     private readonly IMapper _mapper;
 
-    public AuthorController(IAuthorService authorService, IMapper mapper)
+    public AuthorController(IAuthorService authorService, IBookService bookService, IMapper mapper)
     {
-        _service = authorService;
+        _authorService = authorService;
         _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<ActionResult<IReadOnlyCollection<AuthorDto>>> GetAuthors()
     {
-        var authors = await _service.GetAllAsync();
+        var authors = await _authorService.GetAllAsync();
         return _mapper.Map<AuthorDto[]>(authors);
     }
 
     [HttpGet("{authorId}/books")]
     public async Task<ActionResult<IReadOnlyCollection<BookDto>>> GetBooksByAuthor([FromRoute] Guid authorId)
     {
-        var books = await _service.GetBooksByAuthorAsync(authorId);
+        var books = await _authorService.GetBooksByAuthorAsync(authorId);
         return _mapper.Map<BookDto[]>(books);
     }
 
-    [HttpPost("addAuthor")]
+    [HttpPost("new")]
     public async Task<ActionResult<AuthorDto>> AddAuthor([FromBody] AuthorDto authorDto)
     {
         var author = _mapper.Map<Author>(authorDto);
-        var newAuthor = await _service.NewAsync(author);
+        var newAuthor = await _authorService.NewAsync(author);
         return _mapper.Map<AuthorDto>(newAuthor);
     }
 
-    [HttpPost("addAuthorWithBooks")]
-    public async Task<ActionResult<AuthorWithBooksDto>> AddAuthorWithBooks([FromBody] AuthorWithBooksDto authorWithBooksDto)
+    [HttpPost("newWithBooks")]
+    public async Task<ActionResult<(AuthorDto, IReadOnlyCollection<BookDto>)>> AddAuthorWithBooks([FromBody] NewAuthorWithBooksDto authorWithBooksDto)
     {
         var author = _mapper.Map<Author>(authorWithBooksDto.Author);
-        var books = _mapper.Map<List<Book>>(authorWithBooksDto.Books);
+        var books = _mapper.Map<Book[]>(authorWithBooksDto.Books);
 
-        var newAuthorWithBooks = await _service.NewAsync(author, books);
+        var newAuthor = await _authorService.NewAsync(author);
+        var newBooks = await _bookService.NewAsync(
+            books.Select(b => b = b with { Author = new Author { Id = newAuthor.Id } }));
 
-        return authorWithBooksDto with
-        {
-            Author = _mapper.Map<AuthorDto>(newAuthorWithBooks.Author),
-            Books = _mapper.Map<List<BookDto>>(newAuthorWithBooks.Books)
-        };
+        return (_mapper.Map<AuthorDto>(newAuthor), _mapper.Map<BookDto[]>(newBooks));
     }
 
     [HttpDelete("{authorId}")]
     public async Task<ActionResult<bool>> DeleteAuthor([FromRoute] Guid authorId)
     {
-        return await _service.DeleteAsync(authorId);
+        return await _authorService.DeleteAsync(authorId);
     }
 }

@@ -24,6 +24,6 @@ internal class GenreRepository : BaseRepository<Genre, GenreDb>, IGenreRepositor
             .Select(genre => new GenreStatsModel(genre, _context.Books.Count(book => book.Genre.Id == genre.Id)))
             .ToArrayAsync();
 
-        return _mapper.Map<IEnumerable<GenreStats>>(statsEntities);
+        return _mapper.Map<GenreStats[]>(statsEntities);
     }
 }

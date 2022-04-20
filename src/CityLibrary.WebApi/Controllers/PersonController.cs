@@ -11,7 +11,7 @@ using CityLibrary.WebApi.Models.Books;
 namespace CityLibrary.WebApi.Controllers;
 
 [ApiController]
-[Route("/api/person")]
+[Route("/api/persons")]
 public class PersonController : ControllerBase
 {
     private readonly IPersonService _service;
