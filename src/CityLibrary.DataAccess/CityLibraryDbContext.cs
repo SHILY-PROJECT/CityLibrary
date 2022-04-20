@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CityLibrary.DataAccess.Models;
 using CityLibrary.DataAccess.Entities;
-using CityLibrary.DataAccess.EntityConfigurations;
+using CityLibrary.DataAccess.EntityConfiguration;
 
 namespace CityLibrary.DataAccess;
 

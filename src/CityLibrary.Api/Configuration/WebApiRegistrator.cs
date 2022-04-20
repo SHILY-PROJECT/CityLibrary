@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
-using CityLibrary.Api.Models.Persons.Validators;
-using FluentValidation.AspNetCore;
 
-namespace CityLibrary.Api;
+namespace CityLibrary.Api.Configuration;
 
 public static class WebApiRegistrator
 {

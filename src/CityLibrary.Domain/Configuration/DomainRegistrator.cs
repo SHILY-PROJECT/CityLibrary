@@ -2,7 +2,7 @@
 using CityLibrary.Domain.Interfaces.Services;
 using CityLibrary.Domain.Services;
 
-namespace CityLibrary.Domain;
+namespace CityLibrary.Domain.Configuration;
 
 public static class DomainRegistrator
 {

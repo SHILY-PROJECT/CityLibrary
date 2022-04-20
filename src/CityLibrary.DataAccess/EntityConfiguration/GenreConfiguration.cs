@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using CityLibrary.DataAccess.Entities;
 
-namespace CityLibrary.DataAccess.EntityConfigurations;
+namespace CityLibrary.DataAccess.EntityConfiguration;
 
 internal sealed class GenreConfiguration : IEntityTypeConfiguration<GenreDb>
 {

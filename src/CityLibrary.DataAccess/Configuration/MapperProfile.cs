@@ -3,7 +3,7 @@ using CityLibrary.Domain.Models;
 using CityLibrary.DataAccess.Entities;
 using CityLibrary.DataAccess.Models;
 
-namespace CityLibrary.DataAccess;
+namespace CityLibrary.DataAccess.Configuration;
 
 public class MapperProfile : Profile
 {

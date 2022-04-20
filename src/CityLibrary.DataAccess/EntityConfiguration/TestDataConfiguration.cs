@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CityLibrary.DataAccess.Entities;
 
-namespace CityLibrary.DataAccess.EntityConfigurations;
+namespace CityLibrary.DataAccess.EntityConfiguration;
 
 internal static class TestDataConfiguration
 {
@@ -31,7 +31,7 @@ internal static class TestDataConfiguration
         var book3 = new BookDb { Id = Guid.NewGuid(), Name = "The Brains Way of Healing: Remarkable Discoveries and Recoveries from the Frontiers of Neuroplasticity", AuthorId = author3.Id, GenreId = genre3.Id };
         var book4 = new BookDb { Id = Guid.NewGuid(), Name = "Contact", AuthorId = author2.Id, GenreId = genre4.Id };
         var book5 = new BookDb { Id = Guid.NewGuid(), Name = "The Lord of the Rings", AuthorId = author5.Id, GenreId = genre1.Id };
-        var book6 = new BookDb { Id = Guid.NewGuid(), Name = "The Hobbit, or There and Back Again", AuthorId = author5.Id , GenreId = genre1.Id };
+        var book6 = new BookDb { Id = Guid.NewGuid(), Name = "The Hobbit, or There and Back Again", AuthorId = author5.Id, GenreId = genre1.Id };
         var book7 = new BookDb { Id = Guid.NewGuid(), Name = "It", AuthorId = author4.Id, GenreId = genre1.Id };
 
         var card1 = new LibraryCardDb { Id = Guid.NewGuid(), PersonId = person1.Id, BookId = book3.Id, DateBookReceived = DateTime.Now };

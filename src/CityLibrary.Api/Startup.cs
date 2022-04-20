@@ -4,10 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using CityLibrary.Domain;
-using CityLibrary.DataAccess;
-using CityLibrary.DataAccess.Models;
 using FluentValidation.AspNetCore;
+using CityLibrary.DataAccess.Models;
+using CityLibrary.DataAccess.Configuration;
+using CityLibrary.Domain.Configuration;
+using CityLibrary.Api.Configuration;
 
 namespace CityLibrary.Api;
 

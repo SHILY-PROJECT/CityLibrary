@@ -4,7 +4,7 @@ using CityLibrary.Domain.Interfaces.Repositories;
 using CityLibrary.DataAccess.Models;
 using CityLibrary.DataAccess.Repositories;
 
-namespace CityLibrary.DataAccess;
+namespace CityLibrary.DataAccess.Configuration;
 
 public static class DataAccessRegistrator
 {
@@ -16,10 +16,10 @@ public static class DataAccessRegistrator
             .AddScoped<IGenreRepository, GenreRepository>()
             .AddScoped<IPersonRepository, PersonRepository>();
 
-        services.AddScoped(x => databaseCreationSettings ?? new DatabaseCreationSettings());
+        services.AddScoped(x => databaseCreationSettings ?? new());
 
         services
-            .AddAutoMapper(typeof(DataAccess.MapperProfile))
+            .AddAutoMapper(typeof(MapperProfile))
             .AddDbContext<CityLibraryDbContext>(options => options.UseSqlServer(connectionString));
 
         return services;
