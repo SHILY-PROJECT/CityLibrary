@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CityLibrary.DataAccess.Models;
 using CityLibrary.DataAccess.Entities;
-using CityLibrary.DataAccess.EntityConfiguration;
+using CityLibrary.DataAccess.Context.Configuration;
 
-namespace CityLibrary.DataAccess;
+namespace CityLibrary.DataAccess.Context;
 
 public class CityLibraryDbContext : DbContext
 {

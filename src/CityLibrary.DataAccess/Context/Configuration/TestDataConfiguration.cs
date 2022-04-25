@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using CityLibrary.DataAccess.Entities;
 
-namespace CityLibrary.DataAccess.EntityConfiguration;
+namespace CityLibrary.DataAccess.Context.Configuration;
 
 internal static class TestDataConfiguration
 {

@@ -3,6 +3,7 @@ using AutoMapper;
 using CityLibrary.DataAccess.Entities;
 using CityLibrary.Domain.Interfaces.Repositories;
 using CityLibrary.Domain.Models;
+using CityLibrary.DataAccess.Context;
 
 namespace CityLibrary.DataAccess.Repositories;
 
