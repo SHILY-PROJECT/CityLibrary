@@ -23,11 +23,11 @@ public class CityLibraryDbContext : DbContext
         Database.EnsureCreated();
     }
 
-    public DbSet<AuthorDb> Authors { get; set; } = null!;
-    public DbSet<BookDb> Books { get; set; } = null!;
-    public DbSet<PersonDb> Persons { get; set; } = null!;
-    public DbSet<GenreDb> Genres { get; set; } = null!;
-    public DbSet<LibraryCardDb> LibraryCards { get; set; } = null!;
+    public DbSet<AuthorDb> Authors { get; set; }
+    public DbSet<BookDb> Books { get; set; }
+    public DbSet<PersonDb> Persons { get; set; }
+    public DbSet<GenreDb> Genres { get; set; }
+    public DbSet<LibraryCardDb> LibraryCards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
